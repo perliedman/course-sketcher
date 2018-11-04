@@ -1,28 +1,45 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <track-view :track="track" :layers="layers"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TrackView from './components/TrackView.vue'
+import { gpx } from '@mapbox/togeojson'
 
 export default {
   name: 'app',
+  data () {
+    return {
+      track: {},
+      layers: []
+    }
+  },
+  created () {
+    fetch('tiles/hp/layers.json')
+      .then(res => res.json())
+      .then(layers => {
+        this.layers = Object.freeze(layers)
+      })
+
+    fetch('example.gpx')
+      .then(res => res.text())
+      .then(text => (new window.DOMParser()).parseFromString(text, "text/xml"))
+      .then(doc => gpx(doc))
+      .then(track => {
+        this.track = Object.freeze(track)
+      })
+  },
   components: {
-    HelloWorld
+    TrackView
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    margin: 0;
+    padding: 0;
+  }
 </style>
