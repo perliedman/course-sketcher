@@ -12,6 +12,7 @@
     "@turf/bbox": "^6.0.1",
     "@turf/bearing": "^6.0.1",
     "@turf/distance": "^6.0.1",
+    "@turf/meta": "^6.0.2",
     "mapbox-gl": "^0.51.0-beta.2",
     "ocad2geojson": "^1.1.0",
     "reproject": "^1.2.3",

@@ -1,19 +1,77 @@
+const { coordEach } = require('@turf/meta')
 import { toWgs84 } from 'reproject'
 
 export default function parsePPen (crs, doc) {
   const controls = Array.prototype.slice.call(doc.getElementsByTagName('control'))
     .map(parseControl.bind(null, crs))
   const controlTextLocations = createControlTextLocations(controls)
+  const courseControls = Array.prototype.slice.call(doc.getElementsByTagName('course-control'))
+    .reduce((a, cc) => {
+      const id = cc.getAttribute('id')
+      const control = cc.getAttribute('control')
+      const nextTag = cc.getElementsByTagName('next')
+      let next = undefined
+      if (nextTag && nextTag[0]) {
+        next = nextTag[0].getAttribute('course-control')
+      }
+
+      a[id] = {
+        control,
+        next
+      }
+
+      return a
+    }, {})
+  const getCourseControls = (id, sequence) => {
+    const control = controls.find(c => c.id === courseControls[id].control)
+    const next = courseControls[id].next
+    // Clone the feature root and its properties
+    const courseControl = {...control, properties: {...control.properties}}
+
+    courseControl.properties.sequence = sequence > 0 && next ? sequence : undefined
+
+    return [courseControl]
+      .concat(next ? getCourseControls(next, sequence + 1) : [])
+  }
+  const courses = Array.prototype.slice.call(doc.getElementsByTagName('course'))
+    .filter(c => c.getElementsByTagName('first').length > 0)
+    .map(c => {
+      const courseControls = getCourseControls(c.getElementsByTagName('first')[0].getAttribute('course-control'), 0)
+      return {
+        id: c.getAttribute('id'),
+        name: c.getElementsByTagName('name')[0].textContent,
+        order: Number(c.getAttribute('order')),
+        controls: {
+          type: 'FeatureCollection',
+          features: courseControls
+        },
+        controlTexts: applyCrs(crs, {
+          type: 'FeatureCollection',
+          features: createControlTextLocations(courseControls)
+        }),
+        connections: applyCrs(crs, {
+          type: 'FeatureCollection',
+          features: createControlConnections(courseControls)
+        })
+      }
+    })
+    .sort((a, b) => a.order - b.order)
 
   return {
-    controls: toWgs84({
+    controls: toWgs84(applyCrs(crs, {
       type: 'FeatureCollection',
-      features: applyCrs(crs, controls)
-    }, crs.proj),
-    controlTexts: toWgs84({
+      features: controls
+    }), crs.proj),
+    controlTexts: toWgs84(applyCrs(crs, {
       type: 'FeatureCollection',
-      features: applyCrs(crs, controlTextLocations)
-    }, crs.proj)
+      features: controlTextLocations
+    }), crs.proj),
+    courses: courses.map(c => {
+      c.controls = toWgs84(c.controls, crs.proj)
+      c.controlTexts = toWgs84(c.controlTexts, crs.proj)
+      c.connections = toWgs84(c.connections, crs.proj)
+      return c
+    })
   }
 }
 
@@ -41,10 +99,10 @@ const parseControl = (crs, tag) => {
 }
 
 const applyCrs = (crs, features) => {
-  features.forEach(f => f.geometry.coordinates = new Coordinate(
-    f.geometry.coordinates[0] * mmToMeter * crs.scale + crs.easting,
-    f.geometry.coordinates[1] * mmToMeter * crs.scale + crs.northing
-  ))
+  coordEach(features, c => {
+    c[0] = c[0] * mmToMeter * crs.scale + crs.easting
+    c[1] = c[1] * mmToMeter * crs.scale + crs.northing
+  })
   return features
 }
 
@@ -114,6 +172,30 @@ const getTextLocation = (controlLocation, distanceFromCenter, text, controls) =>
   return bestPoint
 }
 
+const createControlConnections = controls =>
+  controls.slice(1).map((_, i) => {
+    const r = controlCircleOutsideDiameter / 2
+    const c0 = controls[i].geometry.coordinates
+    const c1 = controls[i + 1].geometry.coordinates
+    const v = c1.sub(c0)
+    const l = v.vLength()
+
+    const dx = v[0] / l
+    const dy = v[1] / l
+
+    const p0 = c0.add(new Coordinate(dx * r, dy * r))
+    const p1 = c1.sub(new Coordinate(dx * r, dy * r))
+
+    return {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: [p0, p1]
+      }
+    }
+  })
+
 class Coordinate extends Array {
   vLength () {
     return Math.sqrt(this[0] * this[0] + this[1] * this[1])
@@ -124,6 +206,6 @@ class Coordinate extends Array {
   }
 
   sub (c1) {
-    return new Coordinate(this[0] - c1[0], this[1] - c1[1], this.xFlags, this.yFlags)
+    return new Coordinate(this[0] - c1[0], this[1] - c1[1])
   }
 }
