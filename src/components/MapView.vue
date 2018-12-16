@@ -10,7 +10,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibGllZG1hbiIsImEiOiJZc3U4UXowIn0.d4yPyJ_Bl7CAR
 export default {
   name: 'MapView',
   props: {
-    event: Object,
+    controls: Object,
+    controlTexts: Object,
+    controlConnections: Object,
     layers: Array,
   },
   mounted () {
@@ -30,11 +32,15 @@ export default {
           },
           controls: {
             type: 'geojson',
-            data: this.event.controls || {type: 'FeatureCollection', features: []}
+            data: {type: 'FeatureCollection', features: []}
           },
           controlTexts: {
             type: 'geojson',
-            data: this.event.controlTexts || {type: 'FeatureCollection', features: []}
+            data: {type: 'FeatureCollection', features: []}
+          },
+          controlConnections: {
+            type: 'geojson',
+            data: {type: 'FeatureCollection', features: []}
           }
         },
         layers: this.layers.concat([
@@ -58,7 +64,7 @@ export default {
             type: 'symbol',
             layout: {
               'symbol-placement': 'point',
-              'text-field': ['get', 'code'],
+              'text-field': ['get', 'sequence'],
               'text-size': expFunc(48),
               'text-anchor': 'center',
               'text-allow-overlap': true,
@@ -67,6 +73,16 @@ export default {
             paint: {
               'text-color': '#aa0055',
               'text-opacity': 0.8
+            }
+          },
+          {
+            id: 'control-connections',
+            source: 'controlConnections',
+            type: 'line',
+            paint: {
+              'line-color': '#aa0055',
+              'line-opacity': 0.7,
+              'line-width': expFunc(4)
             }
           }
         ])
@@ -80,21 +96,9 @@ export default {
         map.setStyle(style)
       }
     },
-    event ({ controls, controlTexts }) {
-      const map = this.getMap()
-      const setData = () => {
-        map.getSource('controls').setData(controls)
-        map.getSource('controlTexts').setData(controlTexts)
-      }
-
-      if (map) {
-        if (map.isStyleLoaded()) {
-          setData()
-        } else {
-          map.on('load', setData)
-        }
-      }
-    }
+    controls (controls) { this.updateSource('controls', controls) },
+    controlTexts (controlTexts) { this.updateSource('controlTexts', controlTexts) },
+    controlConnections (controlConnections) { this.updateSource('controlConnections', controlConnections) }
   },
   methods: {
     getMap () {
@@ -104,14 +108,6 @@ export default {
           style: this.mapStyle
         })
 
-        this.replayTrail = {
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: []
-          }
-        }
-
         this.map.jumpTo({
           center: [11.93, 57.75],
           zoom: 14
@@ -119,6 +115,20 @@ export default {
       }
 
       return this.map
+    },
+    updateSource (id, data) {
+      const map = this.getMap()
+      const setData = () => {
+        map.getSource(id).setData(data)
+      }
+
+      if (map) {
+        if (map.isStyleLoaded()) {
+          setData()
+        } else {
+          map.once('load', setData)
+        }
+      }
     }
   }
 }

@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <map-view :event="event" :layers="layers"/>
+    <map-view
+      :controls="event && event.courses && event.courses[selectedCourse].controls"
+      :control-texts="event && event.courses && event.courses[selectedCourse].controlTexts"
+      :control-connections="event && event.courses && event.courses[selectedCourse].connections"
+      :layers="layers"/>
   </div>
 </template>
 
@@ -13,6 +17,7 @@ export default {
   data () {
     return {
       event: {},
+      selectedCourse: 0,
       layers: []
     }
   },
@@ -35,7 +40,7 @@ export default {
       .then(doc => parsePPen(crs, doc))
       .then(event => {
         // console.log(JSON.stringify(event.controls, null, 2))
-        this.event = Object.freeze(event)
+        this.event = event
       })
   },
   components: {
