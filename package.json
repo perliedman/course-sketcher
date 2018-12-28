@@ -13,8 +13,10 @@
     "@turf/bearing": "^6.0.1",
     "@turf/distance": "^6.0.1",
     "@turf/meta": "^6.0.2",
+    "blob-to-buffer": "^1.2.8",
     "mapbox-gl": "^0.51.0-beta.2",
-    "ocad2geojson": "^1.1.0",
+    "muse-ui": "^3.0.1",
+    "ocad2geojson": "^1.2.0",
     "reproject": "^1.2.3",
     "vue": "^2.5.17"
   },

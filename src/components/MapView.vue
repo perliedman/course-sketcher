@@ -1,10 +1,11 @@
 <template>
-  <div class="map" ref="mapContainer">
+  <div :class="{map: true, 'empty-map': !layers || !layers.length}" ref="mapContainer">
   </div>
 </template>
 
 <script>
 import mapboxgl from 'mapbox-gl'
+import bbox from '@turf/bbox'
 mapboxgl.accessToken = 'pk.eyJ1IjoibGllZG1hbiIsImEiOiJZc3U4UXowIn0.d4yPyJ_Bl7CAROv15im36Q';
 
 export default {
@@ -14,6 +15,7 @@ export default {
     controlTexts: Object,
     controlConnections: Object,
     layers: Array,
+    mapGeojson: Object
   },
   mounted () {
     this.getMap()
@@ -26,9 +28,8 @@ export default {
         glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
         sources: {
           map: {
-            type: 'vector',
-            tiles: ['http://localhost:8080/tiles/hp/{z}/{x}/{y}.pbf'],
-            maxzoom: 14
+            type: 'geojson',
+            data: this.mapGeojson
           },
           controls: {
             type: 'geojson',
@@ -90,6 +91,11 @@ export default {
     }
   },
   watch: {
+    mapGeojson (geojson) {
+      if (this.map) {
+        this.map.fitBounds(bbox(geojson))
+      }      
+    },
     mapStyle (style) {
       const map = this.getMap()
       if (map) {
@@ -108,10 +114,9 @@ export default {
           style: this.mapStyle
         })
 
-        this.map.jumpTo({
-          center: [11.93, 57.75],
-          zoom: 14
-        })
+        if (this.mapGeojson && this.mapGeojson.features) {
+          this.map.once('load', () => this.map.fitBounds(bbox(this.mapGeojson), { padding: 20, animate: false }))
+        }
       }
 
       return this.map
@@ -147,8 +152,6 @@ const expFunc = base => ({
 </script>
 
 <style scoped>
-  @import url(~/mapbox-gl/dist/mapbox-gl.css);
-  
   .map {
     position: absolute;
     width: 100%;
