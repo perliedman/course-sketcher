@@ -115,10 +115,11 @@ export default {
           style: this.mapStyle
         })
 
+        this.map.on('click', this.onMapClick.bind(this))
+
         if (this.mapGeojson && this.mapGeojson.features) {
           this.map.once('load', () => {
             this.map.fitBounds(bbox(this.mapGeojson), { padding: 20, animate: false })
-            console.log(this.mapRotation)
             this.map.setBearing(this.mapRotation)
           })
         }
@@ -139,6 +140,9 @@ export default {
           map.once('load', setData)
         }
       }
+    },
+    onMapClick (e) {
+      this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat] })
     }
   }
 }

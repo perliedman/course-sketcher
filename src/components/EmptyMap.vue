@@ -2,7 +2,7 @@
   <div class="empty-map">
     <input type="file" @change="onUpload($event.target.files)" class="input-file">
       <h1>
-        Drop an OCAD map file here<br>or click to select a file
+        {{ $t('emptyMap') }}
       </h1>
   </div>
 </template>
