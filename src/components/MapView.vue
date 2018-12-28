@@ -15,7 +15,8 @@ export default {
     controlTexts: Object,
     controlConnections: Object,
     layers: Array,
-    mapGeojson: Object
+    mapGeojson: Object,
+    mapRotation: Number
   },
   mounted () {
     this.getMap()
@@ -115,7 +116,11 @@ export default {
         })
 
         if (this.mapGeojson && this.mapGeojson.features) {
-          this.map.once('load', () => this.map.fitBounds(bbox(this.mapGeojson), { padding: 20, animate: false }))
+          this.map.once('load', () => {
+            this.map.fitBounds(bbox(this.mapGeojson), { padding: 20, animate: false })
+            console.log(this.mapRotation)
+            this.map.setBearing(this.mapRotation)
+          })
         }
       }
 

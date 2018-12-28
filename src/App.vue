@@ -6,7 +6,8 @@
       :control-texts="event && event.courses && event.courses[selectedCourse].controlTexts"
       :control-connections="event && event.courses && event.courses[selectedCourse].connections"
       :layers="layers"
-      :map-geojson="mapGeojson"/>
+      :map-geojson="mapGeojson"
+      :map-rotation="mapRotation"/>
     <empty-map v-else @fileselected="mapFileSelected" />
     <div v-if="event && event.courses" class="course-list">
       <mu-paper :z-depth="1">
@@ -26,6 +27,11 @@ import EmptyMap from './components/EmptyMap.vue'
 import parsePPen from './parse-ppen.js'
 import { readOcad, ocadToGeoJson, ocadToMapboxGlStyle } from 'ocad2geojson'
 import { toWgs84 } from 'reproject'
+import proj4 from 'proj4'
+import bbox from '@turf/bbox'
+
+// Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
+const projDef = '+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs'
 
 export default {
   name: 'app',
@@ -34,7 +40,8 @@ export default {
       event: {},
       selectedCourse: 0,
       layers: [],
-      mapGeojson: {}
+      mapGeojson: {},
+      mapRotation: 0
     }
   },
   created () {
@@ -63,7 +70,11 @@ export default {
     mapFileSelected(f) {
       readOcad(f.content)
         .then(ocadFile => {
-          this.mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), '+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs'))
+          this.mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), projDef))
+          const [minLng, minLat, maxLng, maxLat] = bbox(this.mapGeojson)
+          const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
+          const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
+          this.mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
           this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
         })
         .catch(err => {
