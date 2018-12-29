@@ -5,8 +5,11 @@
         <mu-expansion-panel :expand="panel === 'courses'" @change="togglePanel('courses')">
           <div slot="header">{{$t('menus.courses')}}</div>
           <mu-list :value="selectedCourse">
-            <mu-list-item button @click="selectedCourse = i" v-for="(c, i) in event.courses" :key="i" :value="i">
+            <mu-list-item button nested @click="selectedCourse = i" v-for="(c, i) in event.courses" :key="i" :value="i">
               <mu-list-item-title>{{c.name}}</mu-list-item-title>
+              <mu-list-item v-for="(c, i) in c.controls" :key="i" slot="nested">
+                <mu-list-item-title>{{i + 1}}</mu-list-item-title>
+              </mu-list-item>
             </mu-list-item>
           </mu-list>
         </mu-expansion-panel>      

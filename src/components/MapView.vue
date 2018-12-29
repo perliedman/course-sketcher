@@ -47,11 +47,53 @@ export default {
         },
         layers: this.layers.concat([
           {
+            id: 'start',
+            source: 'controls',
+            filter: ['==', ['get', 'kind'], 'start'],
+            type: 'line',
+            paint: {
+              'line-color': '#aa0055',
+              'line-opacity': 0.7,
+              'line-width': expFunc(4)
+            }
+          },
+          {
             id: 'control-circles',
             source: 'controls',
+            filter: ['==', ['get', 'kind'], 'control'],
             type: 'circle',
             paint: {
               'circle-radius': expFunc(28),
+              'circle-opacity': 0,
+              'circle-stroke-width': expFunc(4),
+              'circle-stroke-color': '#aa0055',
+              'circle-stroke-opacity': 0.7,
+              'circle-pitch-scale': 'map',
+              'circle-pitch-alignment': 'map'
+            }
+          },
+          {
+            id: 'finish-inner-circle',
+            source: 'controls',
+            filter: ['==', ['get', 'kind'], 'finish'],
+            type: 'circle',
+            paint: {
+              'circle-radius': expFunc(22.4),
+              'circle-opacity': 0,
+              'circle-stroke-width': expFunc(4),
+              'circle-stroke-color': '#aa0055',
+              'circle-stroke-opacity': 0.7,
+              'circle-pitch-scale': 'map',
+              'circle-pitch-alignment': 'map'
+            }
+          },
+          {
+            id: 'finish-outer-circle',
+            source: 'controls',
+            filter: ['==', ['get', 'kind'], 'finish'],
+            type: 'circle',
+            paint: {
+              'circle-radius': expFunc(33.6),
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
               'circle-stroke-color': '#aa0055',

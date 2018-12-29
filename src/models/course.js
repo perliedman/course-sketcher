@@ -9,33 +9,46 @@ export default class Course {
   }
 
   addControl (c) {
-    this.controls.push({
-      type: 'Feature',
-      id: this.controls.length + 1, // TODO
-      properties: {
-        kind: 'control', // TODO
-        code: this.controls.length + 1, // TODO
-        sequence: this.controls.length + 1
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: c.coordinates
-      }
-    })
+    const nControls = this.controls.length
+    const properties = {
+      kind: nControls === 0 ? 'start' : 'control', // TODO
+      code: nControls + 1, // TODO
+      sequence: nControls === 0 ? undefined : nControls,
+      coordinates: new Coordinate(c.coordinates[0], c.coordinates[1])
+    }
+
+    this.controls.push(properties)
 
     return this
   }
 
   controlsToGeoJson () {
-    return featureCollection(clone(this.controls))
+    return featureCollection(this.controls.map((c, i) => ({
+      type: 'Feature',
+      id: i + 1, // TODO
+      properties: c,
+      geometry: i > 0
+        ? {
+          type: 'Point',
+          coordinates: c.coordinates.toArray()
+        }
+        : {
+          type: 'LineString',
+          coordinates: startTriangle.map(p => p
+            .rotate(this.controls.length > i + 1 
+              ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
+              : 0)
+            .add(c.coordinates).toArray())
+        }
+      })))
   }
 
   controlLabelsToGeoJson () {
-    return featureCollection(createControlTextLocations(clone(this.controls)))
+    return featureCollection(createControlTextLocations(this.controls))
   }
 
   controlConnectionsToGeoJson () {
-    return featureCollection(createControlConnections(clone(this.controls)))
+    return featureCollection(createControlConnections(this.controls))
   }
 }
 
@@ -50,6 +63,7 @@ const clone = fs => fs.map(f => ({
 
 const coordClone = c => Array.isArray(c[0]) ? c.map(coordClone) : new Coordinate(c[0], c[1])
 
+const startTriangle = [new Coordinate(0, 3.464), new Coordinate(3, -1.732), new Coordinate(-3, -1.732), new Coordinate(0, 3.464)]
 const defaultControlNumberAngle = Math.PI / 6
 const controlCircleOutsideDiameter = 5.35
 const controlNumberCircleDistance = 1.825
@@ -61,7 +75,7 @@ const createControlTextLocations = controls => {
   const result = []
   controls.forEach(c => {
     const textLocation = createTextPlacement(objects, c)
-    objects.push(textLocation)
+    objects.push({coordinates: new Coordinate(textLocation.geometry.coordinates)})
     result.push(textLocation)        
   })
 
@@ -73,19 +87,19 @@ const createControlTextLocations = controls => {
 // https://github.com/petergolde/PurplePen/blob/master/src/PurplePen/CourseFormatter.cs
 const createTextPlacement = (controls, control) => {
   let textCoord
-  if (control.properties.numberLocation) {
-    textCoord = control.geometry.coordinates.add(control.properties.numberLocation)
+  if (control.numberLocation) {
+    textCoord = control.coordinates.add(control.numberLocation)
   } else {
     const textDistance = (controlCircleOutsideDiameter / 2 + controlNumberCircleDistance * controlCircleSize) * courseObjRatio;
-    textCoord = getTextLocation(control.geometry.coordinates, textDistance, control.properties.code, controls)
+    textCoord = getTextLocation(control.coordinates, textDistance, control.code, controls)
   }
 
   return {
     type: 'Feature',
-    properties: control.properties,
+    properties: control,
     geometry: {
       type: 'Point',
-      coordinates: textCoord
+      coordinates: textCoord.toArray()
     }
   }
 }
@@ -95,7 +109,7 @@ const getTextLocation = (controlLocation, distanceFromCenter, text, controls) =>
   const d = distanceFromCenter + 1.2
 
   const nearbyObjects = controls.filter(c => {
-    const d = c.geometry.coordinates.sub(controlLocation).vLength()
+    const d = c.coordinates.sub(controlLocation).vLength()
     return d > 0 && d <= distanceFromCenter * 4
   })
 
@@ -106,7 +120,7 @@ const getTextLocation = (controlLocation, distanceFromCenter, text, controls) =>
     angle < defaultControlNumberAngle + 2 * Math.PI;
     angle += deltaAngle) {
     const pt = controlLocation.add(new Coordinate(d * Math.cos(angle), d * Math.sin(angle)))
-    const distanceFromNearby = nearbyObjects.reduce((a, o) => Math.min(a, o.geometry.coordinates.sub(pt).vLength()), Number.MAX_VALUE)
+    const distanceFromNearby = nearbyObjects.reduce((a, o) => Math.min(a, o.coordinates.sub(pt).vLength()), Number.MAX_VALUE)
     if (distanceFromNearby > bestDistance) {
       bestPoint = pt
       bestDistance = distanceFromNearby
@@ -119,8 +133,8 @@ const getTextLocation = (controlLocation, distanceFromCenter, text, controls) =>
 const createControlConnections = controls =>
   controls.slice(1).map((_, i) => {
     const r = controlCircleOutsideDiameter / 2
-    const c0 = controls[i].geometry.coordinates
-    const c1 = controls[i + 1].geometry.coordinates
+    const c0 = controls[i].coordinates
+    const c1 = controls[i + 1].coordinates
     const v = c1.sub(c0)
     const l = v.vLength()
 
@@ -135,7 +149,7 @@ const createControlConnections = controls =>
       properties: {},
       geometry: {
         type: 'LineString',
-        coordinates: [p0, p1]
+        coordinates: [p0.toArray(), p1.toArray()]
       }
     }
   })
