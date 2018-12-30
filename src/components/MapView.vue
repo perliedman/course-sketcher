@@ -6,6 +6,8 @@
 <script>
 import mapboxgl from 'mapbox-gl'
 import bbox from '@turf/bbox'
+import { coordEach, coordReduce } from '@turf/meta'
+
 mapboxgl.accessToken = 'pk.eyJ1IjoibGllZG1hbiIsImEiOiJZc3U4UXowIn0.d4yPyJ_Bl7CAROv15im36Q';
 
 export default {
@@ -17,6 +19,9 @@ export default {
     layers: Array,
     mapGeojson: Object,
     mapRotation: Number
+  },
+  created () {
+    this.sources = {}
   },
   mounted () {
     this.getMap()
@@ -185,6 +190,8 @@ export default {
         this.createFeatureHighlight('controls', 'control-circles')
         this.createFeatureHighlight('controls', 'finish-outer-circle')
 
+        this.map.on('mousedown', this.onMouseDown.bind(this))
+
         if (this.mapGeojson && this.mapGeojson.features) {
           this.map.once('load', () => {
             this.map.fitBounds(bbox(this.mapGeojson), { padding: 20, animate: false })
@@ -196,6 +203,8 @@ export default {
       return this.map
     },
     updateSource (id, data) {
+      this.sources[id] = data
+
       const map = this.getMap()
       const setData = () => {
         map.getSource(id).setData(data)
@@ -212,6 +221,35 @@ export default {
     onMapClick (e) {
       this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat] })
     },
+    onMouseDown (e) {
+      if (this.hoveredId) {
+        let lastLngLat = e.lngLat
+        const source = this.map.getSource(this.hoveredSource)
+        const sourceData = this.sources[this.hoveredSource]
+        const feature = sourceData.features.find(f => f.id === this.hoveredId)
+
+        const dragFeature = e => {
+          const delta = [e.lngLat.lng - lastLngLat.lng, e.lngLat.lat - lastLngLat.lat]
+          coordEach(feature, c => {
+            c[0] += delta[0]
+            c[1] += delta[1]
+          })
+
+          source.setData(sourceData)
+          lastLngLat = e.lngLat
+        }
+        this.map.on('mousemove', dragFeature)
+        this.map.once('mouseup', () => {
+          const sumCoord = coordReduce(feature, (a, c) => [a[0] + c[0], a[1] + c[1]], [0, 0])
+          const nCoord = coordReduce(feature, (a, _) => a + 1, 0)
+          this.$emit('controlmoved', {
+            id: feature.id,
+            coordinates: [sumCoord[0] / nCoord, sumCoord[1] / nCoord]
+          })
+          this.map.off('mousemove', dragFeature)
+        })
+      }
+    },
     createFeatureHighlight (source, layer) {
       this.map.on('mousemove', layer, e => {
         if (e.features.length > 0) {
@@ -220,6 +258,7 @@ export default {
           }
           this.hoveredSource = source
           this.hoveredId = e.features[0].id
+          this.map.dragPan.disable()
           this.map.setFeatureState({source, id: this.hoveredId}, { hover: true })
         }
       })
@@ -229,6 +268,7 @@ export default {
           this.map.setFeatureState({source, id: this.hoveredId}, { hover: false })
           this.hoveredSource = null
           this.hoveredId = null
+          this.map.dragPan.enable()
         }
       })
     }

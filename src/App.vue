@@ -9,7 +9,8 @@
         :layers="layers"
         :map-geojson="mapGeojson"
         :map-rotation="mapRotation"
-        @controladded="controlAdded"/>
+        @controladded="controlAdded"
+        @controlmoved="controlMoved"/>
     </div>
     <empty-map v-else @fileselected="mapFileSelected" />
   </div>
@@ -111,6 +112,16 @@ export default {
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
       this.event.courses[this.selectedCourse].addControl({coordinates})
+    },
+
+    controlMoved (e) {
+      const crs = this.map.file.getCrs()
+      const projectedCoord = proj4(proj4.WGS84, projDef, e.coordinates)
+      const coordinates = [
+        (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
+        (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
+      ]
+      this.event.courses[this.selectedCourse].moveControl({id: e.id, coordinates})
     }
   },
   components: {

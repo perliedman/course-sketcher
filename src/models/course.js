@@ -11,6 +11,7 @@ export default class Course {
   addControl (c) {
     const nControls = this.controls.length
     const properties = {
+      id: nControls + 1,
       kind: nControls === 0 ? 'start' : 'control', // TODO
       code: nControls + 1, // TODO
       sequence: nControls === 0 ? undefined : nControls,
@@ -18,6 +19,13 @@ export default class Course {
     }
 
     this.controls.push(properties)
+
+    return this
+  }
+
+  moveControl (c) {
+    const control = this.controls.find(control => c.id === control.id)
+    control.coordinates = new Coordinate(c.coordinates)
 
     return this
   }
