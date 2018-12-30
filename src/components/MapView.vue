@@ -47,13 +47,26 @@ export default {
         },
         layers: this.layers.concat([
           {
+            id: 'start-hover',
+            source: 'controls',
+            filter: ['==', ['get', 'kind'], 'start'],
+            type: 'fill',
+            paint: {
+              'fill-opacity': 0
+            }
+          },
+          {
             id: 'start',
             source: 'controls',
             filter: ['==', ['get', 'kind'], 'start'],
             type: 'line',
             paint: {
+              'line-opacity': ["case",
+                ["boolean", ["feature-state", "hover"], false],
+                    1,
+                    0.7
+                ],
               'line-color': '#aa0055',
-              'line-opacity': 0.7,
               'line-width': expFunc(4)
             }
           },
@@ -67,7 +80,11 @@ export default {
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
               'circle-stroke-color': '#aa0055',
-              'circle-stroke-opacity': 0.7,
+              'circle-stroke-opacity': ["case",
+                ["boolean", ["feature-state", "hover"], false],
+                    1,
+                    0.7
+                ],
               'circle-pitch-scale': 'map',
               'circle-pitch-alignment': 'map'
             }
@@ -97,7 +114,11 @@ export default {
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
               'circle-stroke-color': '#aa0055',
-              'circle-stroke-opacity': 0.7,
+              'circle-stroke-opacity': ["case",
+                ["boolean", ["feature-state", "hover"], false],
+                    1,
+                    0.7
+                ],
               'circle-pitch-scale': 'map',
               'circle-pitch-alignment': 'map'
             }
@@ -157,7 +178,12 @@ export default {
           style: this.mapStyle
         })
 
-        this.map.on('click', this.onMapClick.bind(this))
+        this.map
+          .on('click', this.onMapClick.bind(this))
+
+        this.createFeatureHighlight('controls', 'start-hover', 'start')
+        this.createFeatureHighlight('controls', 'control-circles')
+        this.createFeatureHighlight('controls', 'finish-outer-circle')
 
         if (this.mapGeojson && this.mapGeojson.features) {
           this.map.once('load', () => {
@@ -185,6 +211,26 @@ export default {
     },
     onMapClick (e) {
       this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat] })
+    },
+    createFeatureHighlight (source, layer) {
+      this.map.on('mousemove', layer, e => {
+        if (e.features.length > 0) {
+          if (this.hoveredId) {
+            this.map.setFeatureState({source: this.hoveredSource, id: this.hoveredId}, { hover: false })
+          }
+          this.hoveredSource = source
+          this.hoveredId = e.features[0].id
+          this.map.setFeatureState({source, id: this.hoveredId}, { hover: true })
+        }
+      })
+
+      this.map.on('mouseleave', layer, e => {
+        if (this.hoveredSource === source && this.hoveredId) {
+          this.map.setFeatureState({source, id: this.hoveredId}, { hover: false })
+          this.hoveredSource = null
+          this.hoveredId = null
+        }
+      })
     }
   }
 }

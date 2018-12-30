@@ -33,12 +33,12 @@ export default class Course {
           coordinates: c.coordinates.toArray()
         }
         : {
-          type: 'LineString',
-          coordinates: startTriangle.map(p => p
+          type: 'Polygon',
+          coordinates: [startTriangle.map(p => p
             .rotate(this.controls.length > i + 1 
               ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
               : 0)
-            .add(c.coordinates).toArray())
+            .add(c.coordinates).toArray())]
         }
       })))
   }
