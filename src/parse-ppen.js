@@ -2,9 +2,14 @@ import Coordinate from './models/coordinate'
 import Course from './models/course';
 
 export default function parsePPen (doc) {
-  const controls = Array.prototype.slice.call(doc.getElementsByTagName('control'))
+  const eventTag = doc.getElementsByTagName('event')[0]
+  const mapTag = eventTag.getElementsByTagName('map')[0]
+  const scale = Number(mapTag.getAttribute('scale'))
+
+  const controls = Array.from(doc.getElementsByTagName('control'))
     .map(parseControl)
-  const courseControls = Array.prototype.slice.call(doc.getElementsByTagName('course-control'))
+
+  const courseControls = Array.from(doc.getElementsByTagName('course-control'))
     .reduce((a, cc) => {
       const id = cc.getAttribute('id')
       const control = cc.getAttribute('control')
@@ -21,6 +26,7 @@ export default function parsePPen (doc) {
 
       return a
     }, {})
+
   const getCourseControls = (id, sequence) => {
     const control = controls.find(c => c.id === courseControls[id].control)
     const next = courseControls[id].next
@@ -32,18 +38,22 @@ export default function parsePPen (doc) {
     return [courseControl]
       .concat(next ? getCourseControls(next, sequence + 1) : [])
   }
-  const courses = Array.prototype.slice.call(doc.getElementsByTagName('course'))
+
+  const courses = Array.from(doc.getElementsByTagName('course'))
     .filter(c => c.getElementsByTagName('first').length > 0)
     .map(c => {
       const courseControls = getCourseControls(c.getElementsByTagName('first')[0].getAttribute('course-control'), 0)
-      const course = new Course(c.getAttribute('id'), c.getElementsByTagName('name')[0].textContent, courseControls)
+      const course = new Course(c.getAttribute('id'), c.getElementsByTagName('name')[0].textContent, courseControls, scale)
       course.order = Number(c.getAttribute('order'))
 
       return course
     })
     .sort((a, b) => a.order - b.order)
 
-  return {courses}
+  return {
+    name: eventTag.getElementsByTagName('title')[0].textContent,
+    courses
+  }
 }
 
 
@@ -55,15 +65,13 @@ const parseLocation = loc => new Coordinate(
 const parseControl = (tag) => {
   const codeTag = tag.getElementsByTagName('code')[0]
   return {
-    type: 'Feature',
     id: tag.id,
-    properties: {
-      kind: tag.getAttribute('kind'),
-      code: codeTag ? codeTag.textContent : undefined
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: parseLocation(tag.getElementsByTagName('location')[0])
-    }
+    kind: tag.getAttribute('kind'),
+    code: codeTag ? codeTag.textContent : undefined,
+    coordinates: parseLocation(tag.getElementsByTagName('location')[0]),
+    description: Array.from(tag.getElementsByTagName('description')).reduce((a, dtag) => {
+      a[dtag.getAttribute('box')] = dtag.getAttribute('iof-2004-ref')
+      return a
+    }, {})
   }
 }

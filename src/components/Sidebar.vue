@@ -3,14 +3,10 @@
     <mu-container>
       <mu-expansion-panel :expand="panel === 'courses'" @change="togglePanel('courses')">
         <div slot="header">{{$t('menus.courses')}}</div>
-        <mu-list :value="selectedCourse">
-          <mu-list-item button nested @click="selectedCourse = i" v-for="(c, i) in event.courses" :open="selectedCourse === i" :key="i" :value="i">
-            <mu-list-item-title>{{c.name}}</mu-list-item-title>
-            <mu-list-item v-for="(c, i) in c.controls" :key="i" value="i" slot="nested">
-              <mu-list-item-title>{{i + 1}}</mu-list-item-title>
-            </mu-list-item>
-          </mu-list-item>
-        </mu-list>
+        <mu-expansion-panel v-for="(c, i) in event.courses" :key="i" :expand="selectedCourse === i" @change="selectedCourse = i" :z-depth=1>
+          <div slot="header">{{c.name}}</div>
+          <control-description-sheet :event="event" :course="c" />
+        </mu-expansion-panel>
       </mu-expansion-panel>      
       <mu-expansion-panel :expand="panel === 'map'" @change="togglePanel('map')">
         <div slot="header">{{$t('menus.map')}}</div>
@@ -27,7 +23,10 @@
 </template>
 
 <script>
+import ControlDescriptionSheet from './ControlDescriptionSheet.vue'
+
 export default {
+  components: { ControlDescriptionSheet },
   props: {
     event: Object,
     map: Object

@@ -1,11 +1,25 @@
 import { featureCollection } from '@turf/helpers'
 import Coordinate from './coordinate'
 
+const distance = (c1, c2) => {
+  const crd1 = c1.coordinates
+  const crd2 = c2.coordinates
+  const dx = crd2[0] - crd1[0]
+  const dy = crd2[1] - crd1[1]
+  return Math.sqrt(dx * dx + dy * dy)
+}
+
 export default class Course {
-  constructor (id, name, controls = []) {
+  constructor (id, name, controls = [], scale) {
     this.id = id
     this.name = name
     this.controls = controls
+    this.scale = scale
+  }
+
+  distance () {
+    const controls = this.controls
+    return controls.slice(1).reduce((a, c, i) => a + distance(controls[i], c), 0) / 1000 / 1000 * this.scale
   }
 
   addControl (c) {
