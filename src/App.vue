@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div v-if="layers && layers.length && mapGeojson && mapGeojson.features">
-      <sidebar :event="event" :map="map" />
+      <div class="sidebar-wrapper">
+        <sidebar :event="event" :map="map" :selected-control="selectedControl" />
+      </div>
       <map-view
         :controls="controlsGeoJson"
         :control-texts="controlLabelsGeoJson"
@@ -10,7 +12,8 @@
         :map-geojson="mapGeojson"
         :map-rotation="mapRotation"
         @controladded="controlAdded"
-        @controlmoved="controlMoved"/>
+        @controlmoved="controlMoved"
+        @controlselected="controlSelected"/>
     </div>
     <empty-map v-else @fileselected="mapFileSelected" />
   </div>
@@ -44,6 +47,7 @@ export default {
         ]
       },
       selectedCourse: 0,
+      selectedControl: 0,
       layers: [],
       mapGeojson: {},
       mapRotation: 0
@@ -122,6 +126,10 @@ export default {
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
       this.event.courses[this.selectedCourse].moveControl({id: e.id, coordinates})
+    },
+
+    controlSelected (e) {
+      this.selectedControl = e.id
     }
   },
   components: {
@@ -146,5 +154,14 @@ const applyCrs = (crs, features) => {
   body {
     margin: 0;
     padding: 0;
+  }
+
+  .sidebar-wrapper {
+    position: absolute;
+    z-index: 1;
+    right: 1rem;
+    top: 1rem;
+    padding: 1rem;
+    width: 30em;
   }
 </style>

@@ -1,0 +1,869 @@
+﻿<course-scribe-event>
+  <event id="1">
+    <title>Träningstävling 2018-04-26</title>
+    <map kind="OCAD" scale="15000" ignore-missing-fonts="false" absolute-path="D:\Dropbox\TAIK Peter\2018-04-26 Träningstävling\KartaHisingsparken_ny.ocd">..\..\..\..\TAIK Peter\2018-04-26 Träningstävling\KartaHisingsparken_ny.ocd</map>
+    <standards map="2017" description="2004" />
+    <all-controls print-scale="7500" description-kind="symbols" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-28.3190384" top="109.921432" right="113.03196" bottom="12.0044346" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <numbering start="31" disallow-invertible="true" />
+    <punch-card rows="3" columns="8" left-to-right="true" top-to-bottom="false" />
+    <course-appearance scale-sizes="RelativeToMap" auto-leg-gap-size="3.5" blend-purple="true" />
+    <descriptions lang="sv" color="black" />
+    <ocad overprint-colors="false" />
+  </event>
+  <control id="1" kind="start">
+    <location x="17.6688118" y="66.3785858" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="2" kind="normal">
+    <code>31</code>
+    <location x="10.9165583" y="72.8259354" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.14E" />
+    <gaps scale="7500">11111111111111111001111111111111</gaps>
+    <circle-gaps scale="7500">142.979279:174.032562</circle-gaps>
+  </control>
+  <control id="4" kind="normal">
+    <code>33</code>
+    <location x="3.49370575" y="37.263" />
+    <description box="D" iof-2004-ref="4.5" />
+    <description box="G" iof-2004-ref="11.6SW" />
+    <gaps scale="7500">11111111111111110011111111111111</gaps>
+    <circle-gaps scale="7500">162.391937:185.487122</circle-gaps>
+  </control>
+  <control id="25" kind="normal">
+    <code>34</code>
+    <location x="29.0641365" y="29.8160362" />
+    <description box="D" iof-2004-ref="5.8" />
+    <description box="G" iof-2004-ref="11.8E" />
+    <gaps scale="7500">11111111111111111111111000111111</gaps>
+    <circle-gaps scale="7500">70.5250244:101.987877</circle-gaps>
+  </control>
+  <control id="6" kind="finish">
+    <location x="27.2725945" y="62.2248" />
+    <description box="all" iof-2004-ref="14.1" />
+  </control>
+  <control id="7" kind="normal">
+    <code>100</code>
+    <location x="23.0557384" y="58.462" />
+    <description box="C" iof-2004-ref="0.1N" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="8" kind="normal">
+    <code>56</code>
+    <location x="25.9925766" y="53.70682" />
+    <description box="C" iof-2004-ref="0.5" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.14NE" />
+    <gaps scale="7500">11111110011111111111111101111111</gaps>
+    <circle-gaps scale="7500">78.03307:90.84499,258.700745:282.289856</circle-gaps>
+  </control>
+  <control id="9" kind="normal">
+    <code>37</code>
+    <location x="43.705677" y="31.9342651" />
+    <description box="D" iof-2004-ref="4.9" />
+    <description box="G" iof-2004-ref="11.1NE" />
+    <gaps scale="7500">11111100111111111111111111111111</gaps>
+    <circle-gaps scale="7500">270.769318:291.397552</circle-gaps>
+  </control>
+  <control id="10" kind="normal">
+    <code>38</code>
+    <location x="-9.588936" y="39.2380142" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.14SW" />
+    <gaps scale="7500">11111110011111111111111111111111</gaps>
+    <circle-gaps scale="7500">259.078461:280.067474</circle-gaps>
+  </control>
+  <control id="11" kind="normal">
+    <code>35</code>
+    <location x="4.85870171" y="68.8414841" />
+    <description box="D" iof-2004-ref="2.1" />
+    <gaps scale="7500">11111111111101111111111111111111</gaps>
+    <circle-gaps scale="7500">214.949539:230.3283</circle-gaps>
+  </control>
+  <control id="12" kind="normal">
+    <code>40</code>
+    <location x="-10.3614779" y="50.34081" />
+    <description box="D" iof-2004-ref="5.8" />
+    <description box="E" iof-2004-ref="5.8" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="13" kind="normal">
+    <code>41</code>
+    <location x="4.44517326" y="71.70317" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="3.5" />
+    <description box="F" iof-2004-ref="10.1" />
+  </control>
+  <control id="14" kind="normal">
+    <code>42</code>
+    <location x="10.5460739" y="56.01519" />
+    <description box="C" iof-2004-ref="0.5" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="15" kind="normal">
+    <code>43</code>
+    <location x="6.232144" y="39.1831665" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.8" />
+    <description box="F" iof-2004-ref="10.1" />
+  </control>
+  <control id="16" kind="normal">
+    <code>44</code>
+    <location x="16.05084" y="34.2859955" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="17" kind="normal">
+    <code>52</code>
+    <location x="22.3969574" y="28.4889221" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.14SE" />
+  </control>
+  <control id="18" kind="normal">
+    <code>46</code>
+    <location x="34.3875732" y="30.1177635" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="19" kind="normal">
+    <code>47</code>
+    <location x="22.0106621" y="45.14887" />
+    <description box="C" iof-2004-ref="0.1W" />
+    <description box="D" iof-2004-ref="2.1" />
+    <description box="G" iof-2004-ref="11.13" />
+  </control>
+  <control id="20" kind="normal">
+    <code>48</code>
+    <location x="33.35327" y="40.0543175" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+    <gaps scale="7500">11100111111111111111111111111111</gaps>
+    <circle-gaps scale="7500">298.711975:325.8033</circle-gaps>
+  </control>
+  <control id="21" kind="normal">
+    <code>49</code>
+    <location x="26.0342731" y="36.6936951" />
+    <description box="D" iof-2004-ref="2.4" />
+    <description box="G" iof-2004-ref="11.1S" />
+    <gaps scale="7500">10011001111111111111011111111111</gaps>
+    <circle-gaps scale="7500">122.42807:133.872391,277.302:303.5134,330.434326:345.802765</circle-gaps>
+  </control>
+  <control id="22" kind="normal">
+    <code>50</code>
+    <location x="-1.91983891" y="56.75469" />
+    <description box="D" iof-2004-ref="3.3" />
+    <description box="G" iof-2004-ref="11.1N" />
+    <gaps scale="7500">11111111111111111111110001111111</gaps>
+    <circle-gaps scale="7500">82.5965347:109.253983</circle-gaps>
+  </control>
+  <control id="34" kind="normal">
+    <code>58</code>
+    <location x="10.354537" y="85.25688" />
+    <description box="C" iof-2004-ref="0.5" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.14E" />
+    <gaps scale="7500">11101011110111111111101111011001</gaps>
+    <circle-gaps scale="7500">13.3971357:29.5408478,55.98376:67.85493,110.387825:127.43914,238.90863:249.251617,288.5517:301.374023,315.661957:328.017975</circle-gaps>
+  </control>
+  <control id="24" kind="normal">
+    <code>45</code>
+    <location x="40.22012" y="22.7756252" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.14S" />
+    <gaps scale="7500">01111111111111111111111111100000</gaps>
+    <circle-gaps scale="7500">-10.11731:51.91714</circle-gaps>
+  </control>
+  <control id="26" kind="normal">
+    <code>53</code>
+    <location x="16.5074158" y="86.08974" />
+    <description box="D" iof-2004-ref="2.4" />
+    <description box="E" iof-2004-ref="2.4" />
+    <description box="G" iof-2004-ref="11.15" />
+    <gaps scale="7500">11111101111111111011111111111111</gaps>
+    <circle-gaps scale="7500">162.0249:173.970749,279.638275:289.517639</circle-gaps>
+  </control>
+  <control id="27" kind="normal">
+    <code>54</code>
+    <location x="17.3847427" y="71.28666" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.14NW" />
+  </control>
+  <control id="28" kind="normal">
+    <code>39</code>
+    <location x="26.8208542" y="65.59074" />
+    <description box="D" iof-2004-ref="4.1" />
+    <description box="G" iof-2004-ref="11.4SE" />
+  </control>
+  <control id="29" kind="normal">
+    <code>55</code>
+    <location x="33.6165543" y="59.6438141" />
+    <description box="C" iof-2004-ref="0.1S" />
+    <description box="D" iof-2004-ref="2.1" />
+    <description box="F">3,0</description>
+    <description box="G" iof-2004-ref="11.13" />
+  </control>
+  <control id="32" kind="normal">
+    <code>57</code>
+    <location x="1.85934258" y="48.6179962" />
+    <description box="D" iof-2004-ref="1.10" />
+    <description box="E" iof-2004-ref="1.10" />
+    <description box="G" iof-2004-ref="11.15" />
+  </control>
+  <control id="33" kind="normal">
+    <code>51</code>
+    <location x="11.3161259" y="47.526825" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="35" kind="normal">
+    <code>36</code>
+    <location x="9.617332" y="61.64583" />
+    <description box="C" iof-2004-ref="0.1S" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <control id="36" kind="normal">
+    <code>32</code>
+    <location x="10.2150307" y="43.30807" />
+    <description box="C" iof-2004-ref="0.1E" />
+    <description box="D" iof-2004-ref="5.2" />
+    <description box="E" iof-2004-ref="5.2" />
+    <description box="F" iof-2004-ref="10.2" />
+  </control>
+  <course id="1" kind="normal" order="1">
+    <name>U1</name>
+    <labels label-kind="sequence" />
+    <first course-control="1" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-28.3190384" top="109.921432" right="113.03196" bottom="12.0044346" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="7500" load="20" description-kind="symbols" />
+  </course>
+  <course id="2" kind="normal" order="3">
+    <name>U2</name>
+    <labels label-kind="sequence" />
+    <first course-control="2" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-28.3190384" top="109.921432" right="113.03196" bottom="12.0044346" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="7500" load="20" description-kind="symbols" />
+  </course>
+  <course id="4" kind="normal" order="4">
+    <name>HD12, HD14K, U3</name>
+    <labels label-kind="sequence" />
+    <first course-control="4" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-28.3190384" top="109.921432" right="113.03196" bottom="12.0044346" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="7500" load="10" description-kind="symbols" />
+  </course>
+  <course id="6" kind="normal" order="6">
+    <name>HD16</name>
+    <labels label-kind="sequence" />
+    <first course-control="6" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-28.3190384" top="109.921432" right="113.03196" bottom="12.0044346" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="7500" load="5" description-kind="symbols" />
+  </course>
+  <course id="7" kind="normal" order="2">
+    <name>HD10, HD12K</name>
+    <labels label-kind="sequence" />
+    <first course-control="97" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-28.3190384" top="109.921432" right="113.03196" bottom="12.0044346" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="7500" load="10" description-kind="symbols" />
+  </course>
+  <course id="8" kind="normal" order="5">
+    <name>HD14, HD16K</name>
+    <labels label-kind="sequence" />
+    <first course-control="110" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-28.3190384" top="109.921432" right="113.03196" bottom="12.0044346" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="7500" load="10" description-kind="symbols" />
+  </course>
+  <course id="9" kind="score" order="7">
+    <name>Ut N</name>
+    <labels label-kind="code" />
+    <first course-control="159" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-7.554348" top="94.1340942" right="86.67966" bottom="28.85609" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="5000" score-column="H" description-kind="symbols" />
+  </course>
+  <course id="10" kind="score" order="8">
+    <name>Ut SV</name>
+    <labels label-kind="code" />
+    <first course-control="173" />
+    <print-area automatic="false" restrict-to-page-size="true" left="-16.0688267" top="79.89896" right="78.16518" bottom="14.6209564" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="5000" score-column="H" description-kind="symbols" />
+  </course>
+  <course id="11" kind="score" order="9">
+    <name>Ut O</name>
+    <labels label-kind="code" />
+    <first course-control="183" />
+    <print-area automatic="false" restrict-to-page-size="true" left="0.427967072" top="76.573" right="94.66197" bottom="11.2949944" page-width="827" page-height="1169" page-margins="28" page-landscape="true" />
+    <options print-scale="5000" score-column="H" description-kind="symbols" />
+  </course>
+  <course-control id="1" control="1">
+    <next course-control="135" />
+  </course-control>
+  <course-control id="2" control="1">
+    <next course-control="41" />
+  </course-control>
+  <course-control id="4" control="1">
+    <next course-control="158" />
+  </course-control>
+  <course-control id="6" control="1">
+    <next course-control="57" />
+  </course-control>
+  <course-control id="159" control="1">
+    <next course-control="161" />
+  </course-control>
+  <course-control id="157" control="12">
+    <next course-control="20" />
+  </course-control>
+  <course-control id="9" control="4">
+    <next course-control="56" />
+  </course-control>
+  <course-control id="52" control="24">
+    <next course-control="19" />
+  </course-control>
+  <course-control id="11" control="6" />
+  <course-control id="12" control="6" />
+  <course-control id="13" control="6" />
+  <course-control id="141" control="25">
+    <next course-control="146" />
+  </course-control>
+  <course-control id="16" control="6" />
+  <course-control id="17" control="7">
+    <next course-control="11" />
+  </course-control>
+  <course-control id="134" control="19">
+    <next course-control="17" />
+  </course-control>
+  <course-control id="19" control="9">
+    <next course-control="40" />
+  </course-control>
+  <course-control id="20" control="10">
+    <next course-control="9" />
+  </course-control>
+  <course-control id="96" control="34">
+    <next course-control="59" />
+  </course-control>
+  <course-control id="136" control="36">
+    <next course-control="33" />
+  </course-control>
+  <course-control id="135" control="35">
+    <next course-control="31" />
+  </course-control>
+  <course-control id="137" control="14">
+    <next course-control="138" />
+  </course-control>
+  <course-control id="30" control="7">
+    <next course-control="12" />
+    <number-location x="-4.70649338" y="2.27846336" />
+  </course-control>
+  <course-control id="31" control="14">
+    <next course-control="74" />
+  </course-control>
+  <course-control id="33" control="16">
+    <next course-control="34" />
+  </course-control>
+  <course-control id="34" control="17">
+    <next course-control="35" />
+  </course-control>
+  <course-control id="35" control="18">
+    <next course-control="37" />
+  </course-control>
+  <course-control id="36" control="19">
+    <next course-control="30" />
+  </course-control>
+  <course-control id="37" control="20">
+    <next course-control="36" />
+  </course-control>
+  <course-control id="40" control="21">
+    <next course-control="134" />
+  </course-control>
+  <course-control id="41" control="13">
+    <next course-control="42" />
+  </course-control>
+  <course-control id="42" control="22">
+    <next course-control="43" />
+  </course-control>
+  <course-control id="43" control="12">
+    <next course-control="44" />
+  </course-control>
+  <course-control id="44" control="15">
+    <next course-control="45" />
+  </course-control>
+  <course-control id="45" control="17">
+    <next course-control="155" />
+  </course-control>
+  <course-control id="156" control="22">
+    <next course-control="157" />
+  </course-control>
+  <course-control id="48" control="19">
+    <next course-control="49" />
+  </course-control>
+  <course-control id="49" control="7">
+    <next course-control="13" />
+  </course-control>
+  <course-control id="50" control="20">
+    <next course-control="48" />
+  </course-control>
+  <course-control id="56" control="25">
+    <next course-control="52" />
+  </course-control>
+  <course-control id="57" control="2">
+    <next course-control="58" />
+  </course-control>
+  <course-control id="58" control="26">
+    <next course-control="96" />
+  </course-control>
+  <course-control id="59" control="27">
+    <next course-control="60" />
+  </course-control>
+  <course-control id="60" control="28">
+    <next course-control="61" />
+  </course-control>
+  <course-control id="61" control="29">
+    <next course-control="62" />
+  </course-control>
+  <course-control id="62" control="8">
+    <next course-control="148" />
+  </course-control>
+  <course-control id="148" control="21">
+    <next course-control="150" />
+  </course-control>
+  <course-control id="152" control="12">
+    <next course-control="71" />
+  </course-control>
+  <course-control id="153" control="10">
+    <next course-control="154" />
+  </course-control>
+  <course-control id="154" control="12">
+    <next course-control="127" />
+  </course-control>
+  <course-control id="155" control="18">
+    <next course-control="50" />
+  </course-control>
+  <course-control id="150" control="9">
+    <next course-control="149" />
+  </course-control>
+  <course-control id="149" control="24">
+    <next course-control="139" />
+  </course-control>
+  <course-control id="71" control="32">
+    <next course-control="72" />
+  </course-control>
+  <course-control id="72" control="11">
+    <next course-control="73" />
+  </course-control>
+  <course-control id="73" control="7">
+    <next course-control="16" />
+  </course-control>
+  <course-control id="74" control="33">
+    <next course-control="136" />
+    <number-location x="4.35363" y="0.838692665" />
+  </course-control>
+  <course-control id="97" control="1">
+    <next course-control="98" />
+  </course-control>
+  <course-control id="98" control="13">
+    <next course-control="109" />
+  </course-control>
+  <course-control id="138" control="33">
+    <next course-control="101" />
+  </course-control>
+  <course-control id="101" control="15">
+    <next course-control="132" />
+  </course-control>
+  <course-control id="102" control="17">
+    <next course-control="131" />
+  </course-control>
+  <course-control id="146" control="4">
+    <next course-control="153" />
+  </course-control>
+  <course-control id="132" control="16">
+    <next course-control="102" />
+  </course-control>
+  <course-control id="105" control="20">
+    <next course-control="106" />
+  </course-control>
+  <course-control id="106" control="19">
+    <next course-control="107" />
+  </course-control>
+  <course-control id="107" control="7">
+    <next course-control="108" />
+    <number-location x="-5.479723" y="1.30870438" />
+  </course-control>
+  <course-control id="108" control="6" />
+  <course-control id="109" control="22">
+    <next course-control="137" />
+  </course-control>
+  <course-control id="110" control="1">
+    <next course-control="111" />
+  </course-control>
+  <course-control id="111" control="2">
+    <next course-control="112" />
+  </course-control>
+  <course-control id="112" control="26">
+    <next course-control="113" />
+  </course-control>
+  <course-control id="113" control="34">
+    <next course-control="114" />
+  </course-control>
+  <course-control id="114" control="27">
+    <next course-control="115" />
+  </course-control>
+  <course-control id="115" control="28">
+    <next course-control="116" />
+  </course-control>
+  <course-control id="116" control="29">
+    <next course-control="117" />
+  </course-control>
+  <course-control id="117" control="8">
+    <next course-control="147" />
+  </course-control>
+  <course-control id="147" control="21">
+    <next course-control="141" />
+  </course-control>
+  <course-control id="144" control="4">
+    <next course-control="151" />
+  </course-control>
+  <course-control id="151" control="10">
+    <next course-control="152" />
+  </course-control>
+  <course-control id="131" control="18">
+    <next course-control="105" />
+  </course-control>
+  <course-control id="139" control="25">
+    <next course-control="144" />
+  </course-control>
+  <course-control id="127" control="32">
+    <next course-control="128" />
+  </course-control>
+  <course-control id="128" control="11">
+    <next course-control="129" />
+  </course-control>
+  <course-control id="129" control="7">
+    <next course-control="130" />
+    <number-location x="-6.275791" y="-0.641080856" />
+  </course-control>
+  <course-control id="130" control="6" />
+  <course-control id="158" control="11">
+    <next course-control="156" />
+  </course-control>
+  <course-control id="160" control="6" />
+  <course-control id="161" control="2">
+    <next course-control="162" />
+  </course-control>
+  <course-control id="162" control="27">
+    <next course-control="163" />
+  </course-control>
+  <course-control id="163" control="26">
+    <next course-control="164" />
+  </course-control>
+  <course-control id="164" control="34">
+    <next course-control="165" />
+  </course-control>
+  <course-control id="165" control="13">
+    <next course-control="166" />
+  </course-control>
+  <course-control id="166" control="11">
+    <next course-control="167" />
+  </course-control>
+  <course-control id="167" control="35">
+    <next course-control="168" />
+  </course-control>
+  <course-control id="168" control="7">
+    <next course-control="169" />
+    <number-location x="-3.18664169" y="-7.22925949" />
+  </course-control>
+  <course-control id="169" control="28">
+    <next course-control="170" />
+  </course-control>
+  <course-control id="170" control="29">
+    <next course-control="171" />
+  </course-control>
+  <course-control id="171" control="8">
+    <next course-control="172" />
+  </course-control>
+  <course-control id="172" control="14">
+    <next course-control="160" />
+  </course-control>
+  <course-control id="173" control="1">
+    <next course-control="175" />
+  </course-control>
+  <course-control id="174" control="6" />
+  <course-control id="175" control="22">
+    <next course-control="176" />
+  </course-control>
+  <course-control id="176" control="12">
+    <next course-control="177" />
+    <number-location x="0.199121475" y="5.525593" />
+  </course-control>
+  <course-control id="177" control="10">
+    <next course-control="178" />
+  </course-control>
+  <course-control id="178" control="4">
+    <next course-control="179" />
+    <number-location x="-2.84391212" y="-5.135811" />
+  </course-control>
+  <course-control id="179" control="15">
+    <next course-control="180" />
+    <number-location x="4.422052" y="-4.72880173" />
+  </course-control>
+  <course-control id="180" control="32">
+    <next course-control="181" />
+    <number-location x="-3.109995" y="-5.66797638" />
+  </course-control>
+  <course-control id="181" control="33">
+    <next course-control="182" />
+  </course-control>
+  <course-control id="182" control="36">
+    <next course-control="174" />
+  </course-control>
+  <course-control id="183" control="1">
+    <next course-control="185" />
+  </course-control>
+  <course-control id="184" control="6" />
+  <course-control id="185" control="16">
+    <next course-control="186" />
+  </course-control>
+  <course-control id="186" control="17">
+    <next course-control="187" />
+  </course-control>
+  <course-control id="187" control="25">
+    <next course-control="188" />
+  </course-control>
+  <course-control id="188" control="21">
+    <next course-control="189" />
+    <number-location x="-5.68412971" y="2.25999451" />
+  </course-control>
+  <course-control id="189" control="18">
+    <next course-control="190" />
+    <number-location x="3.908249" y="4.204521" />
+  </course-control>
+  <course-control id="190" control="24">
+    <next course-control="191" />
+  </course-control>
+  <course-control id="191" control="9">
+    <next course-control="192" />
+  </course-control>
+  <course-control id="192" control="20">
+    <next course-control="193" />
+  </course-control>
+  <course-control id="193" control="19">
+    <next course-control="184" />
+  </course-control>
+  <leg id="4" start-control="33" end-control="15">
+    <gaps>
+      <gap start="3.535874" length="1.67820024" />
+    </gaps>
+  </leg>
+  <leg id="3" start-control="36" end-control="16">
+    <gaps>
+      <gap start="3.575335" length="2.7446928" />
+    </gaps>
+  </leg>
+  <leg id="5" start-control="15" end-control="16">
+    <gaps>
+      <gap start="2.26031923" length="1.98108387" />
+    </gaps>
+  </leg>
+  <leg id="6" start-control="20" end-control="19">
+    <gaps>
+      <gap start="7.65723038" length="1.358099" />
+    </gaps>
+  </leg>
+  <leg id="7" start-control="15" end-control="17">
+    <gaps>
+      <gap start="13.3489542" length="3.63958836" />
+    </gaps>
+  </leg>
+  <leg id="8" start-control="10" end-control="4">
+    <gaps>
+      <gap start="9.906263" length="1.07510853" />
+    </gaps>
+  </leg>
+  <leg id="9" start-control="4" end-control="25">
+    <gaps>
+      <gap start="4.187173" length="1.63855791" />
+      <gap start="8.159368" length="0.5724144" />
+      <gap start="9.568572" length="0.773576736" />
+    </gaps>
+  </leg>
+  <leg id="10" start-control="9" end-control="21">
+    <gaps>
+      <gap start="13.82457" length="0.9651003" />
+    </gaps>
+  </leg>
+  <leg id="11" start-control="8" end-control="21">
+    <gaps>
+      <gap start="2.27411962" length="0.8127351" />
+    </gaps>
+  </leg>
+  <leg id="12" start-control="25" end-control="4">
+    <gaps>
+      <gap start="12.2378883" length="1.15501213" />
+      <gap start="16.1896629" length="0.817361832" />
+      <gap start="20.5351543" length="2.11858177" />
+    </gaps>
+  </leg>
+  <leg id="13" start-control="4" end-control="10">
+    <gaps>
+      <gap start="2.30571866" length="0.9440143" />
+      <gap start="8.259675" length="1.61302662" />
+    </gaps>
+  </leg>
+  <leg id="14" start-control="11" end-control="22">
+    <gaps>
+      <gap start="8.09415" length="1.50392723" />
+    </gaps>
+  </leg>
+  <leg id="15" start-control="34" end-control="27">
+    <gaps>
+      <gap start="1.94095111" length="2.11432433" />
+    </gaps>
+  </leg>
+  <special-object id="1" kind="white-out">
+    <location x="-45.0879135" y="9.180832" />
+    <location x="-23.1829" y="8.563507" />
+    <location x="-23.1829071" y="56.35164" />
+    <location x="-0.0154418945" y="99.5144043" />
+    <location x="32.6520233" y="99.3777161" />
+    <location x="56.4498" y="41.6008453" />
+    <location x="56.53476" y="6.99043274" />
+    <location x="118.828171" y="6.9203186" />
+    <location x="117.39608" y="110.859161" />
+    <location x="-46.4321175" y="112.611145" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="2" kind="descriptions">
+    <location x="81.88209" y="109.350311" />
+    <location x="85.68053" y="109.350311" />
+    <courses>
+      <course course="1" />
+    </courses>
+  </special-object>
+  <special-object id="3" kind="descriptions">
+    <location x="82.83885" y="109.623672" />
+    <location x="86.51241" y="109.623672" />
+    <courses>
+      <course course="2" />
+      <course course="7" />
+    </courses>
+  </special-object>
+  <special-object id="13" kind="image">
+    <text>tolered.png</text>
+    <image-data format="png">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</image-data>
+    <location x="52.55681" y="107.571983" />
+    <location x="74.10906" y="96.55433" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="5" kind="descriptions">
+    <location x="82.08708" y="109.623688" />
+    <location x="85.85285" y="109.623688" />
+    <courses>
+      <course course="4" />
+    </courses>
+  </special-object>
+  <special-object id="7" kind="descriptions">
+    <location x="82.56546" y="109.692009" />
+    <location x="86.29078" y="109.692009" />
+    <courses>
+      <course course="6" />
+      <course course="8" />
+    </courses>
+  </special-object>
+  <special-object id="8" kind="line">
+    <appearance line-kind="single" color="black" line-width="0.15" />
+    <location x="-14.7022705" y="35.29149" />
+    <location x="-13.1505737" y="80.11828" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="9" kind="line">
+    <appearance line-kind="single" color="black" line-width="0.15" />
+    <location x="-13.5372839" y="69.40907" />
+    <location x="-11.9425039" y="114.6913" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="11" kind="registration-mark">
+    <location x="56.60759" y="7.01618" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="12" kind="registration-mark">
+    <location x="118.880745" y="6.871891" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="14" kind="text">
+    <text>Skala 1:7500</text>
+    <font name="Arial" bold="false" italic="false" />
+    <appearance color="black" />
+    <location x="42.2557373" y="93.1039047" />
+    <location x="78.2850342" y="86.40078" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="15" kind="text">
+    <text>Ekv. 5 m</text>
+    <font name="Arial" bold="false" italic="false" />
+    <appearance color="black" />
+    <location x="48.55105" y="86.72985" />
+    <location x="72.89968" y="80.0267258" />
+    <courses all="true" />
+  </special-object>
+  <special-object id="16" kind="image">
+    <text>reservrutor 8 st.PNG</text>
+    <image-data format="png">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pU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7uiDMpk1SaZNU2iSVNkmlTVJpk2T6JFW1ze7s6oIwmzZJpU1SaZNU2iSVNkmlTZLpk1TVNruzqwvCbNoklTZJpU1SaZNU2iSVNkmmT1JV2+zOri4Is2mTVNoklTZJpU1SaZNU2iSZPklVbbM7u7ogzKZNUmmTVNoklTZJpU1SaZNk+iRVtc3u7OqCMJs2SaVNUmmTVNoklTZJpU2S6ZNU1Ta7s6sLwmzaJJU2SaVNUmmTVNoklTZJpk9SVdvszq4uCLNpk1TaJJU2SaVNUmmTVNokmT5JVW2zO7u6IMymTVJpk1TaJJU2SaVNUmmTZPokVbXN7uzqgjCbNkmlTVJpk1TaJJU2SaVNkumTVNU2u7OrC8Js2iSVNkmlTVJpk1TaJJU2SaZPUlXb7M6uLgizaZNU2iSVNkmlTVJpk1TaJJk+SVVtszu7XdAwDMMwDMMwDMMwDMMwDGPPY4SHpoZhGIZhGIZhGIZhGIZhHH6MeHf2W4sbhmEYhmEYhmEYhmEYhmHsaYwa/woAAAAAgAPz0BQAAAAAoOGhKQAAAABAw0NTAAAAAICGh6YAAAAAAA0PTQEAAAAAGh6aAgAAAAA0PDQFAAAAAGh4aAoAAAAA0PDQFAAAAADg7Onp/+EvSxx+i0w4AAAAAElFTkSuQmCC</image-data>
+    <location x="54.4296722" y="21.5768051" />
+    <location x="121.893326" y="12.4357452" />
+    <courses>
+      <course course="1" />
+      <course course="7" />
+      <course course="2" />
+      <course course="4" />
+      <course course="8" />
+      <course course="6" />
+    </courses>
+  </special-object>
+  <special-object id="17" kind="descriptions">
+    <appearance columns="2" />
+    <location x="51.60829" y="75.07706" />
+    <location x="55.2011948" y="75.07706" />
+    <courses>
+      <course course="0" />
+    </courses>
+  </special-object>
+  <special-object id="18" kind="descriptions">
+    <location x="57.73027" y="76.90129" />
+    <location x="60.815464" y="76.90129" />
+    <courses>
+      <course course="9" />
+    </courses>
+  </special-object>
+  <special-object id="19" kind="descriptions">
+    <location x="47.0871735" y="72.37798" />
+    <location x="50.815258" y="72.37798" />
+    <courses>
+      <course course="10" />
+    </courses>
+  </special-object>
+  <special-object id="20" kind="descriptions">
+    <location x="57.73027" y="73.8414" />
+    <location x="61.9680862" y="73.8414" />
+    <courses>
+      <course course="11" />
+    </courses>
+  </special-object>
+  <special-object id="21" kind="white-out">
+    <location x="-10.7057123" y="39.8203239" />
+    <location x="-10.4293442" y="39.6674347" />
+    <location x="-11.76414" y="37.46826" />
+    <location x="-12.7520065" y="36.8096848" />
+    <location x="-13.128336" y="37.07429" />
+    <location x="-10.7468729" y="40.1613731" />
+    <courses all="true" />
+  </special-object>
+</course-scribe-event>

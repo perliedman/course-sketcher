@@ -1,9 +1,9 @@
 import Coordinate from './models/coordinate'
 import Course from './models/course';
 
-export default function parsePPen (crs, doc) {
+export default function parsePPen (doc) {
   const controls = Array.prototype.slice.call(doc.getElementsByTagName('control'))
-    .map(parseControl.bind(null, crs))
+    .map(parseControl)
   const courseControls = Array.prototype.slice.call(doc.getElementsByTagName('course-control'))
     .reduce((a, cc) => {
       const id = cc.getAttribute('id')
@@ -43,7 +43,7 @@ export default function parsePPen (crs, doc) {
     })
     .sort((a, b) => a.order - b.order)
 
-  return courses
+  return {courses}
 }
 
 
@@ -52,7 +52,7 @@ const parseLocation = loc => new Coordinate(
   Number(loc.getAttribute('y'))
 )
 
-const parseControl = (crs, tag) => {
+const parseControl = (tag) => {
   const codeTag = tag.getElementsByTagName('code')[0]
   return {
     type: 'Feature',

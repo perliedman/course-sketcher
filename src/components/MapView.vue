@@ -71,7 +71,7 @@ export default {
                     1,
                     0.7
                 ],
-              'line-color': '#aa0055',
+              'line-color': '#fb3199',
               'line-width': expFunc(4)
             }
           },
@@ -84,7 +84,7 @@ export default {
               'circle-radius': expFunc(28),
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
-              'circle-stroke-color': '#aa0055',
+              'circle-stroke-color': '#fb3199',
               'circle-stroke-opacity': ["case",
                 ["boolean", ["feature-state", "hover"], false],
                     1,
@@ -103,7 +103,7 @@ export default {
               'circle-radius': expFunc(22.4),
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
-              'circle-stroke-color': '#aa0055',
+              'circle-stroke-color': '#fb3199',
               'circle-stroke-opacity': 0.7,
               'circle-pitch-scale': 'map',
               'circle-pitch-alignment': 'map'
@@ -118,7 +118,7 @@ export default {
               'circle-radius': expFunc(33.6),
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
-              'circle-stroke-color': '#aa0055',
+              'circle-stroke-color': '#fb3199',
               'circle-stroke-opacity': ["case",
                 ["boolean", ["feature-state", "hover"], false],
                     1,
@@ -141,7 +141,7 @@ export default {
               'text-ignore-placement': true
             },
             paint: {
-              'text-color': '#aa0055',
+              'text-color': '#fb3199',
               'text-opacity': 0.8
             }
           },
@@ -150,7 +150,7 @@ export default {
             source: 'controlConnections',
             type: 'line',
             paint: {
-              'line-color': '#aa0055',
+              'line-color': '#fb3199',
               'line-opacity': 0.7,
               'line-width': expFunc(4)
             }
@@ -202,6 +202,13 @@ export default {
 
       return this.map
     },
+    setSelection ({source, id}) {
+        if (this.selection && (this.selection.source !== this.hover.source || this.selection.id !== this.hover.id)) {
+          this.map.setFeatureState({source: this.selection.source, id: this.selection.id }, { hover: false })
+        }
+
+        this.selection = { source, id }
+    },
     updateSource (id, data) {
       this.sources[id] = data
 
@@ -211,22 +218,23 @@ export default {
       }
 
       if (map) {
-        if (map.isStyleLoaded()) {
-          setData()
-        } else {
-          map.once('load', setData)
-        }
+        setData()
       }
     },
     onMapClick (e) {
-      this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat] })
+      if (!this.hover) {
+        this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat] })
+      }
     },
     onMouseDown (e) {
-      if (this.hoveredId) {
+      if (this.hover) {
+        this.setSelection(this.hover)
+        this.$emit('controlselected', { id: this.selection.id })
+
         let lastLngLat = e.lngLat
-        const source = this.map.getSource(this.hoveredSource)
-        const sourceData = this.sources[this.hoveredSource]
-        const feature = sourceData.features.find(f => f.id === this.hoveredId)
+        const source = this.map.getSource(this.hover.source)
+        const sourceData = this.sources[this.hover.source]
+        const feature = sourceData.features.find(f => f.id === this.hover.id)
 
         const dragFeature = e => {
           const delta = [e.lngLat.lng - lastLngLat.lng, e.lngLat.lat - lastLngLat.lat]
@@ -253,21 +261,23 @@ export default {
     createFeatureHighlight (source, layer) {
       this.map.on('mousemove', layer, e => {
         if (e.features.length > 0) {
-          if (this.hoveredId) {
-            this.map.setFeatureState({source: this.hoveredSource, id: this.hoveredId}, { hover: false })
+          if (this.hover) {
+            this.map.setFeatureState({source: this.hover.source, id: this.hover.id}, { hover: false })
           }
-          this.hoveredSource = source
-          this.hoveredId = e.features[0].id
+          this.hover = { source, id: e.features[0].id }
           this.map.dragPan.disable()
-          this.map.setFeatureState({source, id: this.hoveredId}, { hover: true })
+          this.map.setFeatureState({source, id: this.hover.id}, { hover: true })
         }
       })
 
       this.map.on('mouseleave', layer, e => {
-        if (this.hoveredSource === source && this.hoveredId) {
-          this.map.setFeatureState({source, id: this.hoveredId}, { hover: false })
-          this.hoveredSource = null
-          this.hoveredId = null
+        if (this.hover && this.hover.source === source) {
+
+          if (!this.selection || this.selection.source !== source || this.selection.id !== this.hover.id) {
+            this.map.setFeatureState({source, id: this.hover.id}, { hover: false })
+          }
+
+          this.hover = null
           this.map.dragPan.enable()
         }
       })
