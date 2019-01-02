@@ -4,16 +4,19 @@
       <tbody>
         <tr class="heavy-bottom">
           <td colspan="8">{{event.name}}</td>
+          <td class="control-menu"></td>
         </tr>
         <tr class="heavy-bottom">
           <td colspan="8">{{course.name}}</td>
+          <td class="control-menu"></td>
         </tr>
         <tr class="heavy-bottom">
           <td colspan="3" class="heavy-right">{{course.id}}</td>
           <td colspan="3" class="heavy-right">{{course.distance().toFixed(1)}} km</td>
           <td colspan="2"></td>
+          <td class="control-menu"></td>
         </tr>
-        <tr v-for="(c, i) in course.controls" :key="i" :class="{'light-bottom': i % 3 !== 0, 'heavy-bottom': i % 3 === 0}">
+        <tr v-for="(c, i) in course.controls" :key="i" :class="{'light-bottom': i % 3 !== 0, 'heavy-bottom': i % 3 === 0, selected: c.id === selectedControlId}">
           <td>
             {{i > 0 ? i : ''}}
             <img v-if="i === 0" src="iof-2004/start.svg" />
@@ -25,6 +28,18 @@
           <td @click="openDialog(c.id, 'F', c.description.F)"  class="heavy-right"><img v-if="c.description.F" :src="`iof-2004/${c.description.F}.svg`" /></td>
           <td @click="openDialog(c.id, 'G', c.description.G)" ><img v-if="c.description.G" :src="`iof-2004/${c.description.G}.svg`" /></td>
           <td @click="openDialog(c.id, 'H', c.description.H)" ><img v-if="c.description.H" :src="`iof-2004/${c.description.H}.svg`" /></td>
+          <td class="control-menu">
+            <mu-menu cover placement="bottom-end">
+              <mu-button icon small>
+                <mu-icon value="more_vert"/>
+              </mu-button>
+              <mu-list slot="content">
+                <mu-list-item button @click="$emit('controlremoved', { id: c.id })">
+                  <mu-list-item-title>{{$t('actions.remove')}}</mu-list-item-title>
+                </mu-list-item>
+              </mu-list>
+            </mu-menu>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -48,7 +63,8 @@ export default {
   components: { SymbolChooser },
   props: {
     event: Object,
-    course: Object
+    course: Object,
+    selectedControlId: Number
   },
   data () {
     return {
@@ -85,7 +101,18 @@ export default {
 <style scoped>
   table {
     border-collapse: collapse;
-    border: 2px solid black;
+  }
+
+  tr:first-child td {
+    border-top: 2px solid black;
+  }
+
+  tr:last-child td {
+    border-bottom: 2px solid black;
+  }
+
+  td:first-child {
+    border-left: 2px solid black;
   }
 
   td {
@@ -94,6 +121,10 @@ export default {
     min-width: 2.5em;
     padding: 0.2em;
     border-right: 1px solid black;
+  }
+
+  .selected {
+    background-color: #eee;
   }
 
   td:hover {
@@ -111,5 +142,11 @@ export default {
 
   .heavy-right {
     border-right: 2px solid black;
+  }
+
+  .control-menu {
+    background-color: white !important;
+    border: none !important;
+    border-left: 2px solid black !important;
   }
 </style>

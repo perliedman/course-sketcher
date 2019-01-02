@@ -10,7 +10,8 @@ export default {
       removeMap: 'Ta bort',
       ok: 'Ok',
       cancel: 'Avbryt',
-      search: 'Sök'
+      search: 'Sök',
+      remove: 'Ta bort'
     },
     event: {
       newName: 'Ny träning'
@@ -33,7 +34,8 @@ export default {
       removeMap: 'Remove',
       ok: 'Ok',
       cancel: 'Cancel',
-      search: 'Search'
+      search: 'Search',
+      remove: 'Remove'
     },
     event: {
       newName: 'New training'

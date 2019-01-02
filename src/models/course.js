@@ -45,15 +45,28 @@ export default class Course {
     return this
   }
 
-  setControlDescription(controlId, kind, descriptionId) {
+  setControlDescription (controlId, kind, descriptionId) {
     const control = this.controls.find(control => control.id === controlId)
     control.description[kind] = descriptionId
+  }
+
+  removeControl (controlId) {
+    const index = this.controls.findIndex(c => c.id === controlId)
+
+    if (index === 0) {
+      this.controls[1].kind = 'start'
+    }
+
+    this.controls.splice(index, 1)
+    this.controls.forEach((c, i) => {
+      c.sequence = i > 0 ? i : undefined
+    })
   }
 
   controlsToGeoJson () {
     return featureCollection(this.controls.map((c, i) => ({
       type: 'Feature',
-      id: i + 1, // TODO
+      id: c.id, // TODO
       properties: c,
       geometry: i > 0
         ? {

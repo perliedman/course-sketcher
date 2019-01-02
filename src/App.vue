@@ -2,7 +2,12 @@
   <div id="app">
     <div v-if="layers && layers.length && mapGeojson && mapGeojson.features">
       <div class="sidebar-wrapper">
-        <sidebar :event="event" :map="map" :selected-control="selectedControl" @controldescriptionset="controlDescriptionSet" />
+        <sidebar
+          :event="event"
+          :map="map"
+          :selected-control-id="selectedControl"
+          @controldescriptionset="controlDescriptionSet"
+          @controlremoved="controlRemoved" />
       </div>
       <map-view
         :controls="controlsGeoJson"
@@ -135,6 +140,10 @@ export default {
 
     controlDescriptionSet (e) {
       this.event.courses[this.selectedCourse].setControlDescription(e.controlId, e.kind, e.descriptionId)
+    },
+
+    controlRemoved (e) {
+      this.event.courses[this.selectedCourse].removeControl(e.id)
     }
   },
   components: {
@@ -167,6 +176,6 @@ const applyCrs = (crs, features) => {
     right: 1rem;
     top: 1rem;
     padding: 1rem;
-    width: 30em;
+    width: 32em;
   }
 </style>
