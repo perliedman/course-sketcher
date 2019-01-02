@@ -30,9 +30,6 @@ const createSvgNode = (document, n) => {
 const paths = (tag, fill, closed, symbol) => Array.from(symbol.getElementsByTagName(tag))
   .map(p => {
     const points = Array.from(p.getElementsByTagName('point'))
-    if (closed) {
-      points.push(points[0])
-    }
 
     return {
       type: 'path',
@@ -43,6 +40,7 @@ const paths = (tag, fill, closed, symbol) => Array.from(symbol.getElementsByTagN
         'stroke-linejoin': p.getAttribute('corners') !== 'round' ? 'miter' : 'round',
         d: points
           .map((p, i) => `${i === 0 ? 'M' : 'L'} ${svgCoord(p)}`)
+          .concat(closed ? ['Z'] : [])
           .join(' ')
       }
     }
