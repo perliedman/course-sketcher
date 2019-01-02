@@ -1,51 +1,115 @@
 <template>
-  <table>
-    <tbody>
-      <tr>
-        <td colspan="8">{{event.name}}</td>
-      </tr>
-      <tr>
-        <td colspan="8">{{course.name}}</td>
-      </tr>
-      <tr>
-        <td colspan="3">{{course.id}}</td>
-        <td colspan="3">{{course.distance().toFixed(1)}} km</td>
-        <td colspan="2"></td>
-      </tr>
-      <tr v-for="(c, i) in course.controls" :key="i">
-        <td>{{i > 0 ? i : ''}}</td>
-        <td>{{c.code}}</td>
-        <td><img v-if="c.description.C" :src="`iof-2004/${c.description.C}.svg`" /></td>
-        <td><img v-if="c.description.D" :src="`iof-2004/${c.description.D}.svg`" /></td>
-        <td><img v-if="c.description.E" :src="`iof-2004/${c.description.E}.svg`" /></td>
-        <td><img v-if="c.description.F" :src="`iof-2004/${c.description.F}.svg`" /></td>
-        <td><img v-if="c.description.G" :src="`iof-2004/${c.description.G}.svg`" /></td>
-        <td><img v-if="c.description.H" :src="`iof-2004/${c.description.H}.svg`" /></td>
-      </tr>
-    </tbody>
-  </table>
+  <div>
+    <table>
+      <tbody>
+        <tr class="heavy-bottom">
+          <td colspan="8">{{event.name}}</td>
+        </tr>
+        <tr class="heavy-bottom">
+          <td colspan="8">{{course.name}}</td>
+        </tr>
+        <tr class="heavy-bottom">
+          <td colspan="3" class="heavy-right">{{course.id}}</td>
+          <td colspan="3" class="heavy-right">{{course.distance().toFixed(1)}} km</td>
+          <td colspan="2"></td>
+        </tr>
+        <tr v-for="(c, i) in course.controls" :key="i" :class="{'light-bottom': i % 3 !== 0, 'heavy-bottom': i % 3 === 0}">
+          <td>
+            {{i > 0 ? i : ''}}
+            <img v-if="i === 0" src="iof-2004/start.svg" />
+          </td>
+          <td>{{c.code}}</td>
+          <td @click="openDialog(c.id, 'C', c.description.C)" class="heavy-right"><img v-if="c.description.C" :src="`iof-2004/${c.description.C}.svg`" /></td>
+          <td @click="openDialog(c.id, 'D', c.description.D)" ><img v-if="c.description.D" :src="`iof-2004/${c.description.D}.svg`" /></td>
+          <td @click="openDialog(c.id, 'E', c.description.E)" ><img v-if="c.description.E" :src="`iof-2004/${c.description.E}.svg`" /></td>
+          <td @click="openDialog(c.id, 'F', c.description.F)"  class="heavy-right"><img v-if="c.description.F" :src="`iof-2004/${c.description.F}.svg`" /></td>
+          <td @click="openDialog(c.id, 'G', c.description.G)" ><img v-if="c.description.G" :src="`iof-2004/${c.description.G}.svg`" /></td>
+          <td @click="openDialog(c.id, 'H', c.description.H)" ><img v-if="c.description.H" :src="`iof-2004/${c.description.H}.svg`" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <mu-dialog title="Select Symbol" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open.sync="dialogOpen">
+      <symbol-chooser :symbols="symbols" :kind="dialogKind" :selected="dialogSelection" @symbolselected="dialogResult = $event.id" />
+      <mu-button slot="actions" flat @click="closeDialog">Cancel</mu-button>
+      <mu-button slot="actions" flat color="primary" @click="dialogOk()">Ok</mu-button>
+    </mu-dialog>
+  </div>
 </template>
 
 <script>
+import symbolsXml from '../assets/symbols.xml'
+import parseSymbols from '../parse-symbols.js'
+import SymbolChooser from './SymbolChooser.vue'
+
+const symbols = parseSymbols(new DOMParser().parseFromString(symbolsXml, 'application/xml'))
+
 export default {
   name: 'ControlDescriptionSheet',
+  components: { SymbolChooser },
   props: {
     event: Object,
     course: Object
-  }    
+  },
+  data () {
+    return {
+      dialogOpen: false,
+      dialogControlId: null,
+      dialogKind: null,
+      dialogSelection: null,
+      dialogResult: null,
+      symbols
+    }
+  },
+  methods: {
+    openDialog (controlId, kind, selection) {
+      this.dialogControlId = controlId
+      this.dialogKind = kind
+      this.dialogSelection = selection
+      this.dialogOpen = true
+    },
+    closeDialog () {
+      this.dialogOpen = false
+    },
+    dialogOk () {
+      this.dialogOpen = false
+      this.$emit('controldescriptionset', {
+        controlId: this.dialogControlId,
+        kind: this.dialogKind,
+        descriptionId: this.dialogResult
+       })
+    }
+  }
 }
 </script>
 
 <style scoped>
   table {
     border-collapse: collapse;
+    border: 2px solid black;
   }
 
   td {
     text-align: center;
-    border: 2px solid black;
     color: black;
     min-width: 2.5em;
     padding: 0.2em;
+    border-right: 1px solid black;
+  }
+
+  td:hover {
+    background-color: #ccc;
+    cursor: pointer;
+  }
+
+  .light-bottom td {
+    border-bottom: 1px solid black;
+  }
+
+  .heavy-bottom td {
+    border-bottom: 2px solid black;
+  }
+
+  .heavy-right {
+    border-right: 2px solid black;
   }
 </style>

@@ -5,7 +5,7 @@
         <div slot="header">{{$t('menus.courses')}}</div>
         <mu-expansion-panel v-for="(c, i) in event.courses" :key="i" :expand="selectedCourse === i" @change="selectedCourse = i" :z-depth=1>
           <div slot="header">{{c.name}}</div>
-          <control-description-sheet :event="event" :course="c" />
+          <control-description-sheet :event="event" :course="c" @controldescriptionset="$emit('controldescriptionset', $event)" />
         </mu-expansion-panel>
       </mu-expansion-panel>      
       <mu-expansion-panel :expand="panel === 'map'" @change="togglePanel('map')">

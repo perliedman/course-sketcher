@@ -5,11 +5,11 @@ module.exports = (baseConfig, env, defaultConfig) => {
 
   // For example, add typescript loader:
   defaultConfig.module.rules.push({
-    test: /\.ppen$/,
+    test: /\.(ppen|xml)$/,
     include: path.resolve(__dirname, ".."),
     loader: require.resolve("raw-loader")
   });
-  defaultConfig.resolve.extensions.push(".ppen");
+  defaultConfig.resolve.extensions.push(".ppen", ".xml");
 
   return defaultConfig;
 };

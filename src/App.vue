@@ -2,7 +2,7 @@
   <div id="app">
     <div v-if="layers && layers.length && mapGeojson && mapGeojson.features">
       <div class="sidebar-wrapper">
-        <sidebar :event="event" :map="map" :selected-control="selectedControl" />
+        <sidebar :event="event" :map="map" :selected-control="selectedControl" @controldescriptionset="controlDescriptionSet" />
       </div>
       <map-view
         :controls="controlsGeoJson"
@@ -42,8 +42,9 @@ export default {
     return {
       map: {},
       event: {
+        name: this.$t('event.newName'),
         courses: [
-          new Course(1, this.$t('course.newName'), [])
+          new Course(1, this.$t('course.newName'), [], 15000)
         ]
       },
       selectedCourse: 0,
@@ -130,6 +131,10 @@ export default {
 
     controlSelected (e) {
       this.selectedControl = e.id
+    },
+
+    controlDescriptionSet (e) {
+      this.event.courses[this.selectedCourse].setControlDescription(e.controlId, e.kind, e.descriptionId)
     }
   },
   components: {

@@ -9,6 +9,9 @@ export default {
     actions: {
       removeMap: 'Ta bort'
     },
+    event: {
+      newName: 'Ny träning'
+    },
     course: {
       newName: 'Ny bana'
     }
@@ -22,6 +25,9 @@ export default {
     },
     actions: {
       removeMap: 'Remove'
+    },
+    event: {
+      newName: 'New training'
     },
     course: {
       newName: 'New course'

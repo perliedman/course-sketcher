@@ -29,7 +29,8 @@ export default class Course {
       kind: nControls === 0 ? 'start' : 'control', // TODO
       code: nControls + 1, // TODO
       sequence: nControls === 0 ? undefined : nControls,
-      coordinates: new Coordinate(c.coordinates[0], c.coordinates[1])
+      coordinates: new Coordinate(c.coordinates[0], c.coordinates[1]),
+      description: {}
     }
 
     this.controls.push(properties)
@@ -42,6 +43,11 @@ export default class Course {
     control.coordinates = new Coordinate(c.coordinates)
 
     return this
+  }
+
+  setControlDescription(controlId, kind, descriptionId) {
+    const control = this.controls.find(control => control.id === controlId)
+    control.description[kind] = descriptionId
   }
 
   controlsToGeoJson () {
