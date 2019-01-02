@@ -26,7 +26,7 @@ export default class Course {
     const nControls = this.controls.length
     const properties = {
       id: nControls + 1,
-      kind: nControls === 0 ? 'start' : 'control', // TODO
+      kind: nControls === 0 ? 'start' : 'normal', // TODO
       code: nControls + 1, // TODO
       sequence: nControls === 0 ? undefined : nControls,
       coordinates: new Coordinate(c.coordinates[0], c.coordinates[1]),

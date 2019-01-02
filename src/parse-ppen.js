@@ -30,10 +30,8 @@ export default function parsePPen (doc) {
   const getCourseControls = (id, sequence) => {
     const control = controls.find(c => c.id === courseControls[id].control)
     const next = courseControls[id].next
-    // Clone the feature root and its properties
-    const courseControl = {...control, properties: {...control.properties}}
-
-    courseControl.properties.sequence = sequence > 0 && next ? sequence : undefined
+    // Clone the control
+    const courseControl = { sequence: sequence > 0 && next ? sequence : undefined, ...control }
 
     return [courseControl]
       .concat(next ? getCourseControls(next, sequence + 1) : [])

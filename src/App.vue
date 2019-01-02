@@ -57,28 +57,6 @@ export default {
       mapRotation: 0
     }
   },
-  created () {
-    // fetch('tiles/hp/layers.json')
-    //   .then(res => res.json())
-    //   .then(layers => {
-    //     layers.forEach(l => {
-    //       if (l.layout && l.layout['text-max-width'] === null) {
-    //         l.layout['text-max-width'] = Infinity
-    //       }
-    //     })
-
-    //     this.layers = Object.freeze(layers)
-    //   })
-
-    // fetch('example-1.ppen')
-    //   .then(res => res.text())
-    //   .then(text => (new window.DOMParser()).parseFromString(text, "text/xml"))
-    //   .then(doc => parsePPen(crs, doc))
-    //   .then(event => {
-    //     // console.log(JSON.stringify(event.controls, null, 2))
-    //     this.event = event
-    //   })
-  },
   computed: {
     controlsGeoJson () {
       const f = this.event.courses[this.selectedCourse].controlsToGeoJson() || featureCollection([])
@@ -93,24 +71,29 @@ export default {
   },
   methods: {
     mapFileSelected(f) {
-      readOcad(f.content)
-        .then(ocadFile => {
-          this.mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), projDef))
-          const [minLng, minLat, maxLng, maxLat] = bbox(this.mapGeojson)
-          const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
-          const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
-          this.mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
-          this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
-          this.map = {
-            name: f.name,
-            file: ocadFile 
-          }
-        })
-        .catch(err => {
-          console.error(err)
-          this.error = err.message
-          this.loading = false
-        })
+      if (f.name.toLowerCase().endsWith('.ocd')) {
+        readOcad(f.content)
+          .then(ocadFile => {
+            this.mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), projDef))
+            const [minLng, minLat, maxLng, maxLat] = bbox(this.mapGeojson)
+            const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
+            const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
+            this.mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
+            this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
+            this.map = {
+              name: f.name,
+              file: ocadFile 
+            }
+          })
+          .catch(err => {
+            console.error(err)
+            this.error = err.message
+            this.loading = false
+          })
+      } else if (f.name.toLowerCase().endsWith('.ppen')) {
+        const doc = new DOMParser().parseFromString(f.content, 'application/xml')
+        this.event = parsePPen(doc)
+      }
     },
     controlAdded (e) {
       const crs = this.map.file.getCrs()

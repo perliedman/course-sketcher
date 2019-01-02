@@ -21,6 +21,8 @@ import { coordEach, coordReduce } from '@turf/meta'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibGllZG1hbiIsImEiOiJZc3U4UXowIn0.d4yPyJ_Bl7CAROv15im36Q';
 
+const controlColor = 'hsl(329, 96%, 39%)'
+
 export default {
   name: 'MapView',
   props: {
@@ -90,20 +92,20 @@ export default {
                     1,
                     0.7
                 ],
-              'line-color': '#fb3199',
+              'line-color': controlColor,
               'line-width': expFunc(4)
             }
           },
           {
             id: 'control-circles',
             source: 'controls',
-            filter: ['==', ['get', 'kind'], 'control'],
+            filter: ['==', ['get', 'kind'], 'normal'],
             type: 'circle',
             paint: {
               'circle-radius': expFunc(28),
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
-              'circle-stroke-color': '#fb3199',
+              'circle-stroke-color': controlColor,
               'circle-stroke-opacity': ["case",
                 ["boolean", ["feature-state", "hover"], false],
                     1,
@@ -122,7 +124,7 @@ export default {
               'circle-radius': expFunc(22.4),
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
-              'circle-stroke-color': '#fb3199',
+              'circle-stroke-color': controlColor,
               'circle-stroke-opacity': 0.7,
               'circle-pitch-scale': 'map',
               'circle-pitch-alignment': 'map'
@@ -137,7 +139,7 @@ export default {
               'circle-radius': expFunc(33.6),
               'circle-opacity': 0,
               'circle-stroke-width': expFunc(4),
-              'circle-stroke-color': '#fb3199',
+              'circle-stroke-color': controlColor,
               'circle-stroke-opacity': ["case",
                 ["boolean", ["feature-state", "hover"], false],
                     1,
@@ -160,7 +162,7 @@ export default {
               'text-ignore-placement': true
             },
             paint: {
-              'text-color': '#fb3199',
+              'text-color': controlColor,
               'text-opacity': 0.8
             }
           },
@@ -169,7 +171,7 @@ export default {
             source: 'controlConnections',
             type: 'line',
             paint: {
-              'line-color': '#fb3199',
+              'line-color': controlColor,
               'line-opacity': 0.7,
               'line-width': expFunc(4)
             }
