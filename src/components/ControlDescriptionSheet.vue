@@ -28,10 +28,10 @@
         </tr>
       </tbody>
     </table>
-    <mu-dialog title="Select Symbol" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open.sync="dialogOpen">
+    <mu-dialog :title="$t('control.selectDescription')" width="600" max-width="80%" :open.sync="dialogOpen">
       <symbol-chooser :symbols="symbols" :kind="dialogKind" :selected="dialogSelection" @symbolselected="dialogResult = $event.id" />
-      <mu-button slot="actions" flat @click="closeDialog">Cancel</mu-button>
-      <mu-button slot="actions" flat color="primary" @click="dialogOk()">Ok</mu-button>
+      <mu-button slot="actions" flat @click="closeDialog">{{$t('actions.cancel')}}</mu-button>
+      <mu-button slot="actions" flat color="primary" @click="dialogOk()">{{$t('actions.ok')}}</mu-button>
     </mu-dialog>
   </div>
 </template>

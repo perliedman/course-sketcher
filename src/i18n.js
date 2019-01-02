@@ -7,13 +7,19 @@ export default {
       print: 'Utskrift'
     },
     actions: {
-      removeMap: 'Ta bort'
+      removeMap: 'Ta bort',
+      ok: 'Ok',
+      cancel: 'Avbryt',
+      search: 'Sök'
     },
     event: {
       newName: 'Ny träning'
     },
     course: {
       newName: 'Ny bana'
+    },
+    control: {
+      selectDescription: 'Välj kontrollbeskrivning'
     }
   },
   en: {
@@ -24,13 +30,19 @@ export default {
       print: 'Print'
     },
     actions: {
-      removeMap: 'Remove'
+      removeMap: 'Remove',
+      ok: 'Ok',
+      cancel: 'Cancel',
+      search: 'Search'
     },
     event: {
       newName: 'New training'
     },
     course: {
       newName: 'New course'
+    },
+    control: {
+      selectDescription: 'Choose Control Description'
     }
   }
 }

@@ -4,13 +4,13 @@
       <mu-paper :z-depth="1">
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
           <img class="selected" v-if="currentSelection" :src="`iof-2004/${currentSelection}.svg`" />
-          <h2>{{currentlySelectedSymbol && currentlySelectedSymbol.names.sv}}</h2>
+          <h2>{{currentlySelectedSymbol && currentlySelectedSymbol.names[$i18n.locale]}}</h2>
         </div>
       </mu-paper>
     </div>
     <div class="list-container">
       <mu-paper :z-depth=1 style="    padding: 1em;">
-        <mu-text-field v-model="search" placeholder="Sök"></mu-text-field><br/>
+        <mu-text-field v-model="search" :placeholder="$t('actions.search')"></mu-text-field><br/>
         <div class="list-scroller">
           <mu-list :value="currentSelection">
             <mu-list-item v-for="symbol in filteredSymbols" avatar button :key="symbol.id" :value="symbol.id" @click="selectSymbol(symbol.id)">
@@ -19,7 +19,7 @@
                   <img :src="`iof-2004/${symbol.id}.svg`" />
                 </mu-avatar>
               </mu-list-item-action>
-              <mu-list-item-title>{{symbol.names.sv}}</mu-list-item-title>
+              <mu-list-item-title>{{symbol.names[$i18n.locale]}}</mu-list-item-title>
             </mu-list-item>
           </mu-list>
         </div>
@@ -53,15 +53,18 @@ export default {
       return this.symbols.filter(s =>
         s.id &&
         s.kind === this.kind &&
-        (!this.search || s.names.sv && s.names.sv.toLowerCase().indexOf(this.search.toLowerCase()) >= 0))
+        (!this.search || s.names[this.$i18n.locale] && s.names[this.$i18n.locale].toLowerCase().indexOf(this.search.toLowerCase()) >= 0))
     },
     currentlySelectedSymbol () {
       return this.symbols.find(s => s.id === this.currentSelection)
     }
   },
   watch: {
-    selected (s) {
-      this.currentSelection = s
+    selected: {
+      immediate: true,
+      handler (s) {
+        this.currentSelection = s
+      }
     }    
   }
 }
@@ -81,6 +84,8 @@ export default {
 
   .list-container {
     margin: 1em;
+    width: 30em;
+    height: 39em;
   }
 
   .list-scroller {

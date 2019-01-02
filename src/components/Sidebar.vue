@@ -1,5 +1,4 @@
 <template>
-  <mu-paper :z-depth=3>
     <mu-container>
       <mu-expansion-panel :expand="panel === 'courses'" @change="togglePanel('courses')">
         <div slot="header">{{$t('menus.courses')}}</div>
@@ -19,7 +18,6 @@
         <div slot="header">{{$t('menus.print')}}</div>
       </mu-expansion-panel>
     </mu-container>
-  </mu-paper>
 </template>
 
 <script>
