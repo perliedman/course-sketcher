@@ -1,33 +1,31 @@
 <template>
   <div id="app">
-    <div v-if="layers && layers.length && mapGeojson && mapGeojson.features">
-      <div class="sidebar-wrapper">
-        <sidebar
-          :event="event"
-          :map="map"
-          :selected-control-id="selectedControl"
-          @controldescriptionset="controlDescriptionSet"
-          @controlremoved="controlRemoved" />
-      </div>
-      <map-view
-        :controls="controlsGeoJson"
-        :control-texts="controlLabelsGeoJson"
-        :control-connections="controlCollectionsGeoJson"
-        :layers="layers"
-        :map-geojson="mapGeojson"
-        :map-rotation="mapRotation"
-        @controladded="controlAdded"
-        @controlmoved="controlMoved"
-        @controlselected="controlSelected"/>
+    <div class="sidebar-wrapper">
+      <sidebar
+        v-if="map.file"
+        :event="event"
+        :map="map"
+        :selected-control-id="selectedControl"
+        @controldescriptionset="controlDescriptionSet"
+        @controlremoved="controlRemoved" />
     </div>
-    <empty-map v-else @fileselected="mapFileSelected" />
+    <map-view
+      :controls="controlsGeoJson"
+      :control-texts="controlLabelsGeoJson"
+      :control-connections="controlCollectionsGeoJson"
+      :layers="layers"
+      :map-geojson="mapGeojson"
+      :map-rotation="mapRotation"
+      @controladded="controlAdded"
+      @controlmoved="controlMoved"
+      @controlselected="controlSelected"
+      @fileselected="mapFileSelected"/>
   </div>
 </template>
 
 <script>
 import Sidebar from './components/Sidebar.vue'
 import MapView from './components/MapView.vue'
-import EmptyMap from './components/EmptyMap.vue'
 import parsePPen from './parse-ppen.js'
 import { readOcad, ocadToGeoJson, ocadToMapboxGlStyle } from 'ocad2geojson'
 import { toWgs84 } from 'reproject'
@@ -84,13 +82,13 @@ export default {
   computed: {
     controlsGeoJson () {
       const f = this.event.courses[this.selectedCourse].controlsToGeoJson() || featureCollection([])
-      return this.event && this.event.courses && this.map && applyCrs(this.map.file.getCrs(), f)
+      return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), f)
     },
     controlLabelsGeoJson () {
-      return this.event && this.event.courses && this.map && applyCrs(this.map.file.getCrs(), this.event.courses[this.selectedCourse].controlLabelsToGeoJson() || featureCollection([]))
+      return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.event.courses[this.selectedCourse].controlLabelsToGeoJson() || featureCollection([]))
     },
     controlCollectionsGeoJson () {
-      return this.event && this.event.courses && this.map && applyCrs(this.map.file.getCrs(), this.event.courses[this.selectedCourse].controlConnectionsToGeoJson() || featureCollection([]))
+      return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.event.courses[this.selectedCourse].controlConnectionsToGeoJson() || featureCollection([]))
     }
   },
   methods: {
@@ -148,7 +146,6 @@ export default {
   },
   components: {
     MapView,
-    EmptyMap,
     Sidebar
   }
 }

@@ -1,9 +1,20 @@
 <template>
-  <div :class="{map: true, 'empty-map': !layers || !layers.length}" ref="mapContainer">
+  <div
+    ref="mapContainer"
+    :class="{map: true, empty: empty}"
+    @drop="onFileDropped"
+    @dragover="$event.preventDefault()">
+    <input v-if="empty" type="file" @change="onFileInput($event.target.files)" class="input-file">
+    <div v-if="empty">
+      <h1 v-if="empty">
+        {{ $t(!loading ? 'emptyMap' : 'loadingMap') }}
+      </h1>
+    </div>
   </div>
 </template>
 
 <script>
+import toBuffer from 'blob-to-buffer'
 import mapboxgl from 'mapbox-gl'
 import bbox from '@turf/bbox'
 import { coordEach, coordReduce } from '@turf/meta'
@@ -20,6 +31,11 @@ export default {
     mapGeojson: Object,
     mapRotation: Number
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
   created () {
     this.sources = {}
   },
@@ -27,6 +43,9 @@ export default {
     this.getMap()
   },
   computed: {
+    empty () {
+      return !this.layers || !this.layers.length
+    },
     mapStyle () {
       return {
         version: 8,
@@ -162,8 +181,10 @@ export default {
   watch: {
     mapGeojson (geojson) {
       if (this.map) {
-        this.map.fitBounds(bbox(geojson))
-      }      
+        this.map.fitBounds(bbox(geojson), { animate: false })
+        this.map.setBearing(this.mapRotation, { animate: false })
+      }
+      this.loading = false
     },
     mapStyle (style) {
       const map = this.getMap()
@@ -176,6 +197,37 @@ export default {
     controlConnections (controlConnections) { this.updateSource('controlConnections', controlConnections) }
   },
   methods: {
+    onFileInput (files) {
+      this.readFile(files[0])
+    },
+    onFileDropped (e) {
+      e.preventDefault()
+      if (e.dataTransfer.items) {
+        for (var i = 0; i < e.dataTransfer.items.length; i++) {
+          if (e.dataTransfer.items[i].kind === 'file') {
+            this.readFile(e.dataTransfer.items[i].getAsFile())
+            break
+          }
+        }
+
+        e.dataTransfer.items.clear();
+      }
+    },
+    readFile (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const blob = new Blob([reader.result], {type: 'application/octet-stream'})
+        toBuffer(blob, (err, buffer) => {
+          this.$emit('fileselected', {
+            name: file.name,
+            content: buffer
+          })
+        })
+      }
+
+      this.loading = true
+      setTimeout(() => reader.readAsArrayBuffer(file), 100)
+    },
     getMap () {
       if (!this.map && this.layers && this.layers.length) {
         this.map = new mapboxgl.Map({
@@ -213,8 +265,18 @@ export default {
       this.sources[id] = data
 
       const map = this.getMap()
+      let c = 0
       const setData = () => {
-        map.getSource(id).setData(data)
+        try {
+          map.getSource(id).setData(data)
+        } catch (e) {
+          // This happens when the map has not initialized yet
+          // Note: I have tried checking isStyleLoaded(), but it sometime (?!)
+          // returns false even when the map style clearly _is_ loaded
+          if (c++ < 3) {
+            setTimeout(setData, 200)
+          }
+        }
       }
 
       if (map) {
@@ -303,5 +365,24 @@ const expFunc = base => ({
     position: absolute;
     width: 100%;
     height: 100%;
+  }
+
+  .empty {
+    background-image: url('../assets/topography.svg');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h1 {
+    color: hsl(200, 15%, 75%);
+  }
+
+  .input-file {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
   }
 </style>
