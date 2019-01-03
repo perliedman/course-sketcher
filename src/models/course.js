@@ -1,5 +1,6 @@
 import { featureCollection } from '@turf/helpers'
 import Coordinate from './coordinate'
+import createSvgNode from '../create-svg';
 
 const distance = (c1, c2) => {
   const crd1 = c1.coordinates
@@ -20,6 +21,15 @@ export default class Course {
   distance () {
     const controls = this.controls
     return controls.slice(1).reduce((a, c, i) => a + distance(controls[i], c), 0) / 1000 / 1000 * this.scale
+  }
+
+  bounds () {
+    return this.controls.reduce((a, c) => [
+      Math.min(a[0], c.coordinates[0]),
+      Math.min(a[1], c.coordinates[1]),
+      Math.max(a[2], c.coordinates[0]),
+      Math.max(a[3], c.coordinates[1])
+    ], [Number.MAX_VALUE, Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE])
   }
 
   addControl (c) {
@@ -90,6 +100,30 @@ export default class Course {
 
   controlConnectionsToGeoJson () {
     return featureCollection(createControlConnections(this.controls))
+  }
+
+  toSvg () {
+    return createSvgNode(document, {
+      type: 'g',
+      children: this.controls.map(c => ({
+        type: 'circle',
+        attrs: {
+          cx: c.coordinates[0] * 100,
+          cy: -c.coordinates[1] * 100,
+          r: 300,
+          stroke: '#fb3199',
+          'stroke-width': 50
+        }
+      }))
+      .concat(createControlConnections(this.controls).map(({ geometry: { coordinates } }) => ({
+        type: 'path',
+        attrs: {
+          d: `M ${coordinates[0][0] * 100} ${-coordinates[0][1] * 100} L  ${coordinates[1][0] * 100} ${-coordinates[1][1] * 100}`,
+          stroke: '#fb3199',
+          'stroke-width': 50
+        }
+      })))
+    })
   }
 }
 

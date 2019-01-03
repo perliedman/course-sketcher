@@ -12,7 +12,9 @@ export default {
       ok: 'Ok',
       cancel: 'Avbryt',
       search: 'Sök',
-      remove: 'Ta bort'
+      remove: 'Ta bort',
+      print: 'Skriv ut',
+      printing: 'Skriver ut...'
     },
     event: {
       newName: 'Ny träning'
@@ -37,7 +39,9 @@ export default {
       ok: 'Ok',
       cancel: 'Cancel',
       search: 'Search',
-      remove: 'Remove'
+      remove: 'Remove',
+      print: 'Print',
+      printing: 'Printing...'
     },
     event: {
       newName: 'New training'

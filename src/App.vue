@@ -84,7 +84,7 @@ export default {
             this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
             this.map = {
               name: f.name,
-              file: ocadFile 
+              file: Object.freeze(ocadFile) 
             }
           })
           .catch(err => {
