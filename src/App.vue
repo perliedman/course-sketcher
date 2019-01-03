@@ -5,7 +5,9 @@
         v-if="map.file"
         :event="event"
         :map="map"
+        :selected-course="selectedCourse"
         :selected-control-id="selectedControl"
+        @courseselected="selectedCourse = $event.index"
         @controldescriptionset="controlDescriptionSet"
         @controlremoved="controlRemoved" />
     </div>
@@ -156,6 +158,6 @@ const applyCrs = (crs, features) => {
     right: 1rem;
     top: 1rem;
     padding: 1rem;
-    width: 32em;
+    width: 35em;
   }
 </style>

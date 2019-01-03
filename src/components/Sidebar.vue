@@ -2,7 +2,7 @@
     <mu-container>
       <mu-expansion-panel :expand="panel === 'courses'" @change="togglePanel('courses')">
         <div slot="header">{{$t('menus.courses')}}</div>
-        <mu-expansion-panel v-for="(c, i) in event.courses" :key="i" :expand="selectedCourse === i" @change="selectedCourse = i" :z-depth=1>
+        <mu-expansion-panel v-for="(c, i) in event.courses" :key="i" :expand="selectedCourse === i" @change="$emit('courseselected', {index: i })" :z-depth=1>
           <div slot="header">{{c.name}}</div>
           <control-description-sheet
             :event="event" 
@@ -33,11 +33,11 @@ export default {
   props: {
     event: Object,
     map: Object,
+    selectedCourse: Number,
     selectedControlId: Number
   },
   data () {
     return {
-      selectedCourse: 0,
       panel: 'courses'
     }
   },
