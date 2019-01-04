@@ -1,6 +1,7 @@
 import { featureCollection } from '@turf/helpers'
 import Coordinate from './coordinate'
 import createSvgNode from '../create-svg';
+import flatten from 'arr-flatten'
 
 const distance = (c1, c2) => {
   const crd1 = c1.coordinates
@@ -63,7 +64,7 @@ export default class Course {
   removeControl (controlId) {
     const index = this.controls.findIndex(c => c.id === controlId)
 
-    if (index === 0) {
+    if (index === 0 && this.controls.length) {
       this.controls[1].kind = 'start'
     }
 
@@ -103,38 +104,57 @@ export default class Course {
   }
 
   toSvg () {
+    const circle = (c, r) => ({
+      type: 'circle',
+      attrs: {
+        cx: c.coordinates[0] * 100,
+        cy: -c.coordinates[1] * 100,
+        r,
+        stroke: '#fb3199',
+        'stroke-width': 50
+      }
+    })
+
+    const lines = (cs, close) => ({
+      type: 'path',
+      attrs: {
+        d: cs.map((c, i) => `${i ? 'L' : 'M'} ${c[0] * 100} ${-c[1] * 100}`)
+          .concat(close ? ['Z'] : [])
+          .join(' '),
+        stroke: '#fb3199',
+        'stroke-width': 50
+      }
+  })
+
     return createSvgNode(document, {
       type: 'g',
-      children: this.controls.map(c => ({
-        type: 'circle',
-        attrs: {
-          cx: c.coordinates[0] * 100,
-          cy: -c.coordinates[1] * 100,
-          r: 300,
-          stroke: '#fb3199',
-          'stroke-width': 50
-        }
-      }))
-      .concat(createControlConnections(this.controls).map(({ geometry: { coordinates } }) => ({
-        type: 'path',
-        attrs: {
-          d: `M ${coordinates[0][0] * 100} ${-coordinates[0][1] * 100} L  ${coordinates[1][0] * 100} ${-coordinates[1][1] * 100}`,
-          stroke: '#fb3199',
-          'stroke-width': 50
-        }
-      })))
+      children: this.controls.filter(c => c.kind === 'normal').map(c => circle(c, 300))
+        .concat(this.controls
+          .map((c, i) => [c, i])
+          .filter(([c]) => c.kind === 'start')
+          .map(([c, i]) => lines(
+            startTriangle.map(p => p
+              .rotate(this.controls.length > i + 1 
+                ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
+                : 0)
+              .add(c.coordinates).toArray()), true)))
+        .concat(flatten(this.controls.filter(c => c.kind === 'finish').map(c => [circle(c, 250), circle(c, 350)])))
+        .concat(createControlConnections(this.controls).map(({ geometry: { coordinates } }) => lines(coordinates, false)))
+        .concat(createControlTextLocations(this.controls).map(({ properties, geometry: { coordinates } }) => ({
+          type: 'text',
+          attrs: {
+            x: coordinates[0] * 100,
+            y: -coordinates[1] * 100,
+            dx: '-50%',
+            dy: '50%',
+            fill: '#fb3199',
+            style: 'font: normal 600px sans-serif;'
+          },
+          text: properties.sequence
+        })))
     })
   }
 }
-
-const clone = fs => fs.map(f => ({
-  type: f.type,
-  properties: f.properties,
-  geometry: {
-    type: f.geometry.type,
-    coordinates: coordClone(f.geometry.coordinates)
-  }
-}))
 
 const coordClone = c => Array.isArray(c[0]) ? c.map(coordClone) : new Coordinate(c[0], c[1])
 

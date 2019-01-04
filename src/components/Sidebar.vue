@@ -78,8 +78,10 @@ export default {
         // Padding (could be a setting)
         ;[-20, -20, 20, 20].forEach((x, i) => bounds[i] += x / scaleFactor)
         // TODO: A4 page in millimeters, this should be configurable
-        svg.setAttribute('width', Math.min(595, Math.ceil((bounds[2] - bounds[0]) * mmToPt * scaleFactor)))
-        svg.setAttribute('height', Math.min(842, Math.ceil((bounds[3] - bounds[1]) * mmToPt * scaleFactor)))
+        const mapWidthPt = Math.min(595, Math.ceil((bounds[2] - bounds[0]) * mmToPt * scaleFactor))
+        const mapHeightPt = Math.min(842, Math.ceil((bounds[3] - bounds[1]) * mmToPt * scaleFactor))
+        svg.setAttribute('width', mapWidthPt)
+        svg.setAttribute('height', mapHeightPt)
         // svg.setAttribute('viewBox', `0 0 ${bounds[2] - bounds[0]} ${bounds[3] - bounds[1]}`)
         const transform = `scale(${mmToPt / 100 * scaleFactor}) translate(${-bounds[0] * 100}, ${bounds[3] * 100})`
         mapGroup.setAttribute('transform', transform)
@@ -87,7 +89,16 @@ export default {
         const doc = new PDFDocument()
         const stream = doc.pipe(blobStream())
 
-        SVGtoPDF(doc, svg, 0, 0, {
+        doc.fillColor('black')
+          .fillOpacity(1)
+          .strokeColor('black')
+          .strokeOpacity(1)
+          .lineWidth(1)
+          .undash()
+          .fontSize(12)
+          .font('Helvetica')
+
+        SVGtoPDF(doc, svg, 595 / 2 - mapWidthPt / 2, 842 / 2 - mapHeightPt / 2, {
           assumePt: true,
           colorCallback: x => {
             const color = x && ocadFile.colors.find(c => c && c.rgbArray[0] === x[0][0] && c.rgbArray[1] === x[0][1] && c.rgbArray[2] === x[0][2])
