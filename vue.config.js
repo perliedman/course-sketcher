@@ -1,19 +1,19 @@
 module.exports = {
   chainWebpack: config => {
+    config.node.set('process', true)
+
     config.module
       .rule('xml')
       .test(/\.xml$/)
       .use('raw-loader')
         .loader('raw-loader')
         .end()
+
+    config.module
+      .rule('pdfkit')
+      .test(/node_modules\/(pdfkit|brotli|fontkit|linebreak|png-js|unicode-properties)/)
+      .use('transform-loader?brfs')
+        .loader('transform-loader?brfs')
+        .end()
   }
 }
-// configureWebpack: {
-//   rules: [
-//     {
-//       test: /\.xml$/,
-//       include: path.resolve(__dirname, ".."),
-//       loader: require.resolve("raw-loader")
-//     }
-//   ]
-// }
