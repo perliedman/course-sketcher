@@ -11,6 +11,8 @@ const distance = (c1, c2) => {
   return Math.sqrt(dx * dx + dy * dy)
 }
 
+const courseOverPrintRgb = 'rgb(182, 44, 152)'
+
 export default class Course {
   constructor (id, name, controls = [], scale) {
     this.id = id
@@ -110,7 +112,7 @@ export default class Course {
         cx: c.coordinates[0] * 100,
         cy: -c.coordinates[1] * 100,
         r,
-        stroke: '#fb3199',
+        stroke: courseOverPrintRgb,
         'stroke-width': 50
       }
     })
@@ -121,7 +123,7 @@ export default class Course {
         d: cs.map((c, i) => `${i ? 'L' : 'M'} ${c[0] * 100} ${-c[1] * 100}`)
           .concat(close ? ['Z'] : [])
           .join(' '),
-        stroke: '#fb3199',
+        stroke: courseOverPrintRgb,
         'stroke-width': 50
       }
   })
@@ -147,7 +149,7 @@ export default class Course {
             y: -coordinates[1] * 100,
             dx: '-50%',
             dy: '50%',
-            fill: '#fb3199',
+            fill: courseOverPrintRgb,
             style: 'font: normal 600px sans-serif;'
           },
           text: properties.sequence
