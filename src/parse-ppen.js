@@ -5,6 +5,7 @@ export default function parsePPen (doc) {
   const eventTag = doc.getElementsByTagName('event')[0]
   const mapTag = eventTag.getElementsByTagName('map')[0]
   const scale = Number(mapTag.getAttribute('scale'))
+  const mapAbsPath = mapTag.getAttribute('absolute-path')
 
   const controls = Array.from(doc.getElementsByTagName('control'))
     .map(parseControl)
@@ -48,8 +49,12 @@ export default function parsePPen (doc) {
     })
     .sort((a, b) => a.order - b.order)
 
+
   return {
     name: eventTag.getElementsByTagName('title')[0].textContent,
+    map: {
+      name: mapAbsPath.substring(Math.max(mapAbsPath.lastIndexOf('/'), mapAbsPath.lastIndexOf('\\') + 1))
+    },
     courses
   }
 }

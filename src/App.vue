@@ -22,6 +22,10 @@
       @controlmoved="controlMoved"
       @controlselected="controlSelected"
       @fileselected="mapFileSelected"/>
+    <mu-snackbar position="bottom" :open="!!message">
+      <span v-html="message" />
+      <mu-button flat slot="action" color="primary" @click="message = undefined">Close</mu-button>
+    </mu-snackbar>
   </div>
 </template>
 
@@ -56,7 +60,8 @@ export default {
       selectedControl: 0,
       layers: [],
       mapGeojson: {},
-      mapRotation: 0
+      mapRotation: 0,
+      message: undefined
     }
   },
   computed: {
@@ -73,6 +78,7 @@ export default {
   },
   methods: {
     mapFileSelected(f) {
+      this.message = undefined
       if (f.name.toLowerCase().endsWith('.ocd')) {
         readOcad(f.content)
           .then(ocadFile => {
@@ -87,14 +93,30 @@ export default {
               file: Object.freeze(ocadFile) 
             }
           })
+          .then(() => {
+            if (this.event && this.map.name != this.event.map.name) {
+              this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
+            }
+          })
           .catch(err => {
             console.error(err)
-            this.error = err.message
+            this.message = this.$t('messages.mapLoadError', {error: err.message}) 
             this.loading = false
           })
       } else if (f.name.toLowerCase().endsWith('.ppen')) {
         const doc = new DOMParser().parseFromString(f.content, 'application/xml')
-        this.event = parsePPen(doc)
+        try {
+          this.event = parsePPen(doc)
+          if (!this.map.name) {
+            this.message = this.$t('messages.mapFileRequest', { fileName: this.event.map.name })
+          } else if (this.map.name != this.event.map.name) {
+            this.message = this.$t('message.ensureCorrectMap', { fileName: this.event.map.name })
+          }
+        } catch (err) {
+          this.message = this.$t('messages.mapLoadError', {error: err.message}) 
+        }
+      } else {
+        this.message = this.$t('messages.unknownFileType') 
       }
     },
     controlAdded (e) {

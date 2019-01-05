@@ -1,7 +1,17 @@
 export default {
   sv: {
-    emptyMap: 'Dra en OCAD-kartfil hit, eller klicka för att välja en fil',
-    loadingMap: 'Läser och bearbetar kartan, det här kan ta en liten stund...',
+    hero: {
+      title: 'Course<br/>Sketcher',
+      subtitle: 'Web based course setting for orienteering'
+    },
+    messages: {
+      emptyMap: 'Dra en OCAD-kartfil eller Purple Pen-fil hit, eller klicka för att välja en fil',
+      loadingMap: 'Läser och bearbetar kartan, det här kan ta en liten stund...',
+      mapFileRequest: 'Den här Purple Pen-filen använder en kartfil med namnet <strong><em>{fileName}</em></strong>, dra och släpp den här.',
+      mapLoadError: '😞 Något gick fel när vi läste filen: <em>{error}</em>',
+      unknownFileType: '🤔 Hm, den sortens fil känner jag inte igen. Försök med OCAD- eller Purple Pen-filer.',
+      ensureCorrectMap: 'Purple Pen-filen är gjord för en karta som heter <strong><em>{fileName}</em></strong>, är du säker att du använder rätt kartfil? 🤔'
+    },
     menus: {
       courses: 'Banor',
       map: 'Karta',
@@ -27,8 +37,11 @@ export default {
     }
   },
   en: {
-    emptyMap: 'Drop an OCAD map file here, or click to select a file',
-    loadingMap: 'Reading and preparing map, this can take a few moments...',
+    messages: {
+      emptyMap: 'Drop an OCAD map file here, or click to select a file',
+      loadingMap: 'Reading and preparing map, this can take a few moments...',
+      mapFileRequest: 'This event uses a map file named <strong><em>{fileName}</em></strong>, please drag it here.'
+    },
     menus: {
       courses: 'Courses',
       map: 'Map',

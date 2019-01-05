@@ -6,8 +6,9 @@
     @dragover="$event.preventDefault()">
     <input v-if="empty" type="file" @change="onFileInput($event.target.files)" class="input-file">
     <div v-if="empty">
-      <h1 v-if="empty">
-        {{ $t(!loading ? 'emptyMap' : 'loadingMap') }}
+      <hero v-if="!loading" />
+      <h1 v-else>
+        {{ $t('messages.loadingMap') }}
       </h1>
     </div>
   </div>
@@ -18,6 +19,7 @@ import toBuffer from 'blob-to-buffer'
 import mapboxgl from 'mapbox-gl'
 import bbox from '@turf/bbox'
 import { coordEach, coordReduce } from '@turf/meta'
+import Hero from './Hero.vue'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibGllZG1hbiIsImEiOiJZc3U4UXowIn0.d4yPyJ_Bl7CAROv15im36Q';
 
@@ -25,6 +27,7 @@ const controlColor = 'hsl(329, 96%, 39%)'
 
 export default {
   name: 'MapView',
+  components: { Hero },
   props: {
     controls: Object,
     controlTexts: Object,
