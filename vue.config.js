@@ -1,4 +1,7 @@
 module.exports = {
+  baseUrl: process.env.NODE_ENV === 'production'
+    ? '/course-sketcher'
+    : '/',
   chainWebpack: config => {
     config.node.set('process', true)
 
