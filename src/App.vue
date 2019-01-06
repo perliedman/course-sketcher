@@ -94,7 +94,7 @@ export default {
             }
           })
           .then(() => {
-            if (this.event && this.map.name != this.event.map.name) {
+            if (this.event && this.event.map && this.map.name != this.event.map.name) {
               this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
             }
           })
