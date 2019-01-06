@@ -6,7 +6,7 @@ import 'muse-ui/dist/muse-ui.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import App from './App.vue'
-import messages from './i18n'
+import messages, { languages } from './i18n'
 
 Vue.config.productionTip = false
 
@@ -19,8 +19,11 @@ theme.add('sketcher-theme', {
 
 theme.use('sketcher-theme')
 
+const defaultLocale = navigator.languages.find(l => languages.findIndex(langDef => langDef.code === l) >= 0)
+
 const i18n = new VueI18n({
-  locale: 'sv',
+  locale: defaultLocale || 'en',
+  fallbackLocale: 'en',
   messages
 })
 

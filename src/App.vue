@@ -7,9 +7,16 @@
       <span class="title">
         Course Sketcher
       </span>
-      <mu-button icon slot="right">
-        <mu-icon value="settings"></mu-icon>
-      </mu-button>
+      <mu-menu cover placement="bottom-end" :open.sync="settingsOpen" slot="right">
+        <mu-button icon>
+          <mu-icon value="settings"></mu-icon>
+        </mu-button>
+        <mu-list slot="content">
+          <mu-list-item v-for="lang in langs" button :key="lang.code" @click="$i18n.locale = lang.code">
+            <mu-list-item-title><img :src="`flags/${lang.flag}.svg`" style="width: 16px;">{{lang.title}}</mu-list-item-title>
+          </mu-list-item>
+        </mu-list>
+      </mu-menu>
     </mu-appbar>
     <mu-drawer v-if="map.file" :open.sync="menuOpen" :width=400>
       <sidebar
@@ -52,6 +59,8 @@ import Course from './models/course.js'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
+import { languages } from './i18n'
+
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
 const projDef = '+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs'
 
@@ -72,7 +81,9 @@ export default {
       mapGeojson: {},
       mapRotation: 0,
       menuOpen: true,
-      message: undefined
+      message: undefined,
+      settingsOpen: false,
+      langs: languages
     }
   },
   computed: {
