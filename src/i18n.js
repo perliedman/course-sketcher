@@ -2,7 +2,13 @@ export default {
   sv: {
     hero: {
       title: 'Course<br/>Sketcher',
-      subtitle: 'Web based course setting for orienteering'
+      subtitle: 'Web based course setting for orienteering',
+      info: `
+        <img class="hard-hat" src="hard-hat.png" width="15%"/>
+        <p>
+          Den här programvaran är inte färdigutvecklad ännu. Pröva gärna, men på egen risk.
+          Rapportera gärna synpunkter, buggar, önskemål och så vidare på <a href="https://github.com/perliedman/purple-web">GitHub</a>.
+        </p>`
     },
     messages: {
       emptyMap: 'Dra en OCAD-kartfil eller Purple Pen-fil hit, eller klicka för att välja en fil',

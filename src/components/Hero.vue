@@ -5,6 +5,7 @@
         <img src="logo.svg" /><span v-html="$t('hero.title')" />
       </h1>
       <p class="subtitle" v-html="$t('hero.subtitle')"/>
+      <section v-html="$t('hero.info')" />
     </header>
 
     <div class="instructions">
@@ -37,6 +38,7 @@ export default {
   h1 {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     font-size: 72px;
     color: hsl(313, 50%, 60%);
     text-transform: uppercase;
@@ -50,17 +52,33 @@ export default {
     margin-right: 48px;
   }
 
+  section {
+    max-width: 32em;
+    font-size: 16px;
+    color: #444;
+  }
+
   p.subtitle {
     margin-top: 0;
     font-style: italic;
     font-weight: bold;
     font-size: 35px;
     color: #888;
+    text-align: center;
   }
 
   .instructions {
+    margin-top: 48px;
     color: #888;
     font-size: 24px;
+    font-weight: bold;
     text-align: center;
+  }
+</style>
+
+<style>
+  .hard-hat {
+    float: left;
+    padding-right: 24px;
   }
 </style>
