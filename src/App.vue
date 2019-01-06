@@ -1,8 +1,18 @@
 <template>
   <div id="app">
-    <div class="sidebar-wrapper">
+    <mu-appbar style="width: 100%" color="primary">
+      <mu-button icon slot="left" :disabled="!map.file" @click="menuOpen = !menuOpen">
+        <mu-icon value="menu"></mu-icon>
+      </mu-button>
+      <span class="title">
+        Course Sketcher
+      </span>
+      <mu-button icon slot="right">
+        <mu-icon value="settings"></mu-icon>
+      </mu-button>
+    </mu-appbar>
+    <mu-drawer v-if="map.file" :open.sync="menuOpen" :width=400>
       <sidebar
-        v-if="map.file"
         :event="event"
         :map="map"
         :selected-course="selectedCourse"
@@ -10,7 +20,7 @@
         @courseselected="selectedCourse = $event.index"
         @controldescriptionset="controlDescriptionSet"
         @controlremoved="controlRemoved" />
-    </div>
+    </mu-drawer>
     <map-view
       :controls="controlsGeoJson"
       :control-texts="controlLabelsGeoJson"
@@ -61,6 +71,7 @@ export default {
       layers: [],
       mapGeojson: {},
       mapRotation: 0,
+      menuOpen: true,
       message: undefined
     }
   },
@@ -172,6 +183,16 @@ const applyCrs = (crs, features) => {
   body {
     margin: 0;
     padding: 0;
+  }
+
+  .mu-drawer {
+    top: 64px;
+    z-index: 99;
+  }
+
+  .title {
+    text-transform: uppercase;
+    color: hsl(313, 50%, 60%);
   }
 
   .sidebar-wrapper {
