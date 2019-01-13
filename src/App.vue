@@ -34,6 +34,7 @@
       :control-connections="controlCollectionsGeoJson"
       :layers="layers"
       :map-geojson="mapGeojson"
+      :symbols="map.file && map.file.symbols || []"
       :map-rotation="mapRotation"
       @controladded="controlAdded"
       @controlmoved="controlMoved"
@@ -54,12 +55,14 @@ import { readOcad, ocadToGeoJson, ocadToMapboxGlStyle } from 'ocad2geojson'
 import { toWgs84 } from 'reproject'
 import proj4 from 'proj4'
 import bbox from '@turf/bbox'
+import flatten from 'arr-flatten'
 
 import Course from './models/course.js'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
 import { languages } from './i18n'
+import controlSymbols from './control-symbols.js'
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
 const projDef = '+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs'
@@ -141,14 +144,32 @@ export default {
         this.message = this.$t('messages.unknownFileType') 
       }
     },
-    controlAdded (e) {
+    controlAdded ({ coordinates, features }) {
+      const symbols = features
+          .map(f => (this.map.file.symbols.find(s => `symbol-${s.symNum}` === f.layer.id)))
+          .filter(s => s)
+
+      console.log(symbols.map(s => s.description))
+
+      const featureSymbols = flatten(symbols
+          .map(s => controlSymbols.filter(cs =>
+            cs.kind === 'D' && 
+            cs.searchTerms[this.$i18n.locale].some(term => s.description.toLowerCase().indexOf(term) >= 0)))
+          .filter(css => css.length > 0))
+
+      console.log(symbols
+          .map(s => ({s, css: controlSymbols.filter(cs => cs.kind === 'D')}))
+          .map(({s, css}) => css
+            .map(cs => cs.searchTerms[this.$i18n.locale].filter(term => s.description.toLowerCase().indexOf(term) >= 0))
+            .filter(cs => cs.length > 0)))
+
       const crs = this.map.file.getCrs()
-      const projectedCoord = proj4(proj4.WGS84, projDef, e.coordinates)
-      const coordinates = [
+      const projectedCoord = proj4(proj4.WGS84, projDef, coordinates)
+      coordinates = [
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      this.event.courses[this.selectedCourse].addControl({coordinates})
+      this.event.courses[this.selectedCourse].addControl({coordinates, description: { 'D': featureSymbols[0] && featureSymbols[0].id }})
     },
 
     controlMoved (e) {

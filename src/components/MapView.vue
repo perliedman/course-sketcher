@@ -34,7 +34,8 @@ export default {
     controlConnections: Object,
     layers: Array,
     mapGeojson: Object,
-    mapRotation: Number
+    mapRotation: Number,
+    symbols: Array
   },
   data () {
     return {
@@ -290,7 +291,14 @@ export default {
     },
     onMapClick (e) {
       if (!this.hover) {
-        this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat] })
+        const map = this.getMap()
+        const { clientWidth, clientHeight } = map.getContainer()
+        const d = new mapboxgl.Point(clientWidth / 200, clientHeight / 200)
+        const sw = e.point.sub(d)
+        const ne = e.point.add(d)
+
+        const features = map.queryRenderedFeatures([sw, ne])
+        this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat], features })
       }
     },
     onMouseDown (e) {

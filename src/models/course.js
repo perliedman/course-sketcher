@@ -43,7 +43,7 @@ export default class Course {
       code: nControls + 1, // TODO
       sequence: nControls === 0 ? undefined : nControls,
       coordinates: new Coordinate(c.coordinates[0], c.coordinates[1]),
-      description: {}
+      description: c.description || {}
     }
 
     this.controls.push(properties)

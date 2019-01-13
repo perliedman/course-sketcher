@@ -52,11 +52,8 @@
 </template>
 
 <script>
-import symbolsXml from '../assets/symbols.xml'
-import parseSymbols from '../parse-symbols.js'
 import SymbolChooser from './SymbolChooser.vue'
-
-const symbols = parseSymbols(new DOMParser().parseFromString(symbolsXml, 'application/xml'))
+import symbols from '../control-symbols.js'
 
 export default {
   name: 'ControlDescriptionSheet',
