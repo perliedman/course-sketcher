@@ -3,15 +3,15 @@
     <table>
       <tbody>
         <tr class="heavy-bottom">
-          <td colspan="8">{{event.name}}</td>
+          <td colspan="8">
+            <input type="text" v-model="event.name" />
+          </td>
           <td class="control-menu"></td>
         </tr>
         <tr class="heavy-bottom">
-          <td colspan="8">{{course.name}}</td>
-          <td class="control-menu"></td>
-        </tr>
-        <tr class="heavy-bottom">
-          <td colspan="3" class="heavy-right">{{course.id}}</td>
+          <td colspan="3" class="heavy-right">
+            <input style="width: 6em" type="text" v-model="course.name" />
+          </td>
           <td colspan="3" class="heavy-right">{{course.distance().toFixed(1)}} km</td>
           <td colspan="2"></td>
           <td class="control-menu"></td>
@@ -21,7 +21,9 @@
             {{i > 0 ? i : ''}}
             <img v-if="i === 0" src="iof-2004/start.svg" />
           </td>
-          <td>{{c.code}}</td>
+          <td>
+            <input type="text" v-model="c.code" style="width: 2em" />
+          </td>
           <td @click="openDialog(c.id, 'C', c.description.C)" class="heavy-right"><img v-if="c.description.C" :src="`iof-2004/${c.description.C}.svg`" /></td>
           <td @click="openDialog(c.id, 'D', c.description.D)" ><img v-if="c.description.D" :src="`iof-2004/${c.description.D}.svg`" /></td>
           <td @click="openDialog(c.id, 'E', c.description.E)" ><img v-if="c.description.E" :src="`iof-2004/${c.description.E}.svg`" /></td>
@@ -148,5 +150,10 @@ export default {
     background-color: white !important;
     border: none !important;
     border-left: 2px solid black !important;
+  }
+
+  input {
+    text-align: center;
+    border: none;
   }
 </style>
