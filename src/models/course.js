@@ -170,11 +170,13 @@ const courseObjRatio = 1
 const createControlTextLocations = controls => {
   const objects = controls.slice()
   const result = []
-  controls.forEach(c => {
-    const textLocation = createTextPlacement(objects, c)
-    objects.push({coordinates: new Coordinate(textLocation.geometry.coordinates)})
-    result.push(textLocation)        
-  })
+  controls
+    .filter(c => c.kind !== 'finish')
+    .forEach(c => {
+      const textLocation = createTextPlacement(objects, c)
+      objects.push({coordinates: new Coordinate(textLocation.geometry.coordinates)})
+      result.push(textLocation)        
+    })
 
   return result
 }

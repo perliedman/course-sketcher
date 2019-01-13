@@ -30,7 +30,8 @@ export default {
       search: 'Sök',
       remove: 'Ta bort',
       print: 'Skriv ut',
-      printing: 'Skriver ut...'
+      printing: 'Skriver ut...',
+      makeFinish: 'Gör till målpunkt'
     },
     event: {
       newName: 'Ny träning'
@@ -73,7 +74,8 @@ export default {
       search: 'Search',
       remove: 'Remove',
       print: 'Print',
-      printing: 'Printing...'
+      printing: 'Printing...',
+      makeFinish: 'Finish'
     },
     event: {
       newName: 'New training'

@@ -10,7 +10,8 @@
           :course="c" 
           :selected-control-id="selectedControlId"
           @controldescriptionset="$emit('controldescriptionset', $event)" 
-          @controlremoved="$emit('controlremoved', $event)"/>
+          @controlremoved="$emit('controlremoved', $event)"
+          @controlkindset="$emit('controlkindset', $event)"/>
       </mu-expansion-panel>
     </mu-expansion-panel>      
     <mu-expansion-panel :expand="panel === 'map'" @change="togglePanel('map')">

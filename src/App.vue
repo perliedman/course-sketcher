@@ -26,7 +26,8 @@
         :selected-control-id="selectedControl"
         @courseselected="selectedCourse = $event.index"
         @controldescriptionset="controlDescriptionSet"
-        @controlremoved="controlRemoved" />
+        @controlremoved="controlRemoved"
+        @controlkindset="controlKindSet" />
     </mu-drawer>
     <map-view
       :controls="controlsGeoJson"
@@ -61,6 +62,7 @@ import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
 import { languages } from './i18n'
+import Vue from 'vue';
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
 const projDef = '+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs'
@@ -87,10 +89,16 @@ export default {
   },
   computed: {
     controlsGeoJson () {
+      // TODO: this hack forces the computed value to depend on each control's kind,
+      // which it should, but would be nice if this could be done in a less hacky way
+      this.event.courses[this.selectedCourse].controls.map(c => c.kind)
       const f = this.event.courses[this.selectedCourse].controlsToGeoJson() || featureCollection([])
       return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), f)
     },
     controlLabelsGeoJson () {
+      // TODO: this hack forces the computed value to depend on each control's kind,
+      // which it should, but would be nice if this could be done in a less hacky way
+      this.event.courses[this.selectedCourse].controls.map(c => c.kind)
       return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.event.courses[this.selectedCourse].controlLabelsToGeoJson() || featureCollection([]))
     },
     controlCollectionsGeoJson () {
@@ -115,8 +123,13 @@ export default {
             }
           })
           .then(() => {
-            if (this.event && this.event.map && this.map.name != this.event.map.name) {
-              this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
+            if (this.event) {
+              this.event.courses.forEach(c => {
+                c.scale = this.map.file.getCrs().scale
+              })
+              if (this.event.map && this.map.name != this.event.map.name) {
+                this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
+              }
             }
           })
           .catch(err => {
@@ -174,6 +187,10 @@ export default {
 
     controlRemoved (e) {
       this.event.courses[this.selectedCourse].removeControl(e.id)
+    },
+
+    controlKindSet ({id, kind}) {
+      this.event.courses[this.selectedCourse].controls.find(c => c.id === id).kind = kind
     }
   },
   components: {

@@ -36,7 +36,12 @@
                 <mu-icon value="more_vert"/>
               </mu-button>
               <mu-list slot="content">
+                <mu-list-item v-if="i > 0 && i === course.controls.length - 1" button @click="$emit('controlkindset', { id: c.id, kind: 'finish' })">
+                  <mu-list-item-action><img src="finish-symbol.svg" style="width: 24px"/></mu-list-item-action>
+                  <mu-list-item-title>{{$t('actions.makeFinish')}}</mu-list-item-title>
+                </mu-list-item>
                 <mu-list-item button @click="$emit('controlremoved', { id: c.id })">
+                  <mu-list-item-action><mu-icon value="delete"/></mu-list-item-action>
                   <mu-list-item-title>{{$t('actions.remove')}}</mu-list-item-title>
                 </mu-list-item>
               </mu-list>
