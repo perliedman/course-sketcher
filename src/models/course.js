@@ -40,7 +40,7 @@ export default class Course {
     const properties = {
       id: nControls + 1,
       kind: nControls === 0 ? 'start' : 'normal', // TODO
-      code: nControls + 1, // TODO
+      code: c.code,
       sequence: nControls === 0 ? undefined : nControls,
       coordinates: new Coordinate(c.coordinates[0], c.coordinates[1]),
       description: {}

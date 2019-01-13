@@ -55,6 +55,7 @@ import { toWgs84 } from 'reproject'
 import proj4 from 'proj4'
 import bbox from '@turf/bbox'
 
+import Event from './models/event.js'
 import Course from './models/course.js'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
@@ -69,12 +70,10 @@ export default {
   data () {
     return {
       map: {},
-      event: {
-        name: this.$t('event.newName'),
-        courses: [
+      event: new Event(this.$t('event.newName'), [
           new Course(1, this.$t('course.newName'), [], 15000)
         ]
-      },
+      ),
       selectedCourse: 0,
       selectedControl: 0,
       layers: [],
@@ -148,7 +147,11 @@ export default {
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      this.event.courses[this.selectedCourse].addControl({coordinates})
+      const course = this.event.courses[this.selectedCourse]
+      course.addControl({
+        code: course.controls.length > 0 ? this.event.controlCodeGenerator.next() : null,
+        coordinates
+      })
     },
 
     controlMoved (e) {
