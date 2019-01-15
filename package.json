@@ -29,7 +29,8 @@
     "transform-loader": "^0.2.4",
     "vue": "^2.5.17",
     "vue-i18n": "^8.6.0",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-undo-redo": "^1.1.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.1",

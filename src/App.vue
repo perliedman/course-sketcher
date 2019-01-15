@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @keydown="onKeydown">
     <mu-appbar style="width: 100%" color="primary">
       <mu-button icon slot="left" :disabled="!map.file" @click="menuOpen = !menuOpen">
         <mu-icon value="menu"></mu-icon>
@@ -190,6 +190,17 @@ export default {
     controlKindSet ({ id, kind }) {
       this.setControlKind({ id, kind })
     },
+
+    onKeydown (e) {
+      if (e.ctrlKey) {
+        if (e.key === 'z' && this.canUndo) {
+          this.undo()
+        } else if (e.key === 'y' && this.canRedo) {
+          this.redo()
+        }
+      }
+    },
+
     ...mapMutations({
       addControl: ADD_CONTROL,
       moveControl: MOVE_CONTROL,
