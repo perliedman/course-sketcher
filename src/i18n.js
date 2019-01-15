@@ -1,4 +1,7 @@
-export default {
+import Vue from 'vue'
+import VueI18n from 'vue-i18n'
+
+const messages = {
   sv: {
     hero: {
       title: 'Course<br/>Sketcher',
@@ -95,3 +98,12 @@ export const languages = [
   {code: 'en', flag: 'gb', title: 'English'},
   {code: 'sv', flag: 'se', title: 'Svenska'}
 ]
+
+const defaultLocale = navigator.languages.find(l => languages.findIndex(langDef => langDef.code === l) >= 0)
+
+Vue.use(VueI18n)
+export default new VueI18n({
+  locale: defaultLocale || 'en',
+  fallbackLocale: 'en',
+  messages
+})

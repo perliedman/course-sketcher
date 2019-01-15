@@ -1,0 +1,6 @@
+export const ADD_CONTROL = 'addControl'
+export const MOVE_CONTROL = 'moveControl'
+export const REMOVE_CONTROL = 'removeControl'
+export const SELECT_CONTROL = 'selectControl'
+export const SET_CONTROL_DESCRIPTION = 'setControlDescription'
+export const SET_CONTROL_KIND = 'setControlKind'

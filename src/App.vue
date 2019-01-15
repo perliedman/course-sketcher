@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import Sidebar from './components/Sidebar.vue'
 import MapView from './components/MapView.vue'
 import parsePPen from './parse-ppen.js'
@@ -63,8 +64,8 @@ import Course from './models/course.js'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
+import { ADD_CONTROL, MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND } from './store/mutation-types'
 import { languages } from './i18n'
-import Vue from 'vue';
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
 const projDef = '+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs'
@@ -74,12 +75,6 @@ export default {
   data () {
     return {
       map: {},
-      event: new Event(this.$t('event.newName'), [
-          new Course(1, this.$t('course.newName'), [], 15000, 10000)
-        ]
-      ),
-      selectedCourseIndex: 0,
-      selectedControl: 0,
       layers: [],
       mapGeojson: {},
       mapRotation: 0,
@@ -90,9 +85,6 @@ export default {
     }
   },
   computed: {
-    selectedCourse () {
-      return this.event.courses[this.selectedCourseIndex]
-    },
     controlsGeoJson () {
       // TODO: this hack forces the computed value to depend on each control's kind,
       // which it should, but would be nice if this could be done in a less hacky way
@@ -112,6 +104,8 @@ export default {
     crs () {
       return this.map.file && this.map.file.getCrs()
     },
+    ...mapState(['event', 'selectedCourseIndex', 'selectedControl']),
+    ...mapGetters(['selectedCourse'])
   },
   methods: {
     mapFileSelected(f) {
@@ -168,12 +162,7 @@ export default {
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      const course = this.selectedCourse
-      course.addControl({
-        id: this.event.idGenerator.next(),
-        code: course.controls.length > 0 ? this.event.controlCodeGenerator.next() : null,
-        coordinates
-      })
+      this.addControl({ coordinates })
     },
 
     controlMoved (e) {
@@ -183,24 +172,32 @@ export default {
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      this.selectedCourse.moveControl({id: e.id, coordinates})
+      this.moveControl({ id: e.id, coordinates })
     },
 
-    controlSelected (e) {
-      this.selectedControl = e.id
+    controlSelected ({ id }) {
+      this.selectControl({ id })
     },
 
     controlDescriptionSet (e) {
-      this.selectedCourse.setControlDescription(e.controlId, e.kind, e.descriptionId)
+      this.setControlDescription({ id: e.controlId, kind: e.kind, descriptionId: e.descriptionId })
     },
 
-    controlRemoved (e) {
-      this.selectedCourse.removeControl(e.id)
+    controlRemoved ({ id }) {
+      this.removeControl({ id })
     },
 
-    controlKindSet ({id, kind}) {
-      this.selectedCourse.controls.find(c => c.id === id).kind = kind
-    }
+    controlKindSet ({ id, kind }) {
+      this.setControlKind({ id, kind })
+    },
+    ...mapMutations({
+      addControl: ADD_CONTROL,
+      moveControl: MOVE_CONTROL,
+      removeControl: REMOVE_CONTROL,
+      selectControl: SELECT_CONTROL,
+      setControlDescription: SET_CONTROL_DESCRIPTION,
+      setControlKind: SET_CONTROL_KIND
+    })
   },
   components: {
     MapView,
