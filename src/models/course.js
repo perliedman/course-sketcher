@@ -14,16 +14,17 @@ const distance = (c1, c2) => {
 const courseOverPrintRgb = 'rgb(182, 44, 152)'
 
 export default class Course {
-  constructor (id, name, controls = [], scale) {
+  constructor (id, name, controls = [], mapScale, printScale) {
     this.id = id
     this.name = name
     this.controls = controls
-    this.scale = scale
+    this.mapScale = mapScale
+    this.printScale = printScale
   }
 
   distance () {
     const controls = this.controls
-    return controls.slice(1).reduce((a, c, i) => a + distance(controls[i], c), 0) / 1000 / 1000 * this.scale
+    return controls.slice(1).reduce((a, c, i) => a + distance(controls[i], c), 0) / 1000 / 1000 * this.mapScale
   }
 
   bounds () {
@@ -38,9 +39,8 @@ export default class Course {
   addControl (c) {
     const nControls = this.controls.length
     const properties = {
-      id: nControls + 1,
+      ...c,
       kind: nControls === 0 ? 'start' : 'normal', // TODO
-      code: c.code,
       sequence: nControls === 0 ? undefined : nControls,
       coordinates: new Coordinate(c.coordinates[0], c.coordinates[1]),
       description: {}
@@ -77,6 +77,8 @@ export default class Course {
   }
 
   controlsToGeoJson () {
+    const scaleFactor = (this.printScale / this.mapScale) * 1.5
+
     return featureCollection(this.controls.map((c, i) => ({
       type: 'Feature',
       id: c.id, // TODO
@@ -89,6 +91,7 @@ export default class Course {
         : {
           type: 'Polygon',
           coordinates: [startTriangle.map(p => p
+            .mul(scaleFactor)
             .rotate(this.controls.length > i + 1 
               ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
               : 0)

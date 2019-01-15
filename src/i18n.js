@@ -37,7 +37,8 @@ export default {
       newName: 'Ny träning'
     },
     course: {
-      newName: 'Ny bana'
+      newName: 'Ny bana',
+      printScale: 'Utskriftsskala'
     },
     control: {
       selectDescription: 'Välj kontrollbeskrivning'
@@ -81,7 +82,8 @@ export default {
       newName: 'New training'
     },
     course: {
-      newName: 'New course'
+      newName: 'New course',
+      printScale: 'Print Scale'
     },
     control: {
       selectDescription: 'Choose Control Description'

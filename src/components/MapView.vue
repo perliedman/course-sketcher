@@ -34,7 +34,9 @@ export default {
     controlConnections: Object,
     layers: Array,
     mapGeojson: Object,
-    mapRotation: Number
+    mapRotation: Number,
+    printScale: Number,
+    mapScale: Number
   },
   data () {
     return {
@@ -50,6 +52,9 @@ export default {
   computed: {
     empty () {
       return !this.layers || !this.layers.length
+    },
+    scaleFactor () {
+      return this.printScale / this.mapScale
     },
     mapStyle () {
       return {
@@ -96,7 +101,7 @@ export default {
                     0.7
                 ],
               'line-color': controlColor,
-              'line-width': expFunc(4)
+              'line-width': expFunc(6 * this.scaleFactor)
             }
           },
           {
@@ -105,9 +110,9 @@ export default {
             filter: ['==', ['get', 'kind'], 'normal'],
             type: 'circle',
             paint: {
-              'circle-radius': expFunc(28),
+              'circle-radius': expFunc(42 * this.scaleFactor),
               'circle-opacity': 0,
-              'circle-stroke-width': expFunc(4),
+              'circle-stroke-width': expFunc(6 * this.scaleFactor),
               'circle-stroke-color': controlColor,
               'circle-stroke-opacity': ["case",
                 ["boolean", ["feature-state", "hover"], false],
@@ -124,9 +129,9 @@ export default {
             filter: ['==', ['get', 'kind'], 'finish'],
             type: 'circle',
             paint: {
-              'circle-radius': expFunc(22.4),
+              'circle-radius': expFunc(33.6 * this.scaleFactor),
               'circle-opacity': 0,
-              'circle-stroke-width': expFunc(4),
+              'circle-stroke-width': expFunc(6 * this.scaleFactor),
               'circle-stroke-color': controlColor,
               'circle-stroke-opacity': 0.7,
               'circle-pitch-scale': 'map',
@@ -139,9 +144,9 @@ export default {
             filter: ['==', ['get', 'kind'], 'finish'],
             type: 'circle',
             paint: {
-              'circle-radius': expFunc(33.6),
+              'circle-radius': expFunc(50.4 * this.scaleFactor),
               'circle-opacity': 0,
-              'circle-stroke-width': expFunc(4),
+              'circle-stroke-width': expFunc(6 * this.scaleFactor),
               'circle-stroke-color': controlColor,
               'circle-stroke-opacity': ["case",
                 ["boolean", ["feature-state", "hover"], false],
@@ -159,7 +164,7 @@ export default {
             layout: {
               'symbol-placement': 'point',
               'text-field': ['get', 'sequence'],
-              'text-size': expFunc(48),
+              'text-size': expFunc(72 * this.scaleFactor),
               'text-anchor': 'center',
               'text-allow-overlap': true,
               'text-ignore-placement': true
@@ -176,7 +181,7 @@ export default {
             paint: {
               'line-color': controlColor,
               'line-opacity': 0.7,
-              'line-width': expFunc(4)
+              'line-width': expFunc(6 * this.scaleFactor)
             }
           }
         ])

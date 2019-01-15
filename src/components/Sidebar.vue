@@ -5,6 +5,10 @@
       <div slot="header">{{$t('menus.courses')}}</div>
       <mu-expansion-panel v-for="(c, i) in event.courses" :key="i" :expand="selectedCourse === i" @change="$emit('courseselected', {index: i })" :z-depth=1>
         <div slot="header">{{c.name}}</div>
+        <div style="display: flex; justify-content: space-between;">
+          <div>{{$t('course.printScale')}}</div>
+          <div>1:<input type="number" v-model.number="c.printScale" style="width: 4em; text-align: right; border: none" step="500"/></div>
+        </div>
         <control-description-sheet
           :event="event" 
           :course="c" 
@@ -17,6 +21,7 @@
     <mu-expansion-panel :expand="panel === 'map'" @change="togglePanel('map')">
       <div slot="header">{{$t('menus.map')}}</div>
       <h3>{{map.name}}</h3>
+      1:{{map.file.getCrs().scale.toLocaleString($i18n.locale)}}
       <div slot="action">
         <mu-button slot="action" flat>{{$t('actions.removeMap')}}</mu-button>
       </div>

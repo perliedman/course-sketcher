@@ -21,6 +21,10 @@ export default class Coordinate {
     return new Coordinate(this[0] - c1[0], this[1] - c1[1])
   }
 
+  mul (c) {
+    return new Coordinate(this[0] * c, this[1] * c)
+  }
+
   rotate (theta) {
     return new Coordinate(
       this[0] * Math.cos(theta) - this[1] * Math.sin(theta),

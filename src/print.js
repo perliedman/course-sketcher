@@ -5,7 +5,7 @@ import blobStream from 'blob-stream'
 const mmToPt = 2.83465
 
 export function courseMapToSvg (mapSvg, course, crs) {
-  const scaleFactor = crs.scale / 10000 // 10000 should be the course's print scale setting
+  const scaleFactor = crs.scale / course.printScale // 10000 should be the course's print scale setting
   const svg = mapSvg.cloneNode(true)
 
   const mapGroup = svg.querySelector('g')

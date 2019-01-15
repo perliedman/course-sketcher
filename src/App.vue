@@ -22,9 +22,9 @@
       <sidebar
         :event="event"
         :map="map"
-        :selected-course="selectedCourse"
+        :selected-course="selectedCourseIndex"
         :selected-control-id="selectedControl"
-        @courseselected="selectedCourse = $event.index"
+        @courseselected="selectedCourseIndex = $event.index"
         @controldescriptionset="controlDescriptionSet"
         @controlremoved="controlRemoved"
         @controlkindset="controlKindSet" />
@@ -36,6 +36,8 @@
       :layers="layers"
       :map-geojson="mapGeojson"
       :map-rotation="mapRotation"
+      :map-scale="crs && crs.scale"
+      :print-scale="selectedCourse.printScale"
       @controladded="controlAdded"
       @controlmoved="controlMoved"
       @controlselected="controlSelected"
@@ -73,10 +75,10 @@ export default {
     return {
       map: {},
       event: new Event(this.$t('event.newName'), [
-          new Course(1, this.$t('course.newName'), [], 15000)
+          new Course(1, this.$t('course.newName'), [], 15000, 10000)
         ]
       ),
-      selectedCourse: 0,
+      selectedCourseIndex: 0,
       selectedControl: 0,
       layers: [],
       mapGeojson: {},
@@ -88,22 +90,28 @@ export default {
     }
   },
   computed: {
+    selectedCourse () {
+      return this.event.courses[this.selectedCourseIndex]
+    },
     controlsGeoJson () {
       // TODO: this hack forces the computed value to depend on each control's kind,
       // which it should, but would be nice if this could be done in a less hacky way
-      this.event.courses[this.selectedCourse].controls.map(c => c.kind)
-      const f = this.event.courses[this.selectedCourse].controlsToGeoJson() || featureCollection([])
+      this.selectedCourse.controls.map(c => c.kind)
+      const f = this.selectedCourse.controlsToGeoJson() || featureCollection([])
       return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), f)
     },
     controlLabelsGeoJson () {
       // TODO: this hack forces the computed value to depend on each control's kind,
       // which it should, but would be nice if this could be done in a less hacky way
-      this.event.courses[this.selectedCourse].controls.map(c => c.kind)
-      return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.event.courses[this.selectedCourse].controlLabelsToGeoJson() || featureCollection([]))
+      this.selectedCourse.controls.map(c => c.kind)
+      return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.selectedCourse.controlLabelsToGeoJson() || featureCollection([]))
     },
     controlCollectionsGeoJson () {
-      return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.event.courses[this.selectedCourse].controlConnectionsToGeoJson() || featureCollection([]))
-    }
+      return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.selectedCourse.controlConnectionsToGeoJson() || featureCollection([]))
+    },
+    crs () {
+      return this.map.file && this.map.file.getCrs()
+    },
   },
   methods: {
     mapFileSelected(f) {
@@ -125,7 +133,7 @@ export default {
           .then(() => {
             if (this.event) {
               this.event.courses.forEach(c => {
-                c.scale = this.map.file.getCrs().scale
+                c.mapScale = this.map.file.getCrs().scale
               })
               if (this.event.map && this.map.name != this.event.map.name) {
                 this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
@@ -144,7 +152,7 @@ export default {
           if (!this.map.name) {
             this.message = this.$t('messages.mapFileRequest', { fileName: this.event.map.name })
           } else if (this.map.name != this.event.map.name) {
-            this.message = this.$t('message.ensureCorrectMap', { fileName: this.event.map.name })
+            this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
           }
         } catch (err) {
           this.message = this.$t('messages.mapLoadError', {error: err.message}) 
@@ -160,8 +168,9 @@ export default {
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      const course = this.event.courses[this.selectedCourse]
+      const course = this.selectedCourse
       course.addControl({
+        id: this.event.idGenerator.next(),
         code: course.controls.length > 0 ? this.event.controlCodeGenerator.next() : null,
         coordinates
       })
@@ -174,7 +183,7 @@ export default {
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      this.event.courses[this.selectedCourse].moveControl({id: e.id, coordinates})
+      this.selectedCourse.moveControl({id: e.id, coordinates})
     },
 
     controlSelected (e) {
@@ -182,15 +191,15 @@ export default {
     },
 
     controlDescriptionSet (e) {
-      this.event.courses[this.selectedCourse].setControlDescription(e.controlId, e.kind, e.descriptionId)
+      this.selectedCourse.setControlDescription(e.controlId, e.kind, e.descriptionId)
     },
 
     controlRemoved (e) {
-      this.event.courses[this.selectedCourse].removeControl(e.id)
+      this.selectedCourse.removeControl(e.id)
     },
 
     controlKindSet ({id, kind}) {
-      this.event.courses[this.selectedCourse].controls.find(c => c.id === id).kind = kind
+      this.selectedCourse.controls.find(c => c.id === id).kind = kind
     }
   },
   components: {
