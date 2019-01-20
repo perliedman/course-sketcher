@@ -3,20 +3,28 @@
     <!-- <div ref="svg" style="position: absolute; width: 100%; height: 100%"/> -->
     <mu-expansion-panel :expand="panel === 'courses'" @change="togglePanel('courses')">
       <div slot="header">{{$t('menus.courses')}}</div>
-      <mu-expansion-panel v-for="(c, i) in event.courses" :key="i" :expand="selectedCourse === i" @change="$emit('courseselected', {index: i })" :z-depth=1>
-        <div slot="header">{{c.name}}</div>
-        <div style="display: flex; justify-content: space-between;">
-          <div>{{$t('course.printScale')}}</div>
-          <div>1:<input type="number" v-model.number="c.printScale" style="width: 4em; text-align: right; border: none" step="500"/></div>
-        </div>
-        <control-description-sheet
-          :event="event" 
-          :course="c" 
-          :selected-control-id="selectedControlId"
-          @controldescriptionset="$emit('controldescriptionset', $event)" 
-          @controlremoved="$emit('controlremoved', $event)"
-          @controlkindset="$emit('controlkindset', $event)"/>
-      </mu-expansion-panel>
+      <div style="position: relative; padding-bottom: 32px;">
+        <mu-expansion-panel v-for="(c, i) in event.courses" :key="i" :expand="selectedCourse === i" @change="$emit('courseselected', { id: c.id })" :z-depth=1>
+          <div slot="header">{{c.name}}</div>
+            <div style="display: flex; justify-content: space-between;">
+              <div>{{$t('course.printScale')}}</div>
+              <div>1:<input type="number" v-model.number="c.printScale" style="width: 4em; text-align: right; border: none" step="500"/></div>
+            </div>
+            <control-description-sheet
+              :event="event" 
+              :course="c" 
+              :selected-control-id="selectedControlId"
+              @controldescriptionset="$emit('controldescriptionset', $event)" 
+              @controlremoved="$emit('controlremoved', $event)"
+              @controlkindset="$emit('controlkindset', $event)"
+              @eventnameset="$emit('eventnameset', $event)"
+              @coursenameset="$emit('coursenameset', { name: $event.name, id: c.id })"
+            />
+        </mu-expansion-panel>
+        <mu-button style="position: absolute; right: 0; bottom: 0;" fab small color="primary" :title="$t('actions.newCourse')" @click="$emit('courseadded')">
+          <mu-icon value="add"></mu-icon>
+        </mu-button>
+      </div>
     </mu-expansion-panel>      
     <mu-expansion-panel :expand="panel === 'map'" @change="togglePanel('map')">
       <div slot="header">{{$t('menus.map')}}</div>

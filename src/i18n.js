@@ -34,7 +34,8 @@ const messages = {
       remove: 'Ta bort',
       print: 'Skriv ut',
       printing: 'Skriver ut...',
-      makeFinish: 'Gör till målpunkt'
+      makeFinish: 'Gör till målpunkt',
+      newCourse: 'Lägg till bana'
     },
     event: {
       newName: 'Ny träning'
@@ -79,7 +80,8 @@ const messages = {
       remove: 'Remove',
       print: 'Print',
       printing: 'Printing...',
-      makeFinish: 'Finish'
+      makeFinish: 'Finish',
+      newCourse: 'Add Course'
     },
     event: {
       newName: 'New training'

@@ -105,7 +105,7 @@ export default class Course {
       }
     })
 
-    const controls = this.controls.map(id => this.event.controls[id])
+    const controls = this.controls
 
     return createSvgNode(document, {
       type: 'g',

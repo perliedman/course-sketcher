@@ -24,10 +24,14 @@
         :map="map"
         :selected-course="selectedCourseIndex"
         :selected-control-id="selectedControl"
-        @courseselected="selectedCourseIndex = $event.index"
+        @courseselected="setSelectedCourse($event)"
         @controldescriptionset="controlDescriptionSet"
         @controlremoved="controlRemoved"
-        @controlkindset="controlKindSet" />
+        @controlkindset="controlKindSet"
+        @courseadded="addCourse"
+        @eventnameset="setEventName"
+        @coursenameset="setCourseName"
+      />
     </mu-drawer>
     <map-view
       :controls="controlsGeoJson"
@@ -59,12 +63,10 @@ import { toWgs84 } from 'reproject'
 import proj4 from 'proj4'
 import bbox from '@turf/bbox'
 
-import Event from './models/event.js'
-import Course from './models/course.js'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL } from './store/mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME } from './store/mutation-types'
 import { languages } from './i18n'
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
@@ -210,7 +212,11 @@ export default {
       removeControl: REMOVE_CONTROL,
       selectControl: SELECT_CONTROL,
       setControlDescription: SET_CONTROL_DESCRIPTION,
-      setControlKind: SET_CONTROL_KIND
+      setControlKind: SET_CONTROL_KIND,
+      addCourse: ADD_COURSE,
+      setSelectedCourse: SET_SELECTED_COURSE,
+      setEventName: SET_EVENT_NAME,
+      setCourseName: SET_COURSE_NAME
     })
   },
   components: {

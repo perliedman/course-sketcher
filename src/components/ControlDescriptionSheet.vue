@@ -4,13 +4,13 @@
       <tbody>
         <tr class="heavy-bottom">
           <td colspan="8">
-            <input type="text" v-model="event.name" />
+            <input type="text" v-model="eventName" />
           </td>
           <td class="control-menu"></td>
         </tr>
         <tr class="heavy-bottom">
           <td colspan="3" class="heavy-right">
-            <input style="width: 6em" type="text" v-model="course.name" />
+            <input style="width: 6em" type="text" v-model="courseName" />
           </td>
           <td colspan="3" class="heavy-right">{{course.distance().toFixed(1)}} km</td>
           <td colspan="2"></td>
@@ -81,6 +81,16 @@ export default {
       dialogSelection: null,
       dialogResult: null,
       symbols
+    }
+  },
+  computed: {
+    eventName: {
+      get () { return this.event.name },
+      set (v) { this.$emit('eventnameset', { name: v })}
+    },
+    courseName: {
+      get () { return this.course.name },
+      set (v) { this.$emit('coursenameset', { name: v })}
     }
   },
   methods: {
