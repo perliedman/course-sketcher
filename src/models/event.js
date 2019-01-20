@@ -4,12 +4,8 @@ export default class Event {
   constructor (name, courses) {
     this.name = name
     this.courses = courses || []
-    this.controlCodeGenerator = {
-      next: sequence(30)
-    }
-    this.idGenerator = {
-      next: sequence(1)
-    }
+    this.controlCodeGenerator = sequence(30)
+    this.idGenerator = sequence(1)
     this.map = {
       scale: 15000
     }
@@ -20,7 +16,8 @@ export default class Event {
     this.courses.push(course)
   }
 
-  addControl ({ id, kind, coordinates, description }) {
+  addControl ({ kind, coordinates, description }) {
+    const id = this.idGenerator.next()
     this.controls[id] = {
       id,
       kind: kind || 'normal',
@@ -42,6 +39,9 @@ export default class Event {
 }
 
 const sequence = start => (() => {
-  let next = start
-  return () => next++
+  let s = start - 1
+  return {
+    next: () => ++s,
+    current: () => s
+  }
 })()

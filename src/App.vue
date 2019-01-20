@@ -162,9 +162,9 @@ export default {
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      const id = this.event.idGenerator.next()
-      this.addEventControl({ id, coordinates, kind: id === 1 ? 'start' : 'normal' })
-      this.addCourseControl({ id })
+      
+      this.addEventControl({ coordinates, kind: this.event.idGenerator.current() === 0 ? 'start' : 'normal' })
+      this.addCourseControl({ id: this.event.idGenerator.current() })
     },
 
     controlMoved (e) {
