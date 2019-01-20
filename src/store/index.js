@@ -33,7 +33,7 @@ export default new Vuex.Store({
       this.replaceState(createInitialState())
     },
     [SET_EVENT_NAME] (state, { name }) {
-      state.event.nane = name
+      state.event.name = name
     },
     [SET_COURSE_NAME] (state, { id, name }) {
       state.event.courses.find(c => c.id === id).name = name
