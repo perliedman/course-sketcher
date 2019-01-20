@@ -1,4 +1,5 @@
 import Coordinate from "./coordinate";
+import Control from "./control";
 
 export default class Event {
   constructor (name, courses) {
@@ -18,21 +19,12 @@ export default class Event {
 
   addControl ({ kind, coordinates, description }) {
     const id = this.idGenerator.next()
-    this.controls[id] = {
+    this.controls[id] = new Control(
       id,
-      kind: kind || 'normal',
-      code: kind !== 'start' && kind !== 'finish' ? this.controlCodeGenerator.next() : null,
-      coordinates: new Coordinate(coordinates[0], coordinates[1]),
-      description: {
-        C: undefined,
-        D: undefined,
-        E: undefined,
-        F: undefined,
-        G: undefined,
-        H: undefined,
-        ...description
-      }
-    }
+      kind,
+      kind !== 'start' && kind !== 'finish' ? this.controlCodeGenerator.next() : null,
+      coordinates,
+      description)
   }
 
   moveControl ({ id, coordinates }) {

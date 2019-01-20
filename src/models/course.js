@@ -1,7 +1,6 @@
 import { featureCollection } from '@turf/helpers'
 import Coordinate from './coordinate'
-import createSvgNode from '../create-svg';
-import flatten from 'arr-flatten'
+import { createSvgNode, lines } from '../create-svg';
 
 const distance = (c1, c2) => {
   const crd1 = c1.coordinates
@@ -11,7 +10,7 @@ const distance = (c1, c2) => {
   return Math.sqrt(dx * dx + dy * dy)
 }
 
-const courseOverPrintRgb = 'rgb(182, 44, 152)'
+export const courseOverPrintRgb = 'rgb(182, 44, 152)'
 
 export default class Course {
   constructor (event, id, name, controls = [], printScale) {
@@ -48,30 +47,12 @@ export default class Course {
   controlsToGeoJson () {
     const scaleFactor = (this.printScale / this.event.map.scale) * 1.5
 
-    return featureCollection(this.controls.map((c, i) => {
-      return {
-        type: 'Feature',
-        id: c.id,
-        properties: {
-          sequence: c.kind !== 'start' && c.kind !== 'finish' ? i : undefined,
-          ...c
-        },
-        geometry: c.kind !== 'start'
-          ? {
-            type: 'Point',
-            coordinates: c.coordinates.toArray()
-          }
-          : {
-            type: 'Polygon',
-            coordinates: [startTriangle.map(p => p
-              .mul(scaleFactor)
-              .rotate(this.controls.length > i + 1 
-                ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
-                : 0)
-              .add(c.coordinates).toArray())]
-          }
-        }
-      }))
+    return featureCollection(this.controls.map((c, i) =>
+      c.toGeoJson(
+        scaleFactor,
+        c.kind === 'start' && this.controls.length > i + 1 
+          ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
+          : 0)))
   }
 
   controlLabelsToGeoJson () {
@@ -83,45 +64,16 @@ export default class Course {
   }
 
   toSvg () {
-    const circle = (c, r) => ({
-      type: 'circle',
-      attrs: {
-        cx: c.coordinates[0] * 100,
-        cy: -c.coordinates[1] * 100,
-        r,
-        stroke: courseOverPrintRgb,
-        'stroke-width': 50
-      }
-    })
-
-    const lines = (cs, close) => ({
-      type: 'path',
-      attrs: {
-        d: cs.map((c, i) => `${i ? 'L' : 'M'} ${c[0] * 100} ${-c[1] * 100}`)
-          .concat(close ? ['Z'] : [])
-          .join(' '),
-        stroke: courseOverPrintRgb,
-        'stroke-width': 50
-      }
-    })
-
     const controls = this.controls
 
     return createSvgNode(document, {
       type: 'g',
-      children: controls.filter(c => c.kind === 'normal').map(c => circle(c, 300))
-        .concat(controls
-          .map((c, i) => [c, i])
-          .filter(([c]) => c.kind === 'start')
-          .map(([c, i]) => lines(
-            startTriangle.map(p => p
-              .rotate(controls.length > i + 1 
-                ? Math.atan2.apply(Math, controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
-                : 0)
-              .add(c.coordinates).toArray()), true)))
-        .concat(flatten(controls.filter(c => c.kind === 'finish').map(c => [circle(c, 250), circle(c, 350)])))
-        .concat(createControlConnections(controls).map(({ geometry: { coordinates } }) => lines(coordinates, false)))
-        .concat(createControlTextLocations(controls).map(({ properties, geometry: { coordinates } }) => ({
+      children: controls.map((c, i) =>
+        c.toSvg(c.kind === 'start' && this.controls.length > i + 1 
+          ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
+          : 0))
+        .concat(createControlConnections(controls).map(({ geometry: { coordinates } }) => lines(coordinates, false, courseOverPrintRgb)))
+        .concat(createControlTextLocations(controls).map(({ properties, geometry: { coordinates } }, i) => ({
           type: 'text',
           attrs: {
             x: coordinates[0] * 100,
@@ -131,7 +83,7 @@ export default class Course {
             fill: courseOverPrintRgb,
             style: 'font: normal 600px sans-serif;'
           },
-          text: properties.sequence
+          text: properties.kind !== 'start' && properties.kind !== 'finish' ? (i + 1).toString() : ''
         })))
     })
   }
@@ -139,7 +91,6 @@ export default class Course {
 
 const coordClone = c => Array.isArray(c[0]) ? c.map(coordClone) : new Coordinate(c[0], c[1])
 
-const startTriangle = [new Coordinate(0, 3.464), new Coordinate(3, -1.732), new Coordinate(-3, -1.732), new Coordinate(0, 3.464)]
 const defaultControlNumberAngle = Math.PI / 6
 const controlCircleOutsideDiameter = 5.35
 const controlNumberCircleDistance = 1.825
