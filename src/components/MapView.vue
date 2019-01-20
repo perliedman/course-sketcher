@@ -31,6 +31,7 @@ export default {
     controls: Object,
     controlTexts: Object,
     controlConnections: Object,
+    otherControls: Object,
     layers: Array,
     mapGeojson: Object,
     mapRotation: Number,
@@ -73,43 +74,52 @@ export default {
           controlConnections: {
             type: 'geojson',
             data: {type: 'FeatureCollection', features: []}
-          }
+          },
+          otherControls: {
+            type: 'geojson',
+            data: {type: 'FeatureCollection', features: []}
+          },
         },
         layers: this.layers.concat([
           {
+            id: 'other-control-circles',
+            source: 'otherControls',
+            ...controlCircles(0.4)
+          },
+          {
             id: 'start-hover',
             source: 'controls',
-            ...startHover
+            ...startHover(0.7)
           },
           {
             id: 'start',
             source: 'controls',
-            ...start
+            ...start(0.7)
           },
           {
             id: 'control-circles',
             source: 'controls',
-            ...controlCircles
+            ...controlCircles(0.7)
           },
           {
             id: 'finish-inner-circle',
             source: 'controls',
-            ...finishInnerCircle
+            ...finishInnerCircle(0.7)
           },
           {
             id: 'finish-outer-circle',
             source: 'controls',
-            ...finishOuterCircle
+            ...finishOuterCircle(0.7)
           },
           {
             id: 'control-texts',
             source: 'controlTexts',
-            ...controlTexts
+            ...controlTexts()
           },
           {
             id: 'control-connections',
             source: 'controlConnections',
-            ...controlConnections
+            ...controlConnections()
           }
         ])
       }
@@ -131,7 +141,8 @@ export default {
     },
     controls (controls) { this.updateSource('controls', controls) },
     controlTexts (controlTexts) { this.updateSource('controlTexts', controlTexts) },
-    controlConnections (controlConnections) { this.updateSource('controlConnections', controlConnections) }
+    controlConnections (controlConnections) { this.updateSource('controlConnections', controlConnections) },
+    otherControls (controls) { this.updateSource('otherControls', controls) },
   },
   methods: {
     onFileInput (files) {
@@ -178,6 +189,7 @@ export default {
         this.createFeatureHighlight('controls', 'start-hover', 'start')
         this.createFeatureHighlight('controls', 'control-circles')
         this.createFeatureHighlight('controls', 'finish-outer-circle')
+        this.createFeatureHighlight('otherControls', 'other-control-circles')
 
         this.map.on('mousedown', this.onMouseDown.bind(this))
 
@@ -223,6 +235,8 @@ export default {
     onMapClick (e) {
       if (!this.hover) {
         this.$emit('controladded', { coordinates: [e.lngLat.lng, e.lngLat.lat] })
+      } else if (this.hover.source === 'otherControls') {
+        this.$emit('controladded', { id: this.hover.id })
       }
     },
     onMouseDown (e) {

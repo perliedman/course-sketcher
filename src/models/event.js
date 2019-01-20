@@ -23,7 +23,15 @@ export default class Event {
       kind: kind || 'normal',
       code: kind !== 'start' && kind !== 'finish' ? this.controlCodeGenerator.next() : null,
       coordinates: new Coordinate(coordinates[0], coordinates[1]),
-      description: description || {}
+      description: {
+        C: undefined,
+        D: undefined,
+        E: undefined,
+        F: undefined,
+        G: undefined,
+        H: undefined,
+        ...description
+      }
     }
   }
 

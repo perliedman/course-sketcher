@@ -43,6 +43,7 @@
       :controls="controlsGeoJson"
       :control-texts="controlLabelsGeoJson"
       :control-connections="controlCollectionsGeoJson"
+      :other-controls="otherControlsGeoJson"
       :layers="layers"
       :map-geojson="mapGeojson"
       :map-rotation="mapRotation"
@@ -109,6 +110,23 @@ export default {
     controlCollectionsGeoJson () {
       return this.event && this.event.courses && this.map.file && applyCrs(this.map.file.getCrs(), this.selectedCourse.controlConnectionsToGeoJson() || featureCollection([]))
     },
+    otherControlsGeoJson () {
+      return this.event && this.event.courses && this.map.file &&
+        applyCrs(this.map.file.getCrs(), {
+          type: 'FeatureCollection',
+          features: Object.keys(this.event.controls)
+            .filter(id => !this.selectedCourse.controls.find(c => c.id === Number(id)))
+            .map(id => ({
+              type: 'Feature',
+              id: this.event.controls[id].id,
+              properties: this.event.controls[id],
+              geometry: {
+                type: 'Point',
+                coordinates: this.event.controls[id].coordinates.toArray()
+              }
+            }))
+        })
+    },
     crs () {
       return this.map.file && this.map.file.getCrs()
     },
@@ -164,15 +182,23 @@ export default {
       }
     },
     controlAdded (e) {
-      const crs = this.map.file.getCrs()
-      const projectedCoord = proj4(proj4.WGS84, projDef, e.coordinates)
-      const coordinates = [
-        (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
-        (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
-      ]
+      let id
+
+      if (!e.id) {
+        const crs = this.map.file.getCrs()
+        const projectedCoord = proj4(proj4.WGS84, projDef, e.coordinates)
+        const coordinates = [
+          (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
+          (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
+        ]
+        
+        this.addEventControl({ coordinates, kind: Object.keys(this.event.controls).length === 0 ? 'start' : 'normal' })
+        id = this.event.idGenerator.current()
+      } else {
+        id = e.id
+      }
       
-      this.addEventControl({ coordinates, kind: Object.keys(this.event.controls).length === 0 ? 'start' : 'normal' })
-      this.addCourseControl({ id: this.event.idGenerator.current() })
+      this.addCourseControl({ id })
     },
 
     controlMoved (e) {

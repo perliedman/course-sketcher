@@ -15,29 +15,29 @@ export const expFunc = base => ({
   ]
 })
 
-export const startHover = {
+export const startHover = () => ({
   filter: ['==', ['get', 'kind'], 'start'],
   type: 'fill',
   paint: {
     'fill-opacity': 0
   }
-}
+})
 
-export const start = {
+export const start = (opacityFactor) => ({
   filter: ['==', ['get', 'kind'], 'start'],
   type: 'line',
   paint: {
     'line-opacity': ["case",
       ["boolean", ["feature-state", "hover"], false],
           1,
-          0.7
+          opacityFactor
       ],
     'line-color': controlColor,
     'line-width': expFunc(6 * scaleFactor)
   }
-}
+})
 
-export const controlCircles = {
+export const controlCircles = (opacityFactor) => ({
   filter: ['==', ['get', 'kind'], 'normal'],
   type: 'circle',
   paint: {
@@ -48,14 +48,14 @@ export const controlCircles = {
     'circle-stroke-opacity': ["case",
       ["boolean", ["feature-state", "hover"], false],
           1,
-          0.7
+          opacityFactor
       ],
     'circle-pitch-scale': 'map',
     'circle-pitch-alignment': 'map'
   }
-}
+})
 
-export const finishInnerCircle = {
+export const finishInnerCircle = (opacityFactor) => ({
   filter: ['==', ['get', 'kind'], 'finish'],
   type: 'circle',
   paint: {
@@ -63,13 +63,17 @@ export const finishInnerCircle = {
     'circle-opacity': 0,
     'circle-stroke-width': expFunc(6 * scaleFactor),
     'circle-stroke-color': controlColor,
-    'circle-stroke-opacity': 0.7,
+    'circle-stroke-opacity': ["case",
+      ["boolean", ["feature-state", "hover"], false],
+          1,
+          opacityFactor
+      ],
     'circle-pitch-scale': 'map',
     'circle-pitch-alignment': 'map'
   }
-}
+})
 
-export const finishOuterCircle = {
+export const finishOuterCircle = (opacityFactor) => ({
   filter: ['==', ['get', 'kind'], 'finish'],
   type: 'circle',
   paint: {
@@ -80,14 +84,14 @@ export const finishOuterCircle = {
     'circle-stroke-opacity': ["case",
       ["boolean", ["feature-state", "hover"], false],
           1,
-          0.7
+          opacityFactor
       ],
     'circle-pitch-scale': 'map',
     'circle-pitch-alignment': 'map'
   }
-}
+})
 
-export const controlTexts = {
+export const controlTexts = () => ({
   type: 'symbol',
   layout: {
     'symbol-placement': 'point',
@@ -101,13 +105,13 @@ export const controlTexts = {
     'text-color': controlColor,
     'text-opacity': 0.8
   }
-}
+})
 
-export const controlConnections = {
+export const controlConnections = () => ({
   type: 'line',
   paint: {
     'line-color': controlColor,
     'line-opacity': 0.7,
     'line-width': expFunc(6 * scaleFactor)
   }
-}
+})
