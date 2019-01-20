@@ -71,7 +71,11 @@ export default new Vuex.Store({
     [ADD_COURSE] (state) {
       const newName = i18n.t('course.newName')
       const n = state.event.courses.filter(c => c.name.startsWith(newName)).length
-      state.event.addCourse(new Course(state.event, state.event.idGenerator.next(), `${newName} ${n +1}`, [], 10000))
+      const startId = Object.keys(state.event.controls).find(id => state.event.controls[id].kind === 'start')
+      const controls = startId ? [state.event.controls[startId]] : []
+      const id = state.event.idGenerator.next()
+      state.event.addCourse(new Course(state.event, id, `${newName} ${n +1}`, controls, 10000))
+      state.selectedCourseIndex = state.event.courses.findIndex(c => c.id === id)
     },
     [SET_SELECTED_COURSE] (state, { id }) {
       state.selectedCourseIndex = state.event.courses.findIndex(c => c.id === id)

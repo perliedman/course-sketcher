@@ -131,7 +131,7 @@ export default {
               this.event.courses.forEach(c => {
                 c.mapScale = this.map.file.getCrs().scale
               })
-              if (this.event.map && this.map.name != this.event.map.name) {
+              if (this.event.map && this.event.map.name && this.map.name != this.event.map.name) {
                 this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
               }
             }
@@ -165,7 +165,7 @@ export default {
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
       
-      this.addEventControl({ coordinates, kind: this.event.idGenerator.current() === 0 ? 'start' : 'normal' })
+      this.addEventControl({ coordinates, kind: Object.keys(this.event.controls).length === 0 ? 'start' : 'normal' })
       this.addCourseControl({ id: this.event.idGenerator.current() })
     },
 
