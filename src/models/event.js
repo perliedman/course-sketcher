@@ -14,6 +14,11 @@ export default class Event {
   }
 
   addCourse (course) {
+    course.controls.forEach(c => {
+      if (!this.controls[c.id]) {
+        this.controls[c.id] = c
+      }
+    })
     this.courses.push(course)
   }
 

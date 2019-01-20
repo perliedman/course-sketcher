@@ -73,7 +73,7 @@ import bbox from '@turf/bbox'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME } from './store/mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT } from './store/mutation-types'
 import { languages } from './i18n'
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
@@ -160,7 +160,7 @@ export default {
       } else if (f.name.toLowerCase().endsWith('.ppen')) {
         const doc = new DOMParser().parseFromString(f.content, 'application/xml')
         try {
-          this.event = parsePPen(doc)
+          this.setEvent(parsePPen(doc))
           if (!this.map.name) {
             this.message = this.$t('messages.mapFileRequest', { fileName: this.event.map.name })
           } else if (this.map.name != this.event.map.name) {
@@ -240,7 +240,8 @@ export default {
       addCourse: ADD_COURSE,
       setSelectedCourse: SET_SELECTED_COURSE,
       setEventName: SET_EVENT_NAME,
-      setCourseName: SET_COURSE_NAME
+      setCourseName: SET_COURSE_NAME,
+      setEvent: SET_EVENT
     })
   },
   components: {

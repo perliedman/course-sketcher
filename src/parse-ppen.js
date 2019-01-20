@@ -1,5 +1,7 @@
 import Coordinate from './models/coordinate'
 import Course from './models/course';
+import Event from './models/event';
+import Control from './models/control';
 
 export default function parsePPen (doc) {
   const eventTag = doc.getElementsByTagName('event')[0]
@@ -31,32 +33,33 @@ export default function parsePPen (doc) {
   const getCourseControls = (id, sequence) => {
     const control = controls.find(c => c.id === courseControls[id].control)
     const next = courseControls[id].next
-    // Clone the control
-    const courseControl = { sequence: sequence > 0 && next ? sequence : undefined, ...control }
 
-    return [courseControl]
+    return [control]
       .concat(next ? getCourseControls(next, sequence + 1) : [])
+  }
+
+  const event = new Event(eventTag.getElementsByTagName('title')[0].textContent, [])
+  event.map = {
+    name: mapAbsPath.substring(Math.max(mapAbsPath.lastIndexOf('/'), mapAbsPath.lastIndexOf('\\') + 1)),
+    scale
   }
 
   const courses = Array.from(doc.getElementsByTagName('course'))
     .filter(c => c.getElementsByTagName('first').length > 0)
     .map(c => {
       const courseControls = getCourseControls(c.getElementsByTagName('first')[0].getAttribute('course-control'), 0)
-      const course = new Course(c.getAttribute('id'), c.getElementsByTagName('name')[0].textContent, courseControls, scale)
+      const optionsTag = c.getElementsByTagName('options')[0]
+      const printScale = optionsTag && Number(optionsTag.getAttribute('print-scale')) || scale
+      const course = new Course(event, c.getAttribute('id'), c.getElementsByTagName('name')[0].textContent, courseControls, printScale)
       course.order = Number(c.getAttribute('order'))
 
       return course
     })
     .sort((a, b) => a.order - b.order)
 
+  courses.forEach(c => event.addCourse(c))
 
-  return {
-    name: eventTag.getElementsByTagName('title')[0].textContent,
-    map: {
-      name: mapAbsPath.substring(Math.max(mapAbsPath.lastIndexOf('/'), mapAbsPath.lastIndexOf('\\') + 1))
-    },
-    courses
-  }
+  return event
 }
 
 
@@ -67,14 +70,13 @@ const parseLocation = loc => new Coordinate(
 
 const parseControl = (tag) => {
   const codeTag = tag.getElementsByTagName('code')[0]
-  return {
-    id: tag.id,
-    kind: tag.getAttribute('kind'),
-    code: codeTag ? codeTag.textContent : undefined,
-    coordinates: parseLocation(tag.getElementsByTagName('location')[0]),
-    description: Array.from(tag.getElementsByTagName('description')).reduce((a, dtag) => {
+  return new Control(
+    tag.id,
+    tag.getAttribute('kind'),
+    codeTag ? codeTag.textContent : undefined,
+    parseLocation(tag.getElementsByTagName('location')[0]),
+    Array.from(tag.getElementsByTagName('description')).reduce((a, dtag) => {
       a[dtag.getAttribute('box')] = dtag.getAttribute('iof-2004-ref')
       return a
-    }, {})
-  }
+    }, {}))
 }

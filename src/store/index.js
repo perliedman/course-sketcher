@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexUndoRedo from 'vuex-undo-redo'
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, SET_MAP, ADD_EVENT_CONTROL, ADD_COURSE_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME } from './mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, SET_MAP, ADD_EVENT_CONTROL, ADD_COURSE_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT } from './mutation-types'
 import Event from '../models/event'
 import Course from '../models/course'
 import i18n from '../i18n'
@@ -79,6 +79,11 @@ export default new Vuex.Store({
     },
     [SET_SELECTED_COURSE] (state, { id }) {
       state.selectedCourseIndex = state.event.courses.findIndex(c => c.id === id)
+    },
+    [SET_EVENT] (state, event) {
+      state.event = event
+      state.selectedCourseIndex = 0
+      state.selectedControlId = undefined
     }
   },
   getters: {
