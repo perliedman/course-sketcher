@@ -14,17 +14,17 @@ const distance = (c1, c2) => {
 const courseOverPrintRgb = 'rgb(182, 44, 152)'
 
 export default class Course {
-  constructor (id, name, controls = [], mapScale, printScale) {
+  constructor (event, id, name, controls = [], printScale) {
+    this.event = event
     this.id = id
     this.name = name
     this.controls = controls
-    this.mapScale = mapScale
     this.printScale = printScale
   }
 
   distance () {
     const controls = this.controls
-    return controls.slice(1).reduce((a, c, i) => a + distance(controls[i], c), 0) / 1000 / 1000 * this.mapScale
+    return controls.slice(1).reduce((a, c, i) => a + distance(controls[i], c), 0) / 1000 / 1000 * this.event.map.scale
   }
 
   bounds () {
@@ -36,68 +36,42 @@ export default class Course {
     ], [Number.MAX_VALUE, Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE])
   }
 
-  addControl (c) {
-    const nControls = this.controls.length
-    const properties = {
-      ...c,
-      kind: nControls === 0 ? 'start' : 'normal', // TODO
-      sequence: nControls === 0 ? undefined : nControls,
-      coordinates: new Coordinate(c.coordinates[0], c.coordinates[1]),
-      description: {}
-    }
-
-    this.controls.push(properties)
-
-    return this
-  }
-
-  moveControl (c) {
-    const control = this.controls.find(control => c.id === control.id)
-    control.coordinates = new Coordinate(c.coordinates)
-
-    return this
-  }
-
-  setControlDescription (controlId, kind, descriptionId) {
-    const control = this.controls.find(control => control.id === controlId)
-    control.description[kind] = descriptionId
+  addControl (id) {
+    this.controls.push(this.event.controls[id])
   }
 
   removeControl (controlId) {
     const index = this.controls.findIndex(c => c.id === controlId)
-
-    if (index === 0 && this.controls.length) {
-      this.controls[1].kind = 'start'
-    }
-
     this.controls.splice(index, 1)
-    this.controls.forEach((c, i) => {
-      c.sequence = i > 0 ? i : undefined
-    })
   }
 
   controlsToGeoJson () {
-    const scaleFactor = (this.printScale / this.mapScale) * 1.5
+    const scaleFactor = (this.printScale / this.event.map.scale) * 1.5
 
-    return featureCollection(this.controls.map((c, i) => ({
-      type: 'Feature',
-      id: c.id, // TODO
-      properties: c,
-      geometry: i > 0
-        ? {
-          type: 'Point',
-          coordinates: c.coordinates.toArray()
+    return featureCollection(this.controls.map((c, i) => {
+      return {
+        type: 'Feature',
+        id: c.id,
+        properties: {
+          sequence: c.kind !== 'start' && c.kind !== 'finish' ? i : undefined,
+          ...c
+        },
+        geometry: c.kind !== 'start'
+          ? {
+            type: 'Point',
+            coordinates: c.coordinates.toArray()
+          }
+          : {
+            type: 'Polygon',
+            coordinates: [startTriangle.map(p => p
+              .mul(scaleFactor)
+              .rotate(this.controls.length > i + 1 
+                ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
+                : 0)
+              .add(c.coordinates).toArray())]
+          }
         }
-        : {
-          type: 'Polygon',
-          coordinates: [startTriangle.map(p => p
-            .mul(scaleFactor)
-            .rotate(this.controls.length > i + 1 
-              ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
-              : 0)
-            .add(c.coordinates).toArray())]
-        }
-      })))
+      }))
   }
 
   controlLabelsToGeoJson () {
@@ -129,23 +103,25 @@ export default class Course {
         stroke: courseOverPrintRgb,
         'stroke-width': 50
       }
-  })
+    })
+
+    const controls = this.controls.map(id => this.event.controls[id])
 
     return createSvgNode(document, {
       type: 'g',
-      children: this.controls.filter(c => c.kind === 'normal').map(c => circle(c, 300))
-        .concat(this.controls
+      children: controls.filter(c => c.kind === 'normal').map(c => circle(c, 300))
+        .concat(controls
           .map((c, i) => [c, i])
           .filter(([c]) => c.kind === 'start')
           .map(([c, i]) => lines(
             startTriangle.map(p => p
-              .rotate(this.controls.length > i + 1 
-                ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
+              .rotate(controls.length > i + 1 
+                ? Math.atan2.apply(Math, controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
                 : 0)
               .add(c.coordinates).toArray()), true)))
-        .concat(flatten(this.controls.filter(c => c.kind === 'finish').map(c => [circle(c, 250), circle(c, 350)])))
-        .concat(createControlConnections(this.controls).map(({ geometry: { coordinates } }) => lines(coordinates, false)))
-        .concat(createControlTextLocations(this.controls).map(({ properties, geometry: { coordinates } }) => ({
+        .concat(flatten(controls.filter(c => c.kind === 'finish').map(c => [circle(c, 250), circle(c, 350)])))
+        .concat(createControlConnections(controls).map(({ geometry: { coordinates } }) => lines(coordinates, false)))
+        .concat(createControlTextLocations(controls).map(({ properties, geometry: { coordinates } }) => ({
           type: 'text',
           attrs: {
             x: coordinates[0] * 100,
@@ -174,9 +150,9 @@ const createControlTextLocations = controls => {
   const objects = controls.slice()
   const result = []
   controls
-    .filter(c => c.kind !== 'finish')
-    .forEach(c => {
-      const textLocation = createTextPlacement(objects, c)
+    .filter(c => c.kind !== 'start' && c.kind !== 'finish')
+    .forEach((c, i) => {
+      const textLocation = createTextPlacement(objects, c, (i + 1).toString())
       objects.push({coordinates: new Coordinate(textLocation.geometry.coordinates)})
       result.push(textLocation)        
     })
@@ -187,7 +163,7 @@ const createControlTextLocations = controls => {
 // This is more or less a re-implementation of Purple Pen's CourseFormatter's
 // text placement logic, found in
 // https://github.com/petergolde/PurplePen/blob/master/src/PurplePen/CourseFormatter.cs
-const createTextPlacement = (controls, control) => {
+const createTextPlacement = (controls, control, label) => {
   let textCoord
   if (control.numberLocation) {
     textCoord = control.coordinates.add(control.numberLocation)
@@ -198,7 +174,7 @@ const createTextPlacement = (controls, control) => {
 
   return {
     type: 'Feature',
-    properties: control,
+    properties: { ...control, label },
     geometry: {
       type: 'Point',
       coordinates: textCoord.toArray()

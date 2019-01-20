@@ -163,7 +163,7 @@ export default {
             type: 'symbol',
             layout: {
               'symbol-placement': 'point',
-              'text-field': ['get', 'sequence'],
+              'text-field': ['get', 'label'],
               'text-size': expFunc(72 * this.scaleFactor),
               'text-anchor': 'center',
               'text-allow-overlap': true,

@@ -1,4 +1,6 @@
-export const ADD_CONTROL = 'addControl'
+export const SET_MAP = 'setMap'
+export const ADD_EVENT_CONTROL = 'addEventControl'
+export const ADD_COURSE_CONTROL = 'addCourseControl'
 export const MOVE_CONTROL = 'moveControl'
 export const REMOVE_CONTROL = 'removeControl'
 export const SELECT_CONTROL = 'selectControl'

@@ -64,7 +64,7 @@ import Course from './models/course.js'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
-import { ADD_CONTROL, MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND } from './store/mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL } from './store/mutation-types'
 import { languages } from './i18n'
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
@@ -162,7 +162,9 @@ export default {
         (projectedCoord[0] - crs.easting) / crs.scale / mmToMeter,
         (projectedCoord[1] - crs.northing) / crs.scale / mmToMeter,
       ]
-      this.addControl({ coordinates })
+      const id = this.event.idGenerator.next()
+      this.addEventControl({ id, coordinates, kind: id === 1 ? 'start' : 'normal' })
+      this.addCourseControl({ id })
     },
 
     controlMoved (e) {
@@ -202,7 +204,8 @@ export default {
     },
 
     ...mapMutations({
-      addControl: ADD_CONTROL,
+      addEventControl: ADD_EVENT_CONTROL,
+      addCourseControl: ADD_COURSE_CONTROL,
       moveControl: MOVE_CONTROL,
       removeControl: REMOVE_CONTROL,
       selectControl: SELECT_CONTROL,
