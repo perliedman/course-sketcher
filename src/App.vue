@@ -7,6 +7,12 @@
       <span class="title">
         Course Sketcher
       </span>
+      <mu-button icon title="Undo" :disabled="!canUndo" @click="undo" slot="right">
+        <mu-icon value="undo"></mu-icon>
+      </mu-button>
+      <mu-button icon title="Redo" :disabled="!canRedo" @click="redo" slot="right">
+        <mu-icon value="redo"></mu-icon>
+      </mu-button>
       <mu-menu cover placement="bottom-end" :open.sync="settingsOpen" slot="right">
         <mu-button icon>
           <mu-icon value="settings"></mu-icon>
