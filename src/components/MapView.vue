@@ -87,6 +87,26 @@ export default {
             ...controlCircles(0.4)
           },
           {
+            id: 'other-start-hover',
+            source: 'otherControls',
+            ...startHover(0.4)
+          },
+          {
+            id: 'other-start',
+            source: 'otherControls',
+            ...start(0.4)
+          },
+          {
+            id: 'other-finish-inner-circle',
+            source: 'otherControls',
+            ...finishInnerCircle(0.4)
+          },
+          {
+            id: 'other-finish-outer-circle',
+            source: 'otherControls',
+            ...finishOuterCircle(0.4)
+          },
+          {
             id: 'start-hover',
             source: 'controls',
             ...startHover(0.7)
@@ -189,7 +209,9 @@ export default {
         this.createFeatureHighlight('controls', 'start-hover', 'start')
         this.createFeatureHighlight('controls', 'control-circles')
         this.createFeatureHighlight('controls', 'finish-outer-circle')
+        this.createFeatureHighlight('otherControls', 'other-start-hover', 'start')
         this.createFeatureHighlight('otherControls', 'other-control-circles')
+        this.createFeatureHighlight('otherControls', 'other-finish-outer-circle')
 
         this.map.on('mousedown', this.onMouseDown.bind(this))
 

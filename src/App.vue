@@ -116,15 +116,7 @@ export default {
           type: 'FeatureCollection',
           features: Object.keys(this.event.controls)
             .filter(id => !this.selectedCourse.controls.find(c => c.id === Number(id)))
-            .map(id => ({
-              type: 'Feature',
-              id: this.event.controls[id].id,
-              properties: this.event.controls[id],
-              geometry: {
-                type: 'Point',
-                coordinates: this.event.controls[id].coordinates.toArray()
-              }
-            }))
+            .map(id => this.event.controls[id].toGeoJson(10000/15000, 0))
         })
     },
     crs () {
@@ -197,7 +189,7 @@ export default {
       } else {
         id = e.id
       }
-      
+
       this.addCourseControl({ id })
     },
 
