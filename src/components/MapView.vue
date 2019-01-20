@@ -22,7 +22,7 @@ import { coordEach, coordReduce } from '@turf/meta'
 import Hero from './Hero.vue'
 import { startHover, controlCircles, finishInnerCircle, finishOuterCircle, controlTexts, controlConnections, start } from '../layer-defs'
 
-mapboxgl.accessToken = 'pk.eyJ1IjoibGllZG1hbiIsImEiOiJZc3U4UXowIn0.d4yPyJ_Bl7CAROv15im36Q';
+mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
 
 export default {
   name: 'MapView',
