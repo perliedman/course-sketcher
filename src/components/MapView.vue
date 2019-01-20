@@ -20,10 +20,9 @@ import mapboxgl from 'mapbox-gl'
 import bbox from '@turf/bbox'
 import { coordEach, coordReduce } from '@turf/meta'
 import Hero from './Hero.vue'
+import { startHover, controlCircles, finishInnerCircle, finishOuterCircle, controlTexts, controlConnections, start } from '../layer-defs'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibGllZG1hbiIsImEiOiJZc3U4UXowIn0.d4yPyJ_Bl7CAROv15im36Q';
-
-const controlColor = 'hsl(329, 96%, 39%)'
 
 export default {
   name: 'MapView',
@@ -53,9 +52,6 @@ export default {
     empty () {
       return !this.layers || !this.layers.length
     },
-    scaleFactor () {
-      return this.printScale / this.mapScale
-    },
     mapStyle () {
       return {
         version: 8,
@@ -83,106 +79,37 @@ export default {
           {
             id: 'start-hover',
             source: 'controls',
-            filter: ['==', ['get', 'kind'], 'start'],
-            type: 'fill',
-            paint: {
-              'fill-opacity': 0
-            }
+            ...startHover
           },
           {
             id: 'start',
             source: 'controls',
-            filter: ['==', ['get', 'kind'], 'start'],
-            type: 'line',
-            paint: {
-              'line-opacity': ["case",
-                ["boolean", ["feature-state", "hover"], false],
-                    1,
-                    0.7
-                ],
-              'line-color': controlColor,
-              'line-width': expFunc(6 * this.scaleFactor)
-            }
+            ...start
           },
           {
             id: 'control-circles',
             source: 'controls',
-            filter: ['==', ['get', 'kind'], 'normal'],
-            type: 'circle',
-            paint: {
-              'circle-radius': expFunc(42 * this.scaleFactor),
-              'circle-opacity': 0,
-              'circle-stroke-width': expFunc(6 * this.scaleFactor),
-              'circle-stroke-color': controlColor,
-              'circle-stroke-opacity': ["case",
-                ["boolean", ["feature-state", "hover"], false],
-                    1,
-                    0.7
-                ],
-              'circle-pitch-scale': 'map',
-              'circle-pitch-alignment': 'map'
-            }
+            ...controlCircles
           },
           {
             id: 'finish-inner-circle',
             source: 'controls',
-            filter: ['==', ['get', 'kind'], 'finish'],
-            type: 'circle',
-            paint: {
-              'circle-radius': expFunc(33.6 * this.scaleFactor),
-              'circle-opacity': 0,
-              'circle-stroke-width': expFunc(6 * this.scaleFactor),
-              'circle-stroke-color': controlColor,
-              'circle-stroke-opacity': 0.7,
-              'circle-pitch-scale': 'map',
-              'circle-pitch-alignment': 'map'
-            }
+            ...finishInnerCircle
           },
           {
             id: 'finish-outer-circle',
             source: 'controls',
-            filter: ['==', ['get', 'kind'], 'finish'],
-            type: 'circle',
-            paint: {
-              'circle-radius': expFunc(50.4 * this.scaleFactor),
-              'circle-opacity': 0,
-              'circle-stroke-width': expFunc(6 * this.scaleFactor),
-              'circle-stroke-color': controlColor,
-              'circle-stroke-opacity': ["case",
-                ["boolean", ["feature-state", "hover"], false],
-                    1,
-                    0.7
-                ],
-              'circle-pitch-scale': 'map',
-              'circle-pitch-alignment': 'map'
-            }
+            ...finishOuterCircle
           },
           {
             id: 'control-texts',
             source: 'controlTexts',
-            type: 'symbol',
-            layout: {
-              'symbol-placement': 'point',
-              'text-field': ['get', 'label'],
-              'text-size': expFunc(72 * this.scaleFactor),
-              'text-anchor': 'center',
-              'text-allow-overlap': true,
-              'text-ignore-placement': true
-            },
-            paint: {
-              'text-color': controlColor,
-              'text-opacity': 0.8
-            }
+            ...controlTexts
           },
           {
             id: 'control-connections',
             source: 'controlConnections',
-            type: 'line',
-            paint: {
-              'line-color': controlColor,
-              'line-opacity': 0.7,
-              'line-width': expFunc(6 * this.scaleFactor)
-            }
+            ...controlConnections
           }
         ])
       }
@@ -357,17 +284,6 @@ export default {
   }
 }
 
-const zoom0 = Math.pow(2, (0 - 15))
-const zoom24 = Math.pow(2, (24 - 15))
-
-const expFunc = base => ({
-  'type': 'exponential',
-  'base': 2,
-  'stops': [
-    [0, !base.length ? base * zoom0 : base.map(x => x * zoom0)],
-    [24, !base.length ? base * zoom24 : base.map(x => x * zoom24)]
-  ]
-})
 </script>
 
 <style scoped>
