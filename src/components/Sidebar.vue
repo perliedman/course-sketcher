@@ -16,6 +16,7 @@
               :selected-control-id="selectedControlId"
               @controldescriptionset="$emit('controldescriptionset', $event)" 
               @controlremoved="$emit('controlremoved', $event)"
+              @controldeleted="$emit('controldeleted', $event)"
               @controlkindset="$emit('controlkindset', $event)"
               @eventnameset="$emit('eventnameset', $event)"
               @coursenameset="$emit('coursenameset', { name: $event.name, id: c.id })"

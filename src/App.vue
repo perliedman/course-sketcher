@@ -32,8 +32,9 @@
         :selected-control-id="selectedControl"
         @courseselected="setSelectedCourse($event)"
         @controldescriptionset="controlDescriptionSet"
-        @controlremoved="controlRemoved"
-        @controlkindset="controlKindSet"
+        @controlremoved="removeControl"
+        @controldeleted="deleteControl"
+        @controlkindset="setControlKind"
         @courseadded="addCourse"
         @eventnameset="setEventName"
         @coursenameset="setCourseName"
@@ -73,7 +74,7 @@ import bbox from '@turf/bbox'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT } from './store/mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT, DELETE_CONTROL } from './store/mutation-types'
 import { languages } from './i18n'
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
@@ -114,9 +115,9 @@ export default {
       return this.event && this.event.courses && this.map.file &&
         applyCrs(this.map.file.getCrs(), {
           type: 'FeatureCollection',
-          features: Object.keys(this.event.controls)
-            .filter(id => !this.selectedCourse.controls.find(c => c.id === Number(id)))
-            .map(id => this.event.controls[id].toGeoJson(10000/15000, 0))
+          features: this.event.controlList
+            .filter(eventControl => !this.selectedCourse.controls.some(courseControl => courseControl.id === eventControl.id))
+            .map(control => control.toGeoJson(10000/15000, 0))
         })
     },
     crs () {
@@ -211,14 +212,6 @@ export default {
       this.setControlDescription({ id: e.controlId, kind: e.kind, descriptionId: e.descriptionId })
     },
 
-    controlRemoved ({ id }) {
-      this.removeControl({ id })
-    },
-
-    controlKindSet ({ id, kind }) {
-      this.setControlKind({ id, kind })
-    },
-
     onKeydown (e) {
       if (e.ctrlKey) {
         if (e.key === 'z' && this.canUndo) {
@@ -241,7 +234,8 @@ export default {
       setSelectedCourse: SET_SELECTED_COURSE,
       setEventName: SET_EVENT_NAME,
       setCourseName: SET_COURSE_NAME,
-      setEvent: SET_EVENT
+      setEvent: SET_EVENT,
+      deleteControl: DELETE_CONTROL
     })
   },
   components: {

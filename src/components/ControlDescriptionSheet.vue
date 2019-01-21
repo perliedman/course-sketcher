@@ -31,18 +31,22 @@
           <td @click="openDialog(c.id, 'G', c.description.G)" ><img v-if="c.description.G" :src="`iof-2004/${c.description.G}.svg`" /></td>
           <td @click="openDialog(c.id, 'H', c.description.H)" ><img v-if="c.description.H" :src="`iof-2004/${c.description.H}.svg`" /></td>
           <td class="control-menu">
-            <mu-menu cover placement="bottom-end">
-              <mu-button icon small>
+            <mu-menu cover placement="bottom-end" :open="activeMenu == i">
+              <mu-button icon small @click="activeMenu = i">
                 <mu-icon value="more_vert"/>
               </mu-button>
               <mu-list slot="content">
-                <mu-list-item v-if="i > 0 && i === course.controls.length - 1" button @click="$emit('controlkindset', { id: c.id, kind: 'finish' })">
+                <mu-list-item v-if="i > 0 && i === course.controls.length - 1" button @click="menuAction('controlkindset', { id: c.id, kind: 'finish' })">
                   <mu-list-item-action><img src="finish-symbol.svg" style="width: 24px"/></mu-list-item-action>
                   <mu-list-item-title>{{$t('actions.makeFinish')}}</mu-list-item-title>
                 </mu-list-item>
-                <mu-list-item button @click="$emit('controlremoved', { id: c.id })">
+                <mu-list-item button @click="menuAction('controlremoved', { id: c.id })">
+                  <mu-list-item-action><mu-icon value="remove"/></mu-list-item-action>
+                  <mu-list-item-title>{{$t('actions.removeFromCourse')}}</mu-list-item-title>
+                </mu-list-item>
+                <mu-list-item button @click="menuAction('controldeleted', { id: c.id })">
                   <mu-list-item-action><mu-icon value="delete"/></mu-list-item-action>
-                  <mu-list-item-title>{{$t('actions.remove')}}</mu-list-item-title>
+                  <mu-list-item-title>{{$t('actions.deleteControl')}}</mu-list-item-title>
                 </mu-list-item>
               </mu-list>
             </mu-menu>
@@ -80,6 +84,7 @@ export default {
       dialogKind: null,
       dialogSelection: null,
       dialogResult: null,
+      activeMenu: null,
       symbols
     }
   },
@@ -110,6 +115,10 @@ export default {
         kind: this.dialogKind,
         descriptionId: this.dialogResult
        })
+    },
+    menuAction (eventName, eventProps) {
+      this.$emit(eventName, eventProps)
+      this.activeMenu = null
     }
   }
 }
