@@ -3,7 +3,7 @@ import Course from './models/course';
 import Event from './models/event';
 import Control from './models/control';
 
-export default function parsePPen (doc) {
+export function parsePPen (doc) {
   const eventTag = doc.getElementsByTagName('event')[0]
   const mapTag = eventTag.getElementsByTagName('map')[0]
   const scale = Number(mapTag.getAttribute('scale'))
