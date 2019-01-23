@@ -65,11 +65,12 @@
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Sidebar from './components/Sidebar.vue'
 import MapView from './components/MapView.vue'
-import { parsePPen } from './ppen.js'
+import { parsePPen, writePpen } from './ppen.js'
 import { readOcad, ocadToGeoJson, ocadToMapboxGlStyle } from 'ocad2geojson'
 import { toWgs84 } from 'reproject'
 import proj4 from 'proj4'
 import bbox from '@turf/bbox'
+import FileSaver from 'file-saver'
 
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
@@ -218,6 +219,11 @@ export default {
           this.undo()
         } else if (e.key === 'y' && this.canRedo) {
           this.redo()
+        } else if (e.key === 's') {
+          const xml = new XMLSerializer().serializeToString(writePpen(this.event))
+          const blob = new Blob([xml], {type: "text/xml;charset=utf-8"})
+          FileSaver.saveAs(blob, `${this.event.name}.ppen`);
+          e.preventDefault()
         }
       }
     },
