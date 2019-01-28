@@ -16,6 +16,7 @@ export function parseOcadEvent (ocadFile) {
   return event
 }
 
+let controlId = 1
 const toControl = f => {
   if (f.properties.objectStringType !== 1 || !f.properties.objectString) {
     return null
@@ -49,10 +50,10 @@ const toControl = f => {
   const coord = f.geometry.coordinates
   const mmCoord = [coord[0] / 100, coord[1] / 100]
 
-  return new Control(defs[0], kind, defs[0], mmCoord, description)
+  return new Control(controlId++, kind, defs[0], mmCoord, description)
 }
 
 const toCourse = (event, allControls, s) => {
-  const controls = s._pairs.map(({ value }) => allControls.find(c => c.id === value))
+  const controls = s._pairs.map(({ value }) => allControls.find(c => c.code === value))
   return new Course(event, event.idGenerator.next(), s._first, controls, 10000) //TODO: scale
 }
