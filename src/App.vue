@@ -66,6 +66,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import Sidebar from './components/Sidebar.vue'
 import MapView from './components/MapView.vue'
 import { parsePPen, writePpen } from './ppen.js'
+import { parseOcadEvent } from './ocad'
 import { readOcad, ocadToGeoJson, ocadToMapboxGlStyle } from 'ocad2geojson'
 import { toWgs84 } from 'reproject'
 import proj4 from 'proj4'
@@ -133,15 +134,21 @@ export default {
       if (f.name.toLowerCase().endsWith('.ocd')) {
         readOcad(f.content)
           .then(ocadFile => {
-            this.mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), projDef))
-            const [minLng, minLat, maxLng, maxLat] = bbox(this.mapGeojson)
-            const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
-            const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
-            this.mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
-            this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
-            this.map = {
-              name: f.name,
-              file: Object.freeze(ocadFile) 
+            if (ocadFile.header.fileType !== 1) {
+              // OCAD map file
+              this.mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), projDef))
+              const [minLng, minLat, maxLng, maxLat] = bbox(this.mapGeojson)
+              const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
+              const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
+              this.mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
+              this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
+              this.map = {
+                name: f.name,
+                file: Object.freeze(ocadFile) 
+              }
+            } else {
+              // OCAD course setting project
+              this.setEvent(parseOcadEvent(ocadFile))
             }
           })
           .then(() => {
@@ -163,11 +170,6 @@ export default {
         const doc = new DOMParser().parseFromString(f.content, 'application/xml')
         try {
           this.setEvent(parsePPen(doc))
-          if (!this.map.name) {
-            this.message = this.$t('messages.mapFileRequest', { fileName: this.event.map.name })
-          } else if (this.map.name != this.event.map.name) {
-            this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
-          }
         } catch (err) {
           this.message = this.$t('messages.mapLoadError', {error: err.message}) 
         }
@@ -228,6 +230,15 @@ export default {
       }
     },
 
+    setEvent (event) {
+      this.setEventInStore(event)
+      if (!this.map.name) {
+        this.message = this.$t('messages.mapFileRequest', { fileName: this.event.map.name })
+      } else if (this.map.name != this.event.map.name) {
+        this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
+      }
+    },
+
     ...mapMutations({
       addEventControl: ADD_EVENT_CONTROL,
       addCourseControl: ADD_COURSE_CONTROL,
@@ -240,7 +251,7 @@ export default {
       setSelectedCourse: SET_SELECTED_COURSE,
       setEventName: SET_EVENT_NAME,
       setCourseName: SET_COURSE_NAME,
-      setEvent: SET_EVENT,
+      setEventInStore: SET_EVENT,
       deleteControl: DELETE_CONTROL
     })
   },
