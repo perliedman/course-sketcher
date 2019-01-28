@@ -8,9 +8,15 @@ export function parseOcadEvent (ocadFile) {
   const controls = geoJson.features
     .map(toControl)
     .filter(c => c)
+    
   const event = new Event("Test", [])
-  const courses = ocadFile.parameterStrings["2"].map(toCourse.bind(null, event, controls))
+  const mapAbsPath = ocadFile.parameterStrings["8"][0]._first
+  event.map = {
+    name: mapAbsPath.substring(Math.max(mapAbsPath.lastIndexOf('/'), mapAbsPath.lastIndexOf('\\') + 1)),
+    scale: ocadFile.getCrs().scale
+  }
 
+  const courses = ocadFile.parameterStrings["2"].map(toCourse.bind(null, event, controls))
   courses.forEach(c => event.addCourse(c))
 
   return event
