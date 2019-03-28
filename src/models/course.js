@@ -35,6 +35,10 @@ export default class Course {
     ], [Number.MAX_VALUE, Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE])
   }
 
+  objScale () {
+    return (this.printScale / 15000) / 0.6667
+  }
+
   addControl (id) {
     this.controls.push(this.event.controls[id])
   }
@@ -56,11 +60,11 @@ export default class Course {
   }
 
   controlLabelsToGeoJson () {
-    return featureCollection(createControlTextLocations(this.controls))
+    return featureCollection(createControlTextLocations(this.controls, this.objScale()))
   }
 
   controlConnectionsToGeoJson () {
-    return featureCollection(createControlConnections(this.controls))
+    return featureCollection(createControlConnections(this.controls, this.objScale()))
   }
 
   toSvg () {
@@ -95,15 +99,14 @@ const defaultControlNumberAngle = Math.PI / 6
 const controlCircleOutsideDiameter = 5.35
 const controlNumberCircleDistance = 1.825
 const controlCircleSize = 1
-const courseObjRatio = 1
 
-const createControlTextLocations = controls => {
+const createControlTextLocations = (controls, courseObjRatio) => {
   const objects = controls.slice()
   const result = []
   controls
     .filter(c => c.kind !== 'start' && c.kind !== 'finish')
     .forEach((c, i) => {
-      const textLocation = createTextPlacement(objects, c, (i + 1).toString())
+      const textLocation = createTextPlacement(objects, c, (i + 1).toString(), courseObjRatio)
       objects.push({coordinates: new Coordinate(textLocation.geometry.coordinates)})
       result.push(textLocation)        
     })
@@ -114,12 +117,12 @@ const createControlTextLocations = controls => {
 // This is more or less a re-implementation of Purple Pen's CourseFormatter's
 // text placement logic, found in
 // https://github.com/petergolde/PurplePen/blob/master/src/PurplePen/CourseFormatter.cs
-const createTextPlacement = (controls, control, label) => {
+const createTextPlacement = (controls, control, label, courseObjRatio) => {
   let textCoord
   if (control.numberLocation) {
     textCoord = control.coordinates.add(control.numberLocation)
   } else {
-    const textDistance = (controlCircleOutsideDiameter / 2 + controlNumberCircleDistance * controlCircleSize) * courseObjRatio;
+    const textDistance = (controlCircleOutsideDiameter / 2 + controlNumberCircleDistance * courseObjRatio * controlCircleSize) * courseObjRatio;
     textCoord = getTextLocation(control.coordinates, textDistance, control.code, controls)
   }
 
@@ -159,9 +162,9 @@ const getTextLocation = (controlLocation, distanceFromCenter, text, controls) =>
   return bestPoint
 }
 
-const createControlConnections = controls =>
+const createControlConnections = (controls, courseObjScale) =>
   controls.slice(1).map((_, i) => {
-    const r = controlCircleOutsideDiameter / 2
+    const r = (controlCircleOutsideDiameter / 2) * courseObjScale
     const c0 = controls[i].coordinates
     const c1 = controls[i + 1].coordinates
     const v = c1.sub(c0)

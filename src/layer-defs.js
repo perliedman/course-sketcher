@@ -1,8 +1,5 @@
 export const controlColor = 'hsl(329, 96%, 39%)'
 
-// TODO: this is really a setting
-const scaleFactor = 10000/15000
-
 const zoom0 = Math.pow(2, (0 - 15))
 const zoom24 = Math.pow(2, (24 - 15))
 
@@ -23,7 +20,7 @@ export const startHover = () => ({
   }
 })
 
-export const start = (opacityFactor) => ({
+export const start = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'start'],
   type: 'line',
   paint: {
@@ -37,7 +34,7 @@ export const start = (opacityFactor) => ({
   }
 })
 
-export const controlCircles = (opacityFactor) => ({
+export const controlCircles = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'normal'],
   type: 'circle',
   paint: {
@@ -55,7 +52,7 @@ export const controlCircles = (opacityFactor) => ({
   }
 })
 
-export const finishInnerCircle = (opacityFactor) => ({
+export const finishInnerCircle = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'finish'],
   type: 'circle',
   paint: {
@@ -73,7 +70,7 @@ export const finishInnerCircle = (opacityFactor) => ({
   }
 })
 
-export const finishOuterCircle = (opacityFactor) => ({
+export const finishOuterCircle = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'finish'],
   type: 'circle',
   paint: {
@@ -91,7 +88,7 @@ export const finishOuterCircle = (opacityFactor) => ({
   }
 })
 
-export const controlTexts = () => ({
+export const controlTexts = (scaleFactor) => ({
   type: 'symbol',
   layout: {
     'symbol-placement': 'point',
@@ -107,7 +104,7 @@ export const controlTexts = () => ({
   }
 })
 
-export const controlConnections = () => ({
+export const controlConnections = (scaleFactor) => ({
   type: 'line',
   paint: {
     'line-color': controlColor,

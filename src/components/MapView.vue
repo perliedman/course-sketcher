@@ -53,6 +53,9 @@ export default {
     empty () {
       return !this.layers || !this.layers.length
     },
+    scaleFactor () {
+      return (this.printScale / 10000) * 0.6667 
+    },
     mapStyle () {
       return {
         version: 8,
@@ -84,7 +87,7 @@ export default {
           {
             id: 'other-control-circles',
             source: 'otherControls',
-            ...controlCircles(0.4)
+            ...controlCircles(0.4, this.scaleFactor)
           },
           {
             id: 'other-start-hover',
@@ -94,17 +97,17 @@ export default {
           {
             id: 'other-start',
             source: 'otherControls',
-            ...start(0.4)
+            ...start(0.4, this.scaleFactor)
           },
           {
             id: 'other-finish-inner-circle',
             source: 'otherControls',
-            ...finishInnerCircle(0.4)
+            ...finishInnerCircle(0.4, this.scaleFactor)
           },
           {
             id: 'other-finish-outer-circle',
             source: 'otherControls',
-            ...finishOuterCircle(0.4)
+            ...finishOuterCircle(0.4, this.scaleFactor)
           },
           {
             id: 'start-hover',
@@ -114,32 +117,32 @@ export default {
           {
             id: 'start',
             source: 'controls',
-            ...start(0.7)
+            ...start(0.7, this.scaleFactor)
           },
           {
             id: 'control-circles',
             source: 'controls',
-            ...controlCircles(0.7)
+            ...controlCircles(0.7, this.scaleFactor)
           },
           {
             id: 'finish-inner-circle',
             source: 'controls',
-            ...finishInnerCircle(0.7)
+            ...finishInnerCircle(0.7, this.scaleFactor)
           },
           {
             id: 'finish-outer-circle',
             source: 'controls',
-            ...finishOuterCircle(0.7)
+            ...finishOuterCircle(0.7, this.scaleFactor)
           },
           {
             id: 'control-texts',
             source: 'controlTexts',
-            ...controlTexts()
+            ...controlTexts(this.scaleFactor)
           },
           {
             id: 'control-connections',
             source: 'controlConnections',
-            ...controlConnections()
+            ...controlConnections(this.scaleFactor)
           }
         ])
       }
