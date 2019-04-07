@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import toBuffer from 'blob-to-buffer'
 import mapboxgl from 'mapbox-gl'
 import bbox from '@turf/bbox'
 import { coordEach, coordReduce } from '@turf/meta'
@@ -36,12 +35,11 @@ export default {
     mapGeojson: Object,
     mapRotation: Number,
     printScale: Number,
-    mapScale: Number
+    mapScale: Number,
+    loading: Boolean
   },
   data () {
-    return {
-      loading: false
-    }
+    return { }
   },
   created () {
     this.sources = {}
@@ -153,7 +151,6 @@ export default {
       if (this.map) {
         this.initializeView()
       }
-      this.loading = false
     },
     mapStyle (style) {
       const map = this.getMap()
@@ -168,35 +165,17 @@ export default {
   },
   methods: {
     onFileInput (files) {
-      this.readFile(files[0])
+      this.$emit('filesdropped', { files: Array.from(files) })
     },
     onFileDropped (e) {
       e.preventDefault()
       if (e.dataTransfer.items) {
-        for (var i = 0; i < e.dataTransfer.items.length; i++) {
-          if (e.dataTransfer.items[i].kind === 'file') {
-            this.readFile(e.dataTransfer.items[i].getAsFile())
-            break
-          }
-        }
-
-        e.dataTransfer.items.clear();
+        const files = e.dataTransfer.items
+          .filter(i => i.kind === 'file')
+          .map(i => i.getAsFile())
+        e.dataTransfer.items.clear()
+        this.$$emit('filesdropped', { files })
       }
-    },
-    readFile (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const blob = new Blob([reader.result], {type: 'application/octet-stream'})
-        toBuffer(blob, (err, buffer) => {
-          this.$emit('fileselected', {
-            name: file.name,
-            content: buffer
-          })
-        })
-      }
-
-      this.loading = true
-      setTimeout(() => reader.readAsArrayBuffer(file), 100)
     },
     getMap () {
       if (!this.map && this.layers && this.layers.length) {

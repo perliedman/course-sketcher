@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div style="display: flex; justify-content: space-between;">
+      <div>{{$t('course.printScale')}}</div>
+      <div>1:<input type="number" v-model.number="printScale" style="width: 4em; text-align: right; border: none" step="500"/></div>
+    </div>
     <table>
       <tbody>
         <tr class="heavy-bottom">
@@ -96,6 +100,10 @@ export default {
     courseName: {
       get () { return this.course.name },
       set (v) { this.$emit('coursenameset', { name: v })}
+    },
+    printScale: {
+      get () { return this.course.printScale },
+      set (v) { this.$emit('printscaleset', { scale: v })}
     }
   },
   methods: {

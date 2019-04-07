@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexUndoRedo from 'vuex-undo-redo'
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, SET_MAP, ADD_EVENT_CONTROL, ADD_COURSE_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT, DELETE_CONTROL } from './mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, SET_MAP, ADD_EVENT_CONTROL, ADD_COURSE_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT, DELETE_CONTROL, SET_PRINT_SCALE } from './mutation-types'
 import Event from '../models/event'
 import Course from '../models/course'
 import i18n from '../i18n'
@@ -37,6 +37,9 @@ export default new Vuex.Store({
     },
     [SET_COURSE_NAME] (state, { id, name }) {
       state.event.courses.find(c => c.id === id).name = name
+    },
+    [SET_PRINT_SCALE] (state, { id, scale }) {
+      state.event.courses.find(c => c.id === id).printScale = scale
     },
     [SET_MAP] (state, { name, scale }) {
       state.event.map = { name, scale }

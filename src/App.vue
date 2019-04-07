@@ -38,6 +38,7 @@
         @courseadded="addCourse"
         @eventnameset="setEventName"
         @coursenameset="setCourseName"
+        @printscaleset="setPrintScale"
       />
     </mu-drawer>
     <map-view
@@ -50,10 +51,11 @@
       :map-rotation="mapRotation"
       :map-scale="crs && crs.scale"
       :print-scale="selectedCourse.printScale"
+      :loading="loading"
       @controladded="controlAdded"
       @controlmoved="controlMoved"
       @controlselected="controlSelected"
-      @fileselected="mapFileSelected"/>
+      @filesdropped="filesDropped"/>
     <mu-snackbar position="bottom" :open="!!message">
       <span v-html="message" />
       <mu-button flat slot="action" color="primary" @click="message = undefined">Close</mu-button>
@@ -62,6 +64,7 @@
 </template>
 
 <script>
+import toBuffer from 'blob-to-buffer'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Sidebar from './components/Sidebar.vue'
 import MapView from './components/MapView.vue'
@@ -76,7 +79,7 @@ import FileSaver from 'file-saver'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT, DELETE_CONTROL } from './store/mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_PRINT_SCALE, SET_EVENT, DELETE_CONTROL } from './store/mutation-types'
 import { languages } from './i18n'
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
@@ -93,7 +96,8 @@ export default {
       menuOpen: true,
       message: undefined,
       settingsOpen: false,
-      langs: languages
+      langs: languages,
+      loading: false
     }
   },
   computed: {
@@ -129,10 +133,37 @@ export default {
     ...mapGetters(['selectedCourse'])
   },
   methods: {
+    filesDropped ({ files }) {
+      this.loading = true
+      const loadPromises = files.map(this.readFile.bind(this))
+      Promise.all(loadPromises)
+        .then(() => {
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    readFile (file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const blob = new Blob([reader.result], {type: 'application/octet-stream'})
+          toBuffer(blob, (err, buffer) => {
+            resolve(this.mapFileSelected({
+              name: file.name,
+              content: buffer
+            }))
+          })
+        }
+
+        setTimeout(() => reader.readAsArrayBuffer(file), 100)
+      })
+    },
     mapFileSelected(f) {
       this.message = undefined
       if (f.name.toLowerCase().endsWith('.ocd')) {
-        readOcad(f.content)
+        return readOcad(f.content)
           .then(ocadFile => {
             const isCourseSettingProject = ocadFile.header.fileType === 1
 
@@ -182,7 +213,6 @@ export default {
           .catch(err => {
             console.error(err)
             this.message = this.$t('messages.mapLoadError', {error: err.message}) 
-            this.loading = false
           })
       } else if (f.name.toLowerCase().endsWith('.ppen')) {
         const doc = new DOMParser().parseFromString(f.content, 'application/xml')
@@ -270,7 +300,8 @@ export default {
       setEventName: SET_EVENT_NAME,
       setCourseName: SET_COURSE_NAME,
       setEventInStore: SET_EVENT,
-      deleteControl: DELETE_CONTROL
+      deleteControl: DELETE_CONTROL,
+      setPrintScale: SET_PRINT_SCALE
     })
   },
   components: {
