@@ -134,21 +134,39 @@ export default {
       if (f.name.toLowerCase().endsWith('.ocd')) {
         readOcad(f.content)
           .then(ocadFile => {
-            if (ocadFile.header.fileType !== 1) {
-              // OCAD map file
-              this.mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), projDef))
-              const [minLng, minLat, maxLng, maxLat] = bbox(this.mapGeojson)
-              const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
-              const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
-              this.mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
-              this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
+            const isCourseSettingProject = ocadFile.header.fileType === 1
+
+            const mapGeojson = Object.freeze(toWgs84(ocadToGeoJson(ocadFile), projDef))
+            const [minLng, minLat, maxLng, maxLat] = bbox(mapGeojson)
+            const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
+            const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
+            const mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
+
+            if (!isCourseSettingProject || !this.map.file) {
               this.map = {
                 name: f.name,
                 file: Object.freeze(ocadFile) 
               }
+              this.mapRotation = mapRotation
+            }
+
+            if (!isCourseSettingProject) {
+              this.mapGeojson = mapGeojson
+              this.layers = ocadToMapboxGlStyle(ocadFile, {source: 'map', sourceLayer: ''})
             } else {
               // OCAD course setting project
               this.setEvent(parseOcadEvent(ocadFile))
+
+              if (!this.mapGeojson.features) {
+                this.mapGeojson = {
+                  type: 'FeatureCollection',
+                  features: []
+                }
+              }
+
+              if (this.layers.length === 0) {
+                this.layers.push({id: 'dummy', type: 'symbol', source: 'map'})
+              }
             }
           })
           .then(() => {

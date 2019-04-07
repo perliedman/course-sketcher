@@ -151,8 +151,7 @@ export default {
   watch: {
     mapGeojson (geojson) {
       if (this.map) {
-        this.map.fitBounds(bbox(geojson), { animate: false })
-        this.map.setBearing(this.mapRotation, { animate: false })
+        this.initializeView()
       }
       this.loading = false
     },
@@ -220,8 +219,7 @@ export default {
 
         if (this.mapGeojson && this.mapGeojson.features) {
           this.map.once('load', () => {
-            this.map.fitBounds(bbox(this.mapGeojson), { padding: 20, animate: false })
-            this.map.setBearing(this.mapRotation)
+            this.initializeView()
           })
         }
       }
@@ -319,6 +317,22 @@ export default {
           this.map.dragPan.enable()
         }
       })
+    },
+    initializeView () {
+      if (this.map) {
+        let bounds
+
+        if (this.mapGeojson && this.mapGeojson.features && this.mapGeojson.features.length) {
+          bounds = bbox(this.mapGeojson)
+        } else if (this.controls && this.controls.features && this.controls.features.length) {
+          bounds = bbox(this.controls)
+        }
+
+        if (bounds) {
+          this.map.fitBounds(bounds, { padding: 20, animate: false })
+          this.map.setBearing(this.mapRotation, { animate: false })
+        }
+      }
     }
   }
 }
