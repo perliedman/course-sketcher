@@ -322,10 +322,10 @@ export default {
       if (this.map) {
         let bounds
 
-        if (this.mapGeojson && this.mapGeojson.features && this.mapGeojson.features.length) {
-          bounds = bbox(this.mapGeojson)
-        } else if (this.controls && this.controls.features && this.controls.features.length) {
+        if (this.controls && this.controls.features && this.controls.features.length) {
           bounds = bbox(this.controls)
+        } else if (this.mapGeojson && this.mapGeojson.features && this.mapGeojson.features.length) {
+          bounds = bbox(this.mapGeojson)
         }
 
         if (bounds) {
