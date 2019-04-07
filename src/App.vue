@@ -40,6 +40,7 @@
         @coursenameset="setCourseName"
         @printscaleset="setPrintScale"
         @filesdropped="filesDropped"
+        @removemap="removeMap"
       />
     </mu-drawer>
     <map-view
@@ -286,6 +287,12 @@ export default {
       } else if (this.map.name != this.event.map.name) {
         this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
       }
+    },
+
+    removeMap () {
+      this.map = {}
+      this.mapGeojson = {}
+      this.layers = []
     },
 
     ...mapMutations({

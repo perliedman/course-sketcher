@@ -219,7 +219,7 @@ export default {
       let c = 0
       const setData = () => {
         try {
-          map.getSource(id).setData(data)
+          map.getSource(id).setData(data && data.features && data || {type: 'FeatureCollection', features: []})
         } catch (e) {
           // This happens when the map has not initialized yet
           // Note: I have tried checking isStyleLoaded(), but it sometime (?!)
