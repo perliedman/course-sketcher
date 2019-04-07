@@ -69,15 +69,16 @@ export default class Course {
 
   toSvg () {
     const controls = this.controls
+    const objScale = this.objScale()
 
     return createSvgNode(document, {
       type: 'g',
       children: controls.map((c, i) =>
         c.toSvg(c.kind === 'start' && this.controls.length > i + 1 
           ? Math.atan2.apply(Math, this.controls[i + 1].coordinates.sub(c.coordinates).toArray().reverse()) - Math.PI / 2
-          : 0))
-        .concat(createControlConnections(controls).map(({ geometry: { coordinates } }) => lines(coordinates, false, courseOverPrintRgb)))
-        .concat(createControlTextLocations(controls).map(({ properties, geometry: { coordinates } }, i) => ({
+          : 0, objScale))
+        .concat(createControlConnections(controls, objScale).map(({ geometry: { coordinates } }) => lines(coordinates, false, courseOverPrintRgb, objScale)))
+        .concat(createControlTextLocations(controls, objScale).map(({ properties, geometry: { coordinates } }, i) => ({
           type: 'text',
           attrs: {
             x: coordinates[0] * 100,
@@ -85,7 +86,7 @@ export default class Course {
             dx: '-50%',
             dy: '50%',
             fill: courseOverPrintRgb,
-            style: 'font: normal 600px sans-serif;'
+            style: `font: normal ${600 * objScale}px sans-serif;`
           },
           text: properties.kind !== 'start' && properties.kind !== 'finish' ? (i + 1).toString() : ''
         })))

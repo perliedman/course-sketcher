@@ -13,24 +13,24 @@ export function createSvgNode (document, n) {
 }
 
 // TODO: these are not general enought to put here, but also need to be reusable...
-export const circle = (control, r, stroke) => ({
+export const circle = (control, r, stroke, scale) => ({
   type: 'circle',
   attrs: {
     cx: control.coordinates[0] * 100,
     cy: -control.coordinates[1] * 100,
-    r,
+    r: r * (scale || 1),
     stroke,
-    'stroke-width': 50
+    'stroke-width': 50 * (scale || 1)
   }
 })
 
-export const lines = (coordinates, close, stroke) => ({
+export const lines = (coordinates, close, stroke, scale) => ({
   type: 'path',
   attrs: {
     d: coordinates.map((c, i) => `${i ? 'L' : 'M'} ${c[0] * 100} ${-c[1] * 100}`)
       .concat(close ? ['Z'] : [])
       .join(' '),
     stroke,
-    'stroke-width': 50
+    'stroke-width': 50 * (scale || 1)
   }
 })

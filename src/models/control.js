@@ -41,25 +41,26 @@ export default class Control {
     }
   }
 
-  toSvg (rotation) {
+  toSvg (rotation, objScale) {
     let node
 
     switch (this.kind) {
     case 'normal':
-      node = circle(this, 300, courseOverPrintRgb)
+      node = circle(this, 300, courseOverPrintRgb, objScale)
       break
     case 'start':
       node = lines(
         startTriangle.map(p => p
+          .mul(objScale)
           .rotate(rotation)
-          .add(this.coordinates).toArray()), true, courseOverPrintRgb)
+          .add(this.coordinates).toArray()), true, courseOverPrintRgb, objScale)
       break
     case 'finish':
       node = {
         type: 'g',
         children: [
-          circle(this, 250, courseOverPrintRgb),
-          circle(this, 350, courseOverPrintRgb)
+          circle(this, 250, courseOverPrintRgb, objScale),
+          circle(this, 350, courseOverPrintRgb, objScale)
         ]
       }
       break
