@@ -170,11 +170,11 @@ export default {
     onFileDropped (e) {
       e.preventDefault()
       if (e.dataTransfer.items) {
-        const files = e.dataTransfer.items
+        const files = Array.from(e.dataTransfer.items)
           .filter(i => i.kind === 'file')
           .map(i => i.getAsFile())
         e.dataTransfer.items.clear()
-        this.$$emit('filesdropped', { files })
+        this.$emit('filesdropped', { files })
       }
     },
     getMap () {
