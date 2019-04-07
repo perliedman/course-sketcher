@@ -49,7 +49,7 @@ export default class Course {
   }
 
   controlsToGeoJson () {
-    const scaleFactor = (this.printScale / this.event.map.scale) * 1.5
+    const scaleFactor = this.objScale()
 
     return featureCollection(this.controls.map((c, i) =>
       c.toGeoJson(
