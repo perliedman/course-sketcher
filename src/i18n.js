@@ -27,6 +27,7 @@ const messages = {
       print: 'Utskrift'
     },
     actions: {
+      selectMap: 'Välj karta',
       removeMap: 'Ta bort',
       ok: 'Ok',
       cancel: 'Avbryt',
@@ -47,6 +48,9 @@ const messages = {
     },
     control: {
       selectDescription: 'Välj kontrollbeskrivning'
+    },
+    map: {
+      mapMissing: 'Ingen karta är vald'
     }
   },
   en: {
@@ -74,6 +78,7 @@ const messages = {
       print: 'Print'
     },
     actions: {
+      selectMap: 'Select Map',
       removeMap: 'Remove',
       ok: 'Ok',
       cancel: 'Cancel',
@@ -94,6 +99,9 @@ const messages = {
     },
     control: {
       selectDescription: 'Choose Control Description'
+    },
+    map: {
+      mapMissing: 'No map loaded'
     }
   }
 }

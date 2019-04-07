@@ -26,10 +26,19 @@
     </mu-expansion-panel>      
     <mu-expansion-panel :expand="panel === 'map'" @change="togglePanel('map')">
       <div slot="header">{{$t('menus.map')}}</div>
-      <h3>{{map.name}}</h3>
-      1:{{map.file.getCrs().scale.toLocaleString($i18n.locale)}}
-      <div slot="action">
-        <mu-button slot="action" flat>{{$t('actions.removeMap')}}</mu-button>
+      <div v-if="map.file && map.file.header && map.file.header.fileType !== 1">
+        <h3>{{map.name}}</h3>
+        1:{{map.file.getCrs().scale.toLocaleString($i18n.locale)}}
+        <div slot="action">
+          <mu-button slot="action" flat @click="$emit('removemap')">{{$t('actions.removeMap')}}</mu-button>
+        </div>
+      </div>
+      <div v-else>
+        <h3>{{$t('map.mapMissing')}}</h3>
+        <div slot="action">
+          <mu-button slot="action" flat @click="$refs.fileInput.click()">{{$t('actions.selectMap')}}</mu-button>
+          <input type="file" class="input-file" ref="fileInput" @change="$emit('filesdropped', { files: Array.from($event.target.files) })"/>
+        </div>
       </div>
     </mu-expansion-panel>
     <mu-expansion-panel :expand="panel === 'print'" @change="togglePanel('print')">
@@ -111,3 +120,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .input-file {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+  }
+</style>

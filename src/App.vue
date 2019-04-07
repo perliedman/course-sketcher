@@ -39,6 +39,7 @@
         @eventnameset="setEventName"
         @coursenameset="setCourseName"
         @printscaleset="setPrintScale"
+        @filesdropped="filesDropped"
       />
     </mu-drawer>
     <map-view
