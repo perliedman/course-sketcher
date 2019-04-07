@@ -1,5 +1,5 @@
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'qa'
+  publicPath: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'qa'
     ? '/course-sketcher'
     : '/',
   chainWebpack: config => {
