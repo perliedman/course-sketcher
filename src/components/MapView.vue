@@ -4,7 +4,7 @@
     :class="{map: true, empty: empty}"
     @drop="onFileDropped"
     @dragover="$event.preventDefault()">
-    <input v-if="empty" type="file" @change="onFileInput($event.target.files)" class="input-file">
+    <input v-if="empty" type="file" @change="onFileInput($event.target.files)" class="input-file" accept=".ocd,.ppen">
     <div v-if="empty">
       <hero v-if="!loading" />
       <h1 v-else>
