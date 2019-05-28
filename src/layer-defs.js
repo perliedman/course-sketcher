@@ -1,4 +1,4 @@
-export const controlColor = 'hsl(329, 96%, 39%)'
+export const controlColor = 'hsl(313, 100%, 44%)'
 
 const zoom0 = Math.pow(2, (0 - 15))
 const zoom24 = Math.pow(2, (24 - 15))
