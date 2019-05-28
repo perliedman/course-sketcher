@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import storage from './storage'
 
 const messages = {
   sv: {
@@ -111,7 +112,8 @@ export const languages = [
   {code: 'sv', flag: 'se', title: 'Svenska'}
 ]
 
-const defaultLocale = navigator.languages.find(l => languages.findIndex(langDef => langDef.code === l) >= 0)
+const defaultLocale = storage.get('ui.lang') ||
+  navigator.languages.find(l => languages.findIndex(langDef => langDef.code === l) >= 0)
 
 Vue.use(VueI18n)
 export default new VueI18n({

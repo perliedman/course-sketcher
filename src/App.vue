@@ -18,7 +18,7 @@
           <mu-icon value="settings"></mu-icon>
         </mu-button>
         <mu-list slot="content">
-          <mu-list-item v-for="lang in langs" button :key="lang.code" @click="$i18n.locale = lang.code">
+          <mu-list-item v-for="lang in langs" button :key="lang.code" @click="setLang(lang.code)">
             <mu-list-item-title><img :src="`flags/${lang.flag}.svg`" style="width: 16px;">{{lang.title}}</mu-list-item-title>
           </mu-list-item>
         </mu-list>
@@ -83,6 +83,7 @@ import { coordEach } from '@turf/meta'
 
 import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_PRINT_SCALE, SET_EVENT, DELETE_CONTROL } from './store/mutation-types'
 import { languages } from './i18n'
+import storage from './storage'
 
 // Since the actual geographic coordinates do not have any significance (yet?), just about any CRS will do
 const projDef = '+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs'
@@ -135,6 +136,10 @@ export default {
     ...mapGetters(['selectedCourse'])
   },
   methods: {
+    setLang (code) {
+      this.$i18n.locale = code
+      storage.set('ui.lang', code)
+    },
     filesDropped ({ files }) {
       this.loading = true
       const loadPromises = files.map(this.readFile.bind(this))
