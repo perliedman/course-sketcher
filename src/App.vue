@@ -60,7 +60,7 @@
       @filesdropped="filesDropped"/>
     <mu-snackbar position="bottom" :open="!!message">
       <span v-html="message" />
-      <mu-button flat slot="action" color="primary" @click="message = undefined">Close</mu-button>
+      <mu-button flat slot="action" color="primary" @click="message = undefined">{{$t('actions.close')}}</mu-button>
     </mu-snackbar>
     <mu-snackbar v-if="restoredEvent" position="bottom" :open="!!restoredEvent">
       <span>{{$t('messages.restoreAvailable')}}</span>
