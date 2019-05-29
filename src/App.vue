@@ -62,6 +62,11 @@
       <span v-html="message" />
       <mu-button flat slot="action" color="primary" @click="message = undefined">Close</mu-button>
     </mu-snackbar>
+    <mu-snackbar v-if="restoredEvent" position="bottom" :open="!!restoredEvent">
+      <span>{{$t('messages.restoreAvailable')}}</span>
+      <mu-button flat slot="action" color="primary" @click="setEvent(restoredEvent); restoredEvent = null">{{$t('actions.yes')}}</mu-button>
+      <mu-button flat slot="action" color="primary" @click="restoredEvent = null">{{$t('actions.no')}}</mu-button>
+    </mu-snackbar>
   </div>
 </template>
 
@@ -100,8 +105,27 @@ export default {
       message: undefined,
       settingsOpen: false,
       langs: languages,
-      loading: false
+      loading: false,
+      restoredEvent: null
     }
+  },
+  mounted () {
+    const lastEvent = storage.get('event.ppen')
+    if (lastEvent) {
+      const doc = new DOMParser().parseFromString(lastEvent, 'application/xml')
+      this.restoredEvent = parsePPen(doc)
+    }
+
+    let saveTimeout
+
+    this.$store.subscribe(
+      (mutation, state) => {
+        clearTimeout(saveTimeout)
+        saveTimeout = setTimeout(() => {
+          const doc = writePpen(state.event)
+          storage.set('event.ppen', new XMLSerializer().serializeToString(doc))
+        }, 5000)
+      })
   },
   computed: {
     controlsGeoJson () {

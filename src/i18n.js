@@ -20,7 +20,8 @@ const messages = {
       mapFileRequest: 'Den här Purple Pen-filen använder en kartfil med namnet <strong><em>{fileName}</em></strong>, dra och släpp den här.',
       mapLoadError: '😞 Något gick fel när vi läste filen: <em>{error}</em>',
       unknownFileType: '🤔 Hm, den sortens fil känner jag inte igen. Försök med OCAD- eller Purple Pen-filer.',
-      ensureCorrectMap: 'Purple Pen-filen är gjord för en karta som heter <strong><em>{fileName}</em></strong>, är du säker att du använder rätt kartfil? 🤔'
+      ensureCorrectMap: 'Purple Pen-filen är gjord för en karta som heter <strong><em>{fileName}</em></strong>, är du säker att du använder rätt kartfil? 🤔',
+      restoreAvailable: 'Det finns sparad data från tidigare, vill du återställa den?'
     },
     menus: {
       courses: 'Banor',
@@ -31,6 +32,8 @@ const messages = {
       selectMap: 'Välj karta',
       removeMap: 'Ta bort',
       ok: 'Ok',
+      yes: 'Ja',
+      no: 'Nej',
       cancel: 'Avbryt',
       search: 'Sök',
       removeFromCourse: 'Ta bort från banan',
@@ -71,7 +74,8 @@ const messages = {
       mapFileRequest: 'This event uses a map file named <strong><em>{fileName}</em></strong>, please drag it here.',
       mapLoadError: '😞 Something went wrong when reading that file: <em>{error}</em>',
       unknownFileType: '🤔 Uhm, I don\'t recognize that type of file. Try with OCAD or Purple Pen files.',
-      ensureCorrectMap: 'The Purple Pen file uses a map called <strong><em>{fileName}</em></strong>, are you sure this is the correct map? 🤔'
+      ensureCorrectMap: 'The Purple Pen file uses a map called <strong><em>{fileName}</em></strong>, are you sure this is the correct map? 🤔',
+      restoreAvailable: 'Saved data from an earlier session is available, do you want to restore?'
     },
     menus: {
       courses: 'Courses',
@@ -82,6 +86,8 @@ const messages = {
       selectMap: 'Select Map',
       removeMap: 'Remove',
       ok: 'Ok',
+      yes: 'Yes',
+      no: 'No',
       cancel: 'Cancel',
       search: 'Search',
       removeFromCourse: 'Remove from course',
