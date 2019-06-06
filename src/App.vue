@@ -86,7 +86,7 @@ import FileSaver from 'file-saver'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_PRINT_SCALE, SET_EVENT, DELETE_CONTROL } from './store/mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_PRINT_SCALE, SET_EVENT, DELETE_CONTROL, CHECKPOINT } from './store/mutation-types'
 import { languages } from './i18n'
 import storage from './storage'
 
@@ -117,9 +117,15 @@ export default {
     }
 
     let saveTimeout
+    let undoTimeout
 
     this.$store.subscribe(
       (mutation, state) => {
+        if (mutation.type !== CHECKPOINT) {
+          clearTimeout(undoTimeout)
+          undoTimeout = setTimeout(() => this.checkpoint(), 100)
+        }
+
         clearTimeout(saveTimeout)
         saveTimeout = setTimeout(() => {
           const doc = writePpen(state.event)
@@ -338,7 +344,8 @@ export default {
       setCourseName: SET_COURSE_NAME,
       setEventInStore: SET_EVENT,
       deleteControl: DELETE_CONTROL,
-      setPrintScale: SET_PRINT_SCALE
+      setPrintScale: SET_PRINT_SCALE,
+      checkpoint: CHECKPOINT
     })
   },
   components: {

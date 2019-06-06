@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VuexUndoRedo from 'vuex-undo-redo'
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, SET_MAP, ADD_EVENT_CONTROL, ADD_COURSE_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT, DELETE_CONTROL, SET_PRINT_SCALE } from './mutation-types'
+import Undo from '../undo-plugin'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, SET_MAP, ADD_EVENT_CONTROL, ADD_COURSE_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_EVENT, DELETE_CONTROL, SET_PRINT_SCALE, CHECKPOINT } from './mutation-types'
 import Event from '../models/event'
 import Course from '../models/course'
 import i18n from '../i18n'
 
 Vue.use(Vuex)
-Vue.use(VuexUndoRedo, {
+Vue.use(Undo, {
   ignoreMutations: [SELECT_CONTROL]
 })
 
@@ -21,7 +21,8 @@ const createInitialState = () => {
   return {
     event,
     selectedCourseIndex: 0,
-    selectedControlId: 0
+    selectedControlId: 0,
+    checkpointId: 1
   }
 }
 
@@ -90,6 +91,9 @@ export default new Vuex.Store({
       state.event = event
       state.selectedCourseIndex = 0
       state.selectedControlId = undefined
+    },
+    [CHECKPOINT] (state) {
+      state.checkpointId++
     }
   },
   getters: {
