@@ -13,7 +13,7 @@ export default {
           done: [],
           undone: [],
           newMutation: true,
-          ignoreMutations: options.ignoreMutations|| []
+          ignoreMutations: options.ignoreMutations || []
         };
       },
       created() {
