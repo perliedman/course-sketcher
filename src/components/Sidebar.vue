@@ -19,9 +19,32 @@
               @printscaleset="$emit('printscaleset', { scale: $event.scale, id: c.id })"
             />
         </mu-expansion-panel>
-        <mu-button style="position: absolute; right: 0; bottom: 0;" fab small color="primary" :title="$t('actions.newCourse')" @click="$emit('courseadded')">
-          <mu-icon value="add"></mu-icon>
-        </mu-button>
+        <mu-menu cover :open.sync="menuOpen" style="position: absolute; right: 0; bottom: 0;">
+          <mu-button fab small color="primary">
+            <mu-icon value="more_horiz" />
+          </mu-button>
+          <mu-list slot="content">
+            <mu-list-item button @click="addCourse">
+              <mu-list-item-action>
+                <mu-icon value="add"></mu-icon>
+              </mu-list-item-action>
+              <mu-list-item-title>{{$t('actions.newCourse')}}</mu-list-item-title>
+            </mu-list-item>
+            <mu-list-item button>
+              <mu-list-item-action>
+                <mu-icon value="cloud_upload"></mu-icon>
+              </mu-list-item-action>
+              <input type="file" accept=".ppen" class="input-file" @change="uploadEvent"/>
+              <mu-list-item-title>{{$t('actions.open')}}</mu-list-item-title>
+            </mu-list-item>
+            <mu-list-item button @click="downloadEvent">
+              <mu-list-item-action>
+                <mu-icon value="cloud_download"></mu-icon>
+              </mu-list-item-action>
+              <mu-list-item-title>{{$t('actions.save')}}</mu-list-item-title>
+            </mu-list-item>
+          </mu-list>
+        </mu-menu>
       </div>
     </mu-expansion-panel>      
     <mu-expansion-panel :expand="panel === 'map'" @change="togglePanel('map')">
@@ -57,7 +80,7 @@
         </mu-button>
       </div>
     </mu-expansion-panel>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -67,6 +90,7 @@ import { ocadToSvg } from 'ocad2geojson'
 import { saveAs } from 'file-saver'
 
 import { courseMapToSvg, courseMapToPdf } from '../print'
+import { writePpen } from '../ppen'
 
 export default {
   components: { ControlDescriptionSheet },
@@ -81,12 +105,30 @@ export default {
       panel: 'courses',
       printMedia: 'pdf',
       currentPrintJob: 0,
-      totalPrintJobs: 0
+      totalPrintJobs: 0,
+      menuOpen: false
     }
   },
   methods: {
     togglePanel (panel) {
       this.panel = panel === this.panel ? '' : panel
+    },
+    addCourse () {
+      $emit('courseadded')
+      this.menuOpen = false
+    },
+    uploadEvent (event) {
+      this.menuOpen = false
+      this.$emit('filesdropped', { files: Array.from(event.target.files) })
+      event.target.value = null
+    },
+    downloadEvent () {
+      const eventDoc = writePpen(this.event)
+      const xmlString = '<?xml version="1.0" encoding="UTF-8"?>' + new XMLSerializer().serializeToString(eventDoc)
+      const blob = new Blob([xmlString], {type: 'text/xml; charset=utf-8'})
+      saveAs(blob, `${this.event.name}.ppen`)
+
+      this.menuOpen = false
     },
     print () {
       const ocadFile = this.map.file

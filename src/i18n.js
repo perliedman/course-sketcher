@@ -42,7 +42,9 @@ const messages = {
       print: 'Skriv ut',
       printing: 'Skriver ut...',
       makeFinish: 'Gör till målpunkt',
-      newCourse: 'Lägg till bana'
+      newCourse: 'Lägg till bana',
+      open: 'Öppna',
+      save: 'Spara',
     },
     event: {
       newName: 'Ny träning'
@@ -97,7 +99,9 @@ const messages = {
       print: 'Print',
       printing: 'Printing...',
       makeFinish: 'Finish',
-      newCourse: 'Add Course'
+      newCourse: 'Add Course',
+      open: 'Open',
+      save: 'Save',
     },
     event: {
       newName: 'New training'

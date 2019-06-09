@@ -13,7 +13,10 @@ Vue.config.productionTip = false
 Vue.use(MuseUI)
 
 theme.add('sketcher-theme', {
-  primary: '#6A266F'
+  primary: '#6A266F',
+  text: {
+    primary: 'hsl(313, 50%, 60%)'
+  }
 })
 
 theme.use('sketcher-theme')
