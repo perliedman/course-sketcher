@@ -90,7 +90,7 @@ export default new Vuex.Store({
     [SET_SELECTED_COURSE] (state, { id }) {
       state.selectedCourseIndex = state.event.courses.findIndex(c => c.id === id)
     },
-    [SET_EVENT] (state, event) {
+    [SET_EVENT] (state, { event }) {
       state.event = event
       state.selectedCourseIndex = 0
       state.selectedControlId = undefined

@@ -318,7 +318,7 @@ export default {
     },
 
     setEvent (event) {
-      this.setEventInStore(event)
+      this.setEventInStore({ event })
       if (!this.map.name) {
         this.message = this.$t('messages.mapFileRequest', { fileName: this.event.map.name })
       } else if (this.map.name != this.event.map.name) {
