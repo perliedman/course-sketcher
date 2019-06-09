@@ -239,9 +239,10 @@ export default {
           })
           .then(() => {
             if (this.event) {
-              this.setMap(this.map)
+              const scale = this.map.file.getCrs().scale
+              this.setMap({ name: this.map.name, scale })
               this.event.courses.forEach(c => {
-                this.setMapScale({ id: c.id, scale: this.map.file.getCrs().scale })
+                this.setMapScale({ id: c.id, scale })
               })
               if (this.event.map && this.event.map.name && this.map.name != this.event.map.name) {
                 this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
