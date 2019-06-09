@@ -15,8 +15,8 @@ export function parsePPen (doc) {
 
   const courseControls = Array.from(doc.getElementsByTagName('course-control'))
     .reduce((a, cc) => {
-      const id = cc.getAttribute('id')
-      const control = cc.getAttribute('control')
+      const id = Number(cc.getAttribute('id'))
+      const control = Number(cc.getAttribute('control'))
       const nextTag = cc.getElementsByTagName('next')
       let next = undefined
       if (nextTag && nextTag[0]) {
@@ -72,7 +72,7 @@ const parseLocation = loc => new Coordinate(
 const parseControl = (tag) => {
   const codeTag = tag.getElementsByTagName('code')[0]
   return new Control(
-    tag.id,
+    tag.id && Number(tag.id),
     tag.getAttribute('kind'),
     codeTag ? codeTag.textContent : undefined,
     parseLocation(tag.getElementsByTagName('location')[0]),
