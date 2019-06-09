@@ -86,7 +86,7 @@ import FileSaver from 'file-saver'
 import { featureCollection } from '@turf/helpers'
 import { coordEach } from '@turf/meta'
 
-import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_PRINT_SCALE, SET_EVENT, DELETE_CONTROL, CHECKPOINT } from './store/mutation-types'
+import { MOVE_CONTROL, REMOVE_CONTROL, SELECT_CONTROL, SET_CONTROL_DESCRIPTION, SET_CONTROL_KIND, ADD_COURSE_CONTROL, ADD_EVENT_CONTROL, ADD_COURSE, SET_SELECTED_COURSE, SET_EVENT_NAME, SET_COURSE_NAME, SET_PRINT_SCALE, SET_EVENT, DELETE_CONTROL, CHECKPOINT, SET_MAP, SET_MAP_SCALE } from './store/mutation-types'
 import { languages } from './i18n'
 import storage from './storage'
 
@@ -239,8 +239,9 @@ export default {
           })
           .then(() => {
             if (this.event) {
+              this.setMap(this.map)
               this.event.courses.forEach(c => {
-                c.mapScale = this.map.file.getCrs().scale
+                this.setMapScale({ id: c.id, scale: this.map.file.getCrs().scale })
               })
               if (this.event.map && this.event.map.name && this.map.name != this.event.map.name) {
                 this.message = this.$t('messages.ensureCorrectMap', { fileName: this.event.map.name })
@@ -345,6 +346,8 @@ export default {
       setEventInStore: SET_EVENT,
       deleteControl: DELETE_CONTROL,
       setPrintScale: SET_PRINT_SCALE,
+      setMap: SET_MAP,
+      setMapScale: SET_MAP_SCALE,
       checkpoint: CHECKPOINT
     })
   },
