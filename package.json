@@ -22,7 +22,7 @@
     "file-saver": "^2.0.1",
     "mapbox-gl": "^1.0.0",
     "muse-ui": "^3.0.2",
-    "ocad2geojson": "^1.4.0",
+    "ocad2geojson": "^1.5.0",
     "pdfkit": "^0.8.3",
     "reproject": "^1.2.3",
     "svg-to-pdfkit": "^0.1.7",
