@@ -36,7 +36,7 @@ export default class Course {
   }
 
   objScale () {
-    return (this.printScale / 15000) / 0.6667
+    return (this.printScale / this.event.map.scale)
   }
 
   addControl (id) {

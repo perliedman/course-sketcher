@@ -52,7 +52,7 @@ export default {
       return !this.layers || !this.layers.length
     },
     scaleFactor () {
-      return (this.printScale / 10000) * 0.6667 
+      return (this.printScale / this.mapScale) 
     },
     mapStyle () {
       return {
