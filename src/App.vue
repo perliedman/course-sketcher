@@ -67,6 +67,13 @@
       <mu-button flat slot="action" color="secondary" @click="setEvent(restoredEvent); restoredEvent = null">{{$t('actions.yes')}}</mu-button>
       <mu-button flat slot="action" color="secondary" @click="restoredEvent = null">{{$t('actions.no')}}</mu-button>
     </mu-snackbar>
+    <mu-snackbar v-if="warnings && warnings.length > 0" position="bottom">
+      <span>{{$t('messages.ocadWarnings')}}</span>
+      <ul>
+        <li v-for="(w, i) in warnings" :key="i">{{w}}</li>
+      </ul>
+      <mu-button flat slot="action" color="secondary" @click="warnings = null">{{$t('actions.close')}}</mu-button>
+    </mu-snackbar>
   </div>
 </template>
 
@@ -106,7 +113,8 @@ export default {
       settingsOpen: false,
       langs: languages,
       loading: false,
-      restoredEvent: null
+      restoredEvent: null,
+      warnings: null
     }
   },
   mounted () {
@@ -209,6 +217,8 @@ export default {
             const [minX, minY] = proj4(proj4.WGS84, projDef, [minLng, minLat])
             const [maxX, maxY] = proj4(proj4.WGS84, projDef, [minLng, maxLat])
             const mapRotation = Math.atan2(maxY - minY, maxX - minX) / Math.PI * 180 - 90
+
+            this.warnings = ocadFile.warnings
 
             if (!isCourseSettingProject || !this.map.file) {
               this.map = {

@@ -21,7 +21,8 @@ const messages = {
       mapLoadError: '😞 Något gick fel när vi läste filen: <em>{error}</em>',
       unknownFileType: '🤔 Hm, den sortens fil känner jag inte igen. Försök med OCAD- eller Purple Pen-filer.',
       ensureCorrectMap: 'Purple Pen-filen är gjord för en karta som heter <strong><em>{fileName}</em></strong>, är du säker att du använder rätt kartfil? 🤔',
-      restoreAvailable: 'Det finns sparad data från tidigare, vill du återställa den?'
+      restoreAvailable: 'Det finns sparad data från tidigare, vill du återställa den?',
+      ocadWarnings: 'Upptäckte några problem med den här filen:'
     },
     menus: {
       courses: 'Banor',
@@ -79,6 +80,7 @@ const messages = {
       unknownFileType: '🤔 Uhm, I don\'t recognize that type of file. Try with OCAD or Purple Pen files.',
       ensureCorrectMap: 'The courses use a map called <strong><em>{fileName}</em></strong>, are you sure this is the correct map? 🤔',
       restoreAvailable: 'Saved data from an earlier session is available, do you want to restore?',
+      ocadWarnings: 'Some issues were encountered in this file:'
     },
     menus: {
       courses: 'Courses',
