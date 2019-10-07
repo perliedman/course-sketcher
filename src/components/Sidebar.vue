@@ -34,7 +34,7 @@
               <mu-list-item-action>
                 <mu-icon value="cloud_upload"></mu-icon>
               </mu-list-item-action>
-              <input type="file" accept=".ppen" class="input-file" @change="uploadEvent"/>
+              <input type="file" accept=".ppen,.ocd" class="input-file" @change="uploadEvent"/>
               <mu-list-item-title>{{$t('actions.open')}}</mu-list-item-title>
             </mu-list-item>
             <mu-list-item button @click="downloadEvent">
