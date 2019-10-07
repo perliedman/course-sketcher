@@ -15,7 +15,7 @@ const debug = process.env.NODE_ENV !== 'production'
 
 const createInitialState = () => {
   const event = new Event(i18n.t('event.newName'))
-  const course = new Course(event, event.idGenerator.next(), i18n.t('course.newName'), [], 10000)
+  const course = new Course(event, event.idGenerator.next(), i18n.t('course.newName'), [], 10000, 'normal')
   event.addCourse(course)
 
   return {

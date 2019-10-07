@@ -78,5 +78,5 @@ const toCourse = (event, allControls, s) => {
     return c
   })
   .filter(c => c)
-  return new Course(event, event.idGenerator.next(), s._first, controls, 10000) //TODO: scale
+  return new Course(event, event.idGenerator.next(), s._first, controls, 10000, 'normal') //TODO: scale
 }

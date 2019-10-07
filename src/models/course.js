@@ -13,12 +13,13 @@ const distance = (c1, c2) => {
 export const courseOverPrintRgb = 'rgb(182, 44, 152)'
 
 export default class Course {
-  constructor (event, id, name, controls = [], printScale) {
+  constructor (event, id, name, controls = [], printScale, type) {
     this.event = event
     this.id = id
     this.name = name
     this.controls = controls
     this.printScale = printScale
+    this.type = type
   }
 
   distance () {
@@ -64,7 +65,14 @@ export default class Course {
   }
 
   controlConnectionsToGeoJson () {
-    return featureCollection(createControlConnections(this.controls, this.objScale()))
+    switch (this.type) {
+      case 'normal':
+        return featureCollection(createControlConnections(this.controls, this.objScale()))
+      case 'score':
+        return featureCollection([])
+      default:
+        throw new Error(`Unknown course type "${this.type}".`)
+    }
   }
 
   toSvg () {

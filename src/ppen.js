@@ -51,7 +51,7 @@ export function parsePPen (doc) {
       const courseControls = getCourseControls(c.getElementsByTagName('first')[0].getAttribute('course-control'), 0)
       const optionsTag = c.getElementsByTagName('options')[0]
       const printScale = optionsTag && Number(optionsTag.getAttribute('print-scale')) || scale
-      const course = new Course(event, c.getAttribute('id'), c.getElementsByTagName('name')[0].textContent, courseControls, printScale)
+      const course = new Course(event, c.getAttribute('id'), c.getElementsByTagName('name')[0].textContent, courseControls, printScale, c.getAttribute('kind'))
       course.order = Number(c.getAttribute('order'))
 
       return course
