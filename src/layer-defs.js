@@ -23,6 +23,10 @@ export const startHover = () => ({
 export const start = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'start'],
   type: 'line',
+  layout: {
+    'line-join': 'miter',
+    'line-miter-limit': expFunc(5)
+  },
   paint: {
     'line-opacity': ["case",
       ["boolean", ["feature-state", "hover"], false],
@@ -30,7 +34,7 @@ export const start = (opacityFactor, scaleFactor) => ({
           opacityFactor
       ],
     'line-color': controlColor,
-    'line-width': expFunc(6 * scaleFactor)
+    'line-width': expFunc(4 * scaleFactor)
   }
 })
 
@@ -38,9 +42,9 @@ export const controlCircles = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'normal'],
   type: 'circle',
   paint: {
-    'circle-radius': expFunc(42 * scaleFactor),
+    'circle-radius': expFunc(22 * scaleFactor),
     'circle-opacity': 0,
-    'circle-stroke-width': expFunc(6 * scaleFactor),
+    'circle-stroke-width': expFunc(4 * scaleFactor),
     'circle-stroke-color': controlColor,
     'circle-stroke-opacity': ["case",
       ["boolean", ["feature-state", "hover"], false],
@@ -56,9 +60,9 @@ export const finishInnerCircle = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'finish'],
   type: 'circle',
   paint: {
-    'circle-radius': expFunc(33.6 * scaleFactor),
+    'circle-radius': expFunc(18 * scaleFactor),
     'circle-opacity': 0,
-    'circle-stroke-width': expFunc(6 * scaleFactor),
+    'circle-stroke-width': expFunc(4 * scaleFactor),
     'circle-stroke-color': controlColor,
     'circle-stroke-opacity': ["case",
       ["boolean", ["feature-state", "hover"], false],
@@ -74,9 +78,9 @@ export const finishOuterCircle = (opacityFactor, scaleFactor) => ({
   filter: ['==', ['get', 'kind'], 'finish'],
   type: 'circle',
   paint: {
-    'circle-radius': expFunc(50.4 * scaleFactor),
+    'circle-radius': expFunc(26 * scaleFactor),
     'circle-opacity': 0,
-    'circle-stroke-width': expFunc(6 * scaleFactor),
+    'circle-stroke-width': expFunc(4 * scaleFactor),
     'circle-stroke-color': controlColor,
     'circle-stroke-opacity': ["case",
       ["boolean", ["feature-state", "hover"], false],
@@ -93,7 +97,7 @@ export const controlTexts = (scaleFactor) => ({
   layout: {
     'symbol-placement': 'point',
     'text-field': ['get', 'label'],
-    'text-size': expFunc(72 * scaleFactor),
+    'text-size': expFunc(54 * scaleFactor),
     'text-anchor': 'center',
     'text-allow-overlap': true,
     'text-ignore-placement': true
@@ -109,6 +113,6 @@ export const controlConnections = (scaleFactor) => ({
   paint: {
     'line-color': controlColor,
     'line-opacity': 0.7,
-    'line-width': expFunc(6 * scaleFactor)
+    'line-width': expFunc(4 * scaleFactor)
   }
 })

@@ -105,8 +105,8 @@ export default class Course {
 const coordClone = c => Array.isArray(c[0]) ? c.map(coordClone) : new Coordinate(c[0], c[1])
 
 const defaultControlNumberAngle = Math.PI / 6
-const controlCircleOutsideDiameter = 5.35
-const controlNumberCircleDistance = 1.825
+const controlCircleOutsideDiameter = 5.9 //5.35
+const controlNumberCircleDistance = 2 // 1.825
 const controlCircleSize = 1
 
 const createControlTextLocations = (controls, courseObjRatio) => {
