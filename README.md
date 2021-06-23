@@ -1,3 +1,5 @@
+**This has been archived, you might want to checkout out [O-Scout](https://github.com/perliedman/o-scout), which is a successor to this project**
+
 # client
 
 ## Project setup
